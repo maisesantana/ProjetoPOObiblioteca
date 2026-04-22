@@ -72,8 +72,8 @@ public class ClientDAO {
         return list;
     }
     public Client findById(String cpf) {
-        String sql = "SELECT p.*, c.isStudying, c.address, c.zipCode, c.startSuspensionDate, c.endSuspensionDate FROM Person p " +
-                "INNER JOIN Client c ON p.cpf = c.cpf";
+        String sql = "SELECT p.*, c.isStudying, c.address, c.zipCode, c.startSuspensionDate, c.endSuspensionDate " + "FROM Person p " +
+                "INNER JOIN Client c ON p.cpf = c.cpf " + "WHERE p.Cpf = ?";
         Client c = null;
 
         try (Connection conn = ConnectionDb.getConexao();
