@@ -8,11 +8,13 @@ public class ReturnBook {
     private LocalDateTime returnDate;
     private Loan loan;
 
-    public ReturnBook() {
-    }
-
     public ReturnBook(int returnId, LocalDateTime returnDate, Loan loan) {
         this.returnId = returnId;
+        this.returnDate = returnDate;
+        this.loan = loan;
+    }
+
+    public ReturnBook(LocalDateTime returnDate, Loan loan) {
         this.returnDate = returnDate;
         this.loan = loan;
     }

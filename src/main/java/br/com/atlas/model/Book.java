@@ -73,11 +73,4 @@ public class Book {
         this.bookOrigin = bookOrigin;
     }
 
-    public Publisher getPublisher() {
-        return publisher;
-    }
-
-    public void setPublisher(Publisher publisher) {
-        this.publisher = publisher;
-    }
 }

@@ -1,41 +1,58 @@
 package br.com.atlas.model;
 
+import java.util.List;
+import java.util.ArrayList;
 import java.time.LocalDateTime;
 
 public class Loan {
 
     private int loanId;
-    private Client client;
-    private BookCopy bookCopy;
     private LocalDateTime loanDate;
     private LocalDateTime expectedReturnDate;
-    private int renewals;
+    private int renewalsNumber;
     private boolean active;
+    private List<Renewal> renewals;
+    private Client client;
+    private BookCopy bookCopy;
+    private ReturnBook returnBook;
 
-    public Loan() {
+    public Loan(Client client, BookCopy bookCopy) {
+        
+        this.client = client;
+        this.bookCopy = bookCopy;
+        loanDate = LocalDateTime.now();
+        expectedReturnDate = loanDate.plusDays(7);
+        renewalsNumber = 0;
+        renewals = new ArrayList<>();
     }
 
-    public Loan(int loanId, Client client, BookCopy bookCopy,
-                LocalDateTime loanDate, LocalDateTime expectedReturnDate,
-                int renewals, boolean active) {
+    public Loan(int loanId, Client client, BookCopy bookCopy) {
+        
         this.loanId = loanId;
         this.client = client;
         this.bookCopy = bookCopy;
-        this.loanDate = loanDate;
-        this.expectedReturnDate = expectedReturnDate;
+        loanDate = LocalDateTime.now();
+        expectedReturnDate = loanDate.plusDays(7);
+        renewalsNumber = 0;
+        renewals = new ArrayList<>();
+    }
+
+    public List<Renewal> getRenewals () {
+        return renewals;
+    }
+    public void setRenewals(List<Renewal> renewals) {
         this.renewals = renewals;
-        this.active = active;
     }
 
+    public ReturnBook getReturnBook() {
+        return returnBook;
+    }
+    public void setReturnBook(ReturnBook returnBook) {
+        this.returnBook = returnBook;
+    }
+    
     public boolean canRenew() {
-        return renewals < 3 && active;
-    }
-
-    public void renew() {
-        if (canRenew()) {
-            expectedReturnDate = expectedReturnDate.plusDays(8);
-            renewals++;
-        }
+        return renewalsNumber < 3 && active;
     }
 
     public void finishLoan() {
@@ -82,12 +99,12 @@ public class Loan {
         this.expectedReturnDate = expectedReturnDate;
     }
 
-    public int getRenewals() {
-        return renewals;
+    public int getRenewalsNumber() {
+        return renewalsNumber;
     }
 
-    public void setRenewals(int renewals) {
-        this.renewals = renewals;
+    public void setRenewalsNumber(int renewalsNumber) {
+        this.renewalsNumber = renewalsNumber;
     }
 
     public boolean isActive() {
@@ -101,5 +118,9 @@ public class Loan {
     public boolean isLate() {
         //ainda sera implementado
         return false;
+    }
+
+    public void addRenew(Renewal r) {
+        renewals.add(r);
     }
 }

@@ -9,11 +9,14 @@ public class Renewal {
     private int renewalNumber;
     private Loan loan;
 
-    public Renewal() {
-    }
-
     public Renewal(int renewalId, LocalDateTime newReturnDate, int renewalNumber, Loan loan) {
         this.renewalId = renewalId;
+        this.newReturnDate = newReturnDate;
+        this.renewalNumber = renewalNumber;
+        this.loan = loan;
+    }
+
+    public Renewal(LocalDateTime newReturnDate, int renewalNumber, Loan loan) {
         this.newReturnDate = newReturnDate;
         this.renewalNumber = renewalNumber;
         this.loan = loan;

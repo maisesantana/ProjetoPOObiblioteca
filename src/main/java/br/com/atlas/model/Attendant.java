@@ -1,6 +1,7 @@
 package br.com.atlas.model;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public class Attendant extends Employee {
 
@@ -40,5 +41,58 @@ public class Attendant extends Employee {
                 }
             }
         }
+    }
+
+    public void registerLoan(Client c, BookCopy bc) {
+        //ver se o cliente pode pegar emprestado
+        if (!c.canBorrow()) {
+            System.out.println("O cliente não pode pegar livro emprestado!");
+            return;
+        }
+        //ver se exemplar ta disponivel
+        if (!bc.isStatusAvailable()) {
+            System.out.println("Exemplar não disponível");
+            return;
+        }
+
+        Loan l = new Loan(c, bc);
+        c.addLoan(l);
+        bc.setStatusAvailable(false);
+        System.out.println("Empréstimo feito.");
+    }
+
+    public void registerRenewal(Loan l) {
+        if (l.canRenew()) {
+            System.out.println("Máximo de renovações efetuadas. Não é posível renovar!");
+            return;
+        }
+        
+        if (LocalDateTime.now().isAfter(l.getExpectedReturnDate())) {
+            System.out.println("Não é possível renovar, pois o empréstimo já passou da data de devolução.");
+            return;
+        }
+
+        //aki ele renova a data
+        l.setExpectedReturnDate(l.getExpectedReturnDate().plusDays(7));
+        l.setRenewalsNumber(l.getRenewalsNumber() + 1);
+        Renewal r = new Renewal(l.getExpectedReturnDate(), l.getRenewalsNumber(), l);
+        l.addRenew(r);
+        System.out.println("Renovação concluída!");
+    }
+
+    public void registerReturnBook(Loan l) {
+        if (!l.isActive()) {
+            System.out.println("O empréstimo já foi concluido.");
+            return;
+        }
+
+        if (l.isLate()) {
+            //tratar aki
+            return;
+        }
+
+        l.setActive(false);
+        ReturnBook r = new ReturnBook(LocalDateTime.now(), l);
+        l.setReturnBook(r);
     }
 }
