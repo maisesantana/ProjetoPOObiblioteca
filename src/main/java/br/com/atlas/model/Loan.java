@@ -97,4 +97,9 @@ public class Loan {
     public void setActive(boolean active) {
         this.active = active;
     }
+
+    public boolean isLate() {
+        //ainda sera implementado
+        return false;
+    }
 }

@@ -4,13 +4,12 @@ import java.time.LocalDate;
 
 public class Employee extends Person {
 
-    public Employee() {
-    }
+    private int password;
 
     public Employee(String cpf, String name, String socialName, String email, String gender,
-                    LocalDate birthDate, String password, String phone, String rg) {
-
-        super(cpf, name, socialName, email, gender, birthDate, password, phone, rg);
+                    LocalDate birthDate, int password) {
+        super(cpf, name, socialName, email, gender, birthDate);
+        this.password = password;
     }
 
     public boolean isAdmin() {
