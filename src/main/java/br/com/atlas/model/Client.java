@@ -11,10 +11,10 @@ public class Client extends Person {
     private LocalDate endSuspensionDate;
     private List<Loan> loans; 
 
-    public Client(String cpf, String name, String socialName, String email, String gender, 
+    public Client(String cpf, String name, String email, String gender, 
         LocalDate birthDate, String adress) {
         
-        super(cpf, name, socialName, email, gender, birthDate);
+        super(cpf, name, email, gender, birthDate);
         this.address = adress;
         startSuspensionDate = null;
         endSuspensionDate = null;

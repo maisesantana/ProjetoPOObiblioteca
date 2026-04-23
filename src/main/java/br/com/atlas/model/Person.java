@@ -6,15 +6,13 @@ public class Person {
 
     private String cpf;
     private String name;
-    private String socialName;
     private String email;
     private String gender;
     private LocalDate birthDate;
 
-    public Person(String cpf, String name, String socialName, String email, String gender, LocalDate birthDate) {
+    public Person(String cpf, String name, String email, String gender, LocalDate birthDate) {
         this.cpf = cpf;
         this.name = name;
-        this.socialName = socialName;
         this.email = email;
         this.gender = gender;
         this.birthDate = birthDate;
@@ -33,14 +31,6 @@ public class Person {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public String getSocialName() {
-        return socialName;
-    }
-
-    public void setSocialName(String socialName) {
-        this.socialName = socialName;
     }
 
     public String getEmail() {
