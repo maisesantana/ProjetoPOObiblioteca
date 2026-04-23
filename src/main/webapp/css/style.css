@@ -1,0 +1,158 @@
+/* =============================================
+   ATLAS - Gestão de Biblioteca
+   style.css
+   ============================================= */
+
+/* === VARIÁVEIS DE COR === */
+:root {
+    --cor-primaria: #7a2530;
+    --cor-secundaria: #798a3a;
+    --cor-botao: #7986cb;
+    --cor-botao-hover: #5c6bc0;
+    --cor-texto: #333333;
+    --cor-fundo: #f5f5f5;
+    --cor-borda-form: #c8d8e8;
+}
+
+body {
+    font-family: 'Lato', Arial, sans-serif;
+    background-color: var(--cor-fundo);
+    color: var(--cor-texto);
+    margin: 0;
+    padding: 0;
+}
+
+/* === HEADER === */
+.atlas-header {
+    background-color: #fff;
+    border-bottom: 1px solid #ddd;
+}
+
+.atlas-logo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.atlas-logo-icon {
+    font-size: 2rem;
+}
+
+.atlas-logo-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 2rem;
+    color: var(--cor-primaria);
+    letter-spacing: 4px;
+}
+
+.atlas-logo-sub {
+    font-size: 0.7rem;
+    letter-spacing: 3px;
+    color: var(--cor-primaria);
+    margin-top: -4px;
+}
+
+/* === BREADCRUMB === */
+.atlas-breadcrumb {
+    font-size: 0.85rem;
+}
+
+.atlas-breadcrumb a {
+    color: var(--cor-primaria);
+    text-decoration: none;
+}
+
+.atlas-breadcrumb a:hover {
+    text-decoration: underline;
+}
+
+/* === TÍTULO === */
+.atlas-page-title {
+    font-family: 'Playfair Display', serif;
+    color: var(--cor-primaria);
+    font-size: 1.6rem;
+    margin-bottom: 2px;
+}
+
+.atlas-page-subtitle {
+    color: var(--cor-primaria);
+    font-size: 0.85rem;
+    margin-bottom: 20px;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+}
+
+/* === CAIXA DO FORMULÁRIO === */
+.atlas-form-box {
+    border: 2px dashed var(--cor-borda-form);
+    border-radius: 4px;
+    padding: 24px;
+    background-color: #fff;
+    max-width: 860px;
+    margin: 0 auto;
+}
+
+/* === LABELS === */
+.form-label {
+    font-weight: 700;
+    font-size: 0.9rem;
+    color: var(--cor-texto);
+    margin-bottom: 4px;
+}
+
+/* === INPUTS === */
+.form-control,
+.form-select {
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 0.9rem;
+    color: #555;
+}
+
+.form-control:focus,
+.form-select:focus {
+    border-color: var(--cor-botao);
+    box-shadow: 0 0 0 0.2rem rgba(121, 134, 203, 0.25);
+}
+
+/* === RADIO BUTTONS === */
+.atlas-radio-group {
+    border: 1px dashed var(--cor-borda-form);
+    border-radius: 4px;
+    padding: 8px 12px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+}
+
+.form-check-input:checked {
+    background-color: var(--cor-primaria);
+    border-color: var(--cor-primaria);
+}
+
+/* === BOTÃO === */
+.atlas-btn-submit {
+    background-color: var(--cor-botao);
+    color: #fff;
+    font-weight: 700;
+    font-size: 1rem;
+    padding: 12px;
+    border: none;
+    border-radius: 4px;
+    letter-spacing: 1px;
+    transition: background-color 0.2s ease;
+}
+
+.atlas-btn-submit:hover {
+    background-color: var(--cor-botao-hover);
+    color: #fff;
+}
+
+/* === FOOTER === */
+.atlas-footer {
+    margin-top: 40px;
+    border-top: 1px solid #ddd;
+    font-size: 0.8rem;
+    color: #888;
+}
