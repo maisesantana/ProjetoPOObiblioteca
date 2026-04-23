@@ -17,6 +17,7 @@ public class Person {
         this.gender = gender;
         this.birthDate = birthDate;
     }
+    
     public String getCpf() {
         return cpf;
     }

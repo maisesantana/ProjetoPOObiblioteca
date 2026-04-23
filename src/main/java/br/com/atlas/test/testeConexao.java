@@ -16,10 +16,8 @@ public class testeConexao {
         
         String cpf = "11122233344";
         Client newClient = new Client(
-            cpf, "Miqueias Dev", "Mique", "miqueias@email.com", "M",
-            LocalDate.of(1995, 5, 10), "pass123", "77988887777", "RG12345",
-            true, "Rua do Código, 123", "45000-000"
-        );
+            cpf, "Miqueias Dev", "miqueias@email.com", "M",
+            LocalDate.of(1995, 5, 10), "Rua do Código, 123");
 
         PersonDAO personDao = new PersonDAO();
         ClientDAO clientDao = new ClientDAO();
@@ -53,7 +51,6 @@ public class testeConexao {
         BookCopy newCopy = new BookCopy();
         newCopy.setBook(bookRef);
         newCopy.setStatusAvailable(true); 
-        newCopy.setPublicationYear(2024);
 
         // Criando o DAO do exemplar (Primeira vez)
         BookCopyDAO copyDao = new BookCopyDAO();
