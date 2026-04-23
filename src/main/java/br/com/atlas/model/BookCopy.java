@@ -5,16 +5,14 @@ public class BookCopy {
     private int bookCopyId;
     private Book book;
     private boolean statusAvailable;
-    private int publicationYear;
 
     public BookCopy() {
     }
 
-    public BookCopy(int bookCopyId, Book book, boolean statusAvailable, int publicationYear) {
+    public BookCopy(int bookCopyId, Book book, boolean statusAvailable) {
         this.bookCopyId = bookCopyId;
         this.book = book;
         this.statusAvailable = statusAvailable;
-        this.publicationYear = publicationYear;
     }
 
     public int getBookCopyId() {
@@ -39,13 +37,5 @@ public class BookCopy {
 
     public void setStatusAvailable(boolean statusAvailable) {
         this.statusAvailable = statusAvailable;
-    }
-
-    public int getPublicationYear() {
-        return publicationYear;
-    }
-
-    public void setPublicationYear(int publicationYear) {
-        this.publicationYear = publicationYear;
     }
 }
