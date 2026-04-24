@@ -1,154 +1,159 @@
 package br.com.atlas.dao;
 
 import br.com.atlas.model.Client;
-import br.com.atlas.util.ConnectionDb;
+
 import java.sql.*;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+// representa a conexão ativa com o banco de dados
+// é recebido pelo construtor e guardado no atributo connection — isso significa que quem
+// criar o ClientDAO é responsável por passar a conexão
+// O final garante que depois de atribuída no construtor, a conexão não pode ser trocada por outra
+
 public class ClientDAO {
 
-    public void insert(Client client) {
-        String sql = "INSERT INTO Client (cpf, isStudying, address, zipCode, startSuspensionDate, endSuspensionDate) VALUES (?, ?, ?, ?, ?, ?)";
+    private final Connection connection; 
 
-        try (Connection conn = ConnectionDb.getConexao();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
+    public ClientDAO(Connection connection) {
+        this.connection = connection;
+    }
 
-            stmt.setString(1, client.getCpf());
-            stmt.setBoolean(2, client.isStudying());
-            stmt.setString(3, client.getAddress());
-            stmt.setString(4, client.getZipCode());
+    // CREATE — insere em Person e depois em Client
+    public void insert(Client client) throws SQLException { //Avisa que esse método pode lançar erro de banco. Quem chamar o insert é responsável por tratar esse erro
+        String sqlPerson = "INSERT INTO person (cpf, name, email, gender, birthDate) VALUES (?,?,?,?,?)";
+        String sqlClient = "INSERT INTO client (cpf, address) VALUES (?,?)";
 
-            // Tratamento para datas nulas de suspensão
-            if (client.getStartSuspensionDate() != null) {
-                stmt.setDate(5, Date.valueOf(client.getStartSuspensionDate()));
-            } else {
-                stmt.setNull(5, Types.DATE);
-            }
+        // client.cpf é uma chave estrangeira que referencia person.cpf
+        // Se tentar gravar em client antes, o banco rejeita
 
-            if (client.getEndSuspensionDate() != null) {
-                stmt.setDate(6, Date.valueOf(client.getEndSuspensionDate()));
-            } else {
-                stmt.setNull(6, Types.DATE);
-            }
+        // Garante que os dois PreparedStatement são fechados automaticamente ao final
+        try (PreparedStatement stmtPerson = connection.prepareStatement(sqlPerson); // representa os "?"
+            PreparedStatement stmtClient = connection.prepareStatement(sqlClient)) {
 
-            stmt.executeUpdate();
+            stmtPerson.setString(1, client.getCpf());
+            stmtPerson.setString(2, client.getName());
+            stmtPerson.setString(3, client.getEmail());
+            stmtPerson.setString(4, client.getGender());
+            stmtPerson.setDate(5, Date.valueOf(client.getBirthDate()));
+            stmtPerson.executeUpdate();
 
-        } catch (SQLException e) {
-            e.printStackTrace();
+            stmtClient.setString(1, client.getCpf());
+            stmtClient.setString(2, client.getAddress());
+            stmtClient.executeUpdate(); 
+            // executeUpdate() executa a query no banco. Usado para INSERT, UPDATE e DELETE
         }
     }
 
-    public List<Client> findAll() {
-        List<Client> list = new ArrayList<>();
-        String sql = "SELECT p.*, c.isStudying, c.address, c.zipCode, c.startSuspernsionDate, c.endSuspensionDate FROM Person p " +
-                "INNER JOIN Client c ON p.cpf = c.cpf";
+    // READ ALL — JOIN entre person e client
+    public List<Client> findAll() throws SQLException {
+        String sql = "SELECT p.cpf, p.name, p.email, p.gender, p.birthDate, " +
+            "c.address, c.startSuspensionDate, c.endSuspensionDate " +
+            "FROM client c " +
+            "JOIN person p ON c.cpf = p.cpf";
+            // unindo as duas tabelas por cpf / p e c sao apelidos
 
-        try (Connection conn = ConnectionDb.getConexao();
-             PreparedStatement stmt = conn.prepareStatement(sql);
-             ResultSet rs = stmt.executeQuery()) {
+        List<Client> clients = new ArrayList<>(); // Cria a lista vazia que vai receber os clientes encontrados. Se não encontrar nenhum, retorna a lista vazia 
+
+        try (PreparedStatement stmt = connection.prepareStatement(sql);
+            ResultSet rs = stmt.executeQuery()) { // É o objeto que guarda o resultado da query
 
             while (rs.next()) {
-                Client c = new Client();
-                c.setCpf(rs.getString("cpf"));
-                c.setName(rs.getString("name"));
-                c.setEmail(rs.getString("email"));
-                c.setStudying(rs.getBoolean("isStudying"));
-                c.setAddress(rs.getString("address"));
-                c.setZipCode(rs.getString("zipCode"));
-
-                if (rs.getDate("startSuspensionDate") != null) {
-                    c.setStartSuspensionDate(rs.getDate("startSuspensionDate").toLocalDate());
-                }
-                if (rs.getDate("endSuspensionDate") != null) {
-                    c.setEndSuspensionDate(rs.getDate("endSuspensionDate").toLocalDate());
-                }
-
-                list.add(c);
+                clients.add(mapResultSet(rs));
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
+
+            // Enquanto houver linhas no resultado, chama o mapResultSet(rs) que transforma a linha atual num objeto Client e adiciona na lista.
         }
-        return list;
+
+        return clients;
     }
-    public Client findById(String cpf) {
-        String sql = "SELECT p.*, c.isStudying, c.address, c.zipCode, c.startSuspensionDate, c.endSuspensionDate " + "FROM Person p " +
-                "INNER JOIN Client c ON p.cpf = c.cpf " + "WHERE p.Cpf = ?";
-        Client c = null;
 
-        try (Connection conn = ConnectionDb.getConexao();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
+    // READ BY CPF
+    public Client findByCpf(String cpf) throws SQLException {
+        String sql = "SELECT p.cpf, p.name, p.email, p.gender, p.birthDate, " +
+            "c.address, c.startSuspensionDate, c.endSuspensionDate " +
+            "FROM client c " +
+            "JOIN person p ON c.cpf = p.cpf " +
+            "WHERE c.cpf = ?"; // Filtra o resultado para trazer apenas o cliente com aquele CPF específico
 
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setString(1, cpf);
+
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
-                    c = new Client();
-                    c.setCpf(rs.getString("cpf"));
-                    c.setName(rs.getString("name"));
-                    c.setEmail(rs.getString("email"));
-                    c.setStudying(rs.getBoolean("isStudying"));
-                    c.setAddress(rs.getString("address"));
-                    c.setZipCode(rs.getString("zipCode"));
-
-                    if (rs.getDate("startSuspensionDate") != null) {
-                        c.setStartSuspensionDate(rs.getDate("startSuspensionDate").toLocalDate());
-                    }
-                    if (rs.getDate("endSuspensionDate") != null) {
-                        c.setEndSuspensionDate(rs.getDate("endSuspensionDate").toLocalDate());
-                    }
+                    return mapResultSet(rs);
                 }
+
+                // aq so esperamos uma unica linha, por isso o if em vez de while
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
         }
-        return c;
+
+        return null;
     }
 
-    public boolean update(Client client) {
-        String sql = "UPDATE Client SET isStudying=?, address=?, zipCode=?, startSuspensionDate=?, endSuspensionDate=? WHERE cpf=?";
+    // UPDATE — atualiza person e client separadamente
+    public void update(Client client) throws SQLException {
+        String sqlPerson = "UPDATE person SET name = ?, email = ?, gender = ?, birthDate = ? WHERE cpf = ?";
+        String sqlClient = "UPDATE client SET address = ?, startSuspensionDate = ?, endSuspensionDate = ? WHERE cpf = ?";
 
-        try (Connection conn = ConnectionDb.getConexao();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
+        try (PreparedStatement stmtPerson = connection.prepareStatement(sqlPerson);
+            PreparedStatement stmtClient = connection.prepareStatement(sqlClient)) {
 
-            stmt.setBoolean(1, client.isStudying());
-            stmt.setString(2, client.getAddress());
-            stmt.setString(3, client.getZipCode());
+            stmtPerson.setString(1, client.getName());
+            stmtPerson.setString(2, client.getEmail());
+            stmtPerson.setString(3, client.getGender());
+            stmtPerson.setDate(4, Date.valueOf(client.getBirthDate()));
+            stmtPerson.setString(5, client.getCpf());
+            stmtPerson.executeUpdate();
 
-            if (client.getStartSuspensionDate() != null) {
-                stmt.setDate(4, Date.valueOf(client.getStartSuspensionDate()));
-            } else {
-                stmt.setNull(4, Types.DATE);
-            }
-
-            if (client.getEndSuspensionDate() != null) {
-                stmt.setDate(5, Date.valueOf(client.getEndSuspensionDate()));
-            } else {
-                stmt.setNull(5, Types.DATE);
-            }
-
-            stmt.setString(6, client.getCpf());
-
-            stmt.executeUpdate();
-            return true;
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return false;
+            stmtClient.setString(1, client.getAddress());
+            // datas de suspensão podem ser null
+            stmtClient.setDate(2, client.getStartSuspensionDate() != null
+                    ? Date.valueOf(client.getStartSuspensionDate()) : null);
+            stmtClient.setDate(3, client.getEndSuspensionDate() != null
+                    ? Date.valueOf(client.getEndSuspensionDate()) : null);
+            stmtClient.setString(4, client.getCpf());
+            stmtClient.executeUpdate();
         }
     }
 
-    public boolean delete(String cpf) {
-        String sql = "DELETE FROM Client WHERE cpf=?";
 
-        try (Connection conn = ConnectionDb.getConexao();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
+    // DELETE — deleta client primeiro, depois person (sem CASCADE no banco)
+    public void delete(String cpf) throws SQLException {
+        String sqlClient = "DELETE FROM client WHERE cpf = ?";
+        String sqlPerson = "DELETE FROM person WHERE cpf = ?";
 
-            stmt.setString(1, cpf);
-            stmt.executeUpdate();
-            return true;
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return false;
+        try (PreparedStatement stmtClient = connection.prepareStatement(sqlClient);
+            PreparedStatement stmtPerson = connection.prepareStatement(sqlPerson)) {
+
+            stmtClient.setString(1, cpf);
+            stmtClient.executeUpdate();
+
+            stmtPerson.setString(1, cpf);
+            stmtPerson.executeUpdate();
         }
     }
 
+    // MÉTODO AUXILIAR
+    private Client mapResultSet(ResultSet rs) throws SQLException {
+        String cpf        = rs.getString("cpf");
+        String name       = rs.getString("name");
+        String email      = rs.getString("email");
+        String gender     = rs.getString("gender");
+        LocalDate birthDate = rs.getDate("birthDate").toLocalDate();
+        String address    = rs.getString("address");
+
+        Client client = new Client(cpf, name, email, gender, birthDate, address);
+
+        Date start = rs.getDate("startSuspensionDate");
+        Date end   = rs.getDate("endSuspensionDate");
+        client.setStartSuspensionDate(start != null ? start.toLocalDate() : null);
+        client.setEndSuspensionDate(end != null ? end.toLocalDate() : null);
+
+        return client;
+
+        // pegar uma linha do ResultSet e transformar num objeto Client.
+        // Tanto o findAll quanto o findByCpf chamam ele pra não repetir esse código.
+    }
 }

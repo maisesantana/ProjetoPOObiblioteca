@@ -1,96 +1,128 @@
 package br.com.atlas.test;
 
-import br.com.atlas.dao.*;
-import br.com.atlas.model.*;
+import br.com.atlas.dao.ClientDAO;
+import br.com.atlas.dao.PersonDAO;
+import br.com.atlas.model.Client;
+import br.com.atlas.model.Person;
+import br.com.atlas.util.ConnectionDb;
+
+import java.sql.Connection;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Scanner;
 
 public class testeConexao {
 
-    public static void main(String[] args) {
-        
-        System.out.println("🚀 INICIANDO SIMULAÇÃO DO SISTEMA ATLAS\n");
+    public static void main(String[] args) throws Exception {
 
-        // --- SIMULAÇÃO 1: ClientController (Cadastro de Cliente) ---
-        System.out.println("1. Simulando 'RegisterClient'...");
-        
-        String cpf = "11122233344";
-        Client newClient = new Client(
-            cpf, "Miqueias Dev", "miqueias@email.com", "M",
-            LocalDate.of(1995, 5, 10), "Rua do Código, 123");
+        Connection connection = ConnectionDb.getConexao();
 
-        PersonDAO personDao = new PersonDAO();
-        ClientDAO clientDao = new ClientDAO();
-
-        // Tenta salvar a Pessoa e depois o Cliente
-        if (personDao.insert(newClient)) {
-            clientDao.insert(newClient);
-            System.out.println("✅ Cliente cadastrado com sucesso!");
+        if (connection == null) {
+            System.out.println("❌ Falha na conexão: " + ConnectionDb.getUltimoErro());
+            return;
         }
 
-        System.out.println("\n--------------------------------------------\n");
+        System.out.println("✅ Conexão estabelecida!\n");
 
-        // --- SIMULAÇÃO 2: BookController (Cadastro de Livro) ---
-        System.out.println("2. Simulando 'RegisterBook'...");
-        
-        // Simula que a Editora ID 1 já existe no banco
-        Publisher pub = new Publisher();
-        pub.setPublisherId(1); 
+        PersonDAO personDao = new PersonDAO(connection);
+        ClientDAO clientDao = new ClientDAO(connection);
+        Scanner scanner = new Scanner(System.in);
+        int opcao = -1;
 
-        Book newBook = new Book(0, "Java para Iniciantes", "Estante A1", 300, "Programação", "Nacional", pub);
-        BookDAO bookDao = new BookDAO();
-        bookDao.insert(newBook);
-        System.out.println("✅ Livro cadastrado!");
-        
-        // --- SIMULAÇÃO 2.5: Cadastrando o Exemplar (Físico) ---
-        System.out.println("2.5 Simulando criação de Exemplar...");
+        while (opcao != 0) {
+            System.out.println("=== MENU ===");
+            System.out.println("1 - Inserir Person");
+            System.out.println("2 - Inserir Client");
+            System.out.println("3 - Listar Persons");
+            System.out.println("4 - Listar Clients");
+            System.out.println("5 - Buscar por CPF");
+            System.out.println("6 - Deletar por CPF");
+            System.out.println("0 - Sair");
+            System.out.print("Escolha: ");
+            opcao = scanner.nextInt();
+            scanner.nextLine();
 
-        Book bookRef = new Book();
-        bookRef.setBookId(1); // Referenciando o livro criado acima
+            switch (opcao) {
 
-        BookCopy newCopy = new BookCopy();
-        newCopy.setBook(bookRef);
-        newCopy.setStatusAvailable(true); 
+                case 1:
+                    System.out.print("CPF: ");
+                    String cpf = scanner.nextLine();
+                    System.out.print("Nome: ");
+                    String nome = scanner.nextLine();
+                    System.out.print("Email: ");
+                    String email = scanner.nextLine();
+                    System.out.print("Gênero (M/F): ");
+                    String genero = scanner.nextLine();
+                    System.out.print("Data de nascimento (AAAA-MM-DD): ");
+                    LocalDate nascimento = LocalDate.parse(scanner.nextLine());
+                    personDao.insert(new Person(cpf, nome, email, genero, nascimento));
+                    System.out.println("✅ Person inserido!\n");
+                    break;
 
-        // Criando o DAO do exemplar (Primeira vez)
-        BookCopyDAO copyDao = new BookCopyDAO();
-        copyDao.insert(newCopy);
-        System.out.println("✅ Exemplar ID 1 colocado na estante!");
+                case 2:
+                    System.out.print("CPF: ");
+                    String cpfC = scanner.nextLine();
+                    System.out.print("Nome: ");
+                    String nomeC = scanner.nextLine();
+                    System.out.print("Email: ");
+                    String emailC = scanner.nextLine();
+                    System.out.print("Gênero (M/F): ");
+                    String generoC = scanner.nextLine();
+                    System.out.print("Data de nascimento (AAAA-MM-DD): ");
+                    LocalDate nascimentoC = LocalDate.parse(scanner.nextLine());
+                    System.out.print("Endereço: ");
+                    String endereco = scanner.nextLine();
+                    clientDao.insert(new Client(cpfC, nomeC, emailC, generoC, nascimentoC, endereco));
+                    System.out.println("✅ Client inserido!\n");
+                    break;
 
-        System.out.println("\n--------------------------------------------\n");
+                case 3:
+                    System.out.println("\n--- PERSONS ---");
+                    List<Person> persons = personDao.findAll();
+                    for (Person p : persons) {
+                        System.out.println(p.getCpf() + " | " + p.getName() + " | " + p.getEmail());
+                    }
+                    System.out.println();
+                    break;
 
-        // --- SIMULAÇÃO 3: LoanController (Empréstimo com Verificações) ---
-        System.out.println("3. Simulando 'RegisterLoan' (Com verificações)...");
+                case 4:
+                    System.out.println("\n--- CLIENTS ---");
+                    List<Client> clients = clientDao.findAll();
+                    for (Client c : clients) {
+                        System.out.println(c.getCpf() + " | " + c.getName() + " | " + c.getAddress());
+                    }
+                    System.out.println();
+                    break;
 
-        // Busca o cliente real no banco para checar suspensão
-        Client clientFromDb = clientDao.findById(cpf);
-        
-        // REUTILIZANDO a variável copyDao (Sem declarar de novo)
-        // Buscamos o exemplar ID 1 que acabamos de criar no passo 2.5
-        BookCopy copyFromDb = copyDao.findById(1);
+                case 5:
+                    System.out.print("CPF para buscar: ");
+                    String cpfBusca = scanner.nextLine();
+                    Client found = clientDao.findByCpf(cpfBusca);
+                    if (found != null) {
+                        System.out.println("✅ " + found.getCpf() + " | " + found.getName() + " | " + found.getAddress());
+                    } else {
+                        System.out.println("❌ Não encontrado.");
+                    }
+                    System.out.println();
+                    break;
 
-        // A lógica de segurança do seu Controller
-        if (clientFromDb == null) {
-            System.out.println("❌ Erro: Cliente não encontrado.");
-        } else if (!clientFromDb.canBorrow()) {
-            System.out.println("❌ Erro: Cliente está SUSPENSO!");
-        } else if (copyFromDb == null || !copyFromDb.isStatusAvailable()) {
-            System.out.println("❌ Erro: Livro não disponível.");
-        } else {
-            // Se passar em tudo, registra o empréstimo
-            Loan loan = new Loan();
-            loan.setClient(clientFromDb);
-            loan.setBookCopy(copyFromDb);
-            loan.setLoanDate(LocalDateTime.now());
-            loan.setExpectedReturnDate(LocalDateTime.now().plusDays(8));
-            loan.setRenewals(0);
-            loan.setActive(true);
+                case 6:
+                    System.out.print("CPF para deletar: ");
+                    String cpfDelete = scanner.nextLine();
+                    clientDao.delete(cpfDelete);
+                    System.out.println("✅ Deletado!\n");
+                    break;
 
-            LoanDAO loanDao = new LoanDAO();
-            loanDao.insert(loan);
-            
-            System.out.println("✅ Empréstimo realizado para: " + clientFromDb.getName());
-            System.out.println("📅 Devolução prevista: " + loan.getExpectedReturnDate());
+                case 0:
+                    System.out.println("Saindo...");
+                    break;
+
+                default:
+                    System.out.println("❌ Opção inválida!\n");
+            }
         }
+
+        connection.close();
+        scanner.close();
     }
 }

@@ -1,134 +1,101 @@
 package br.com.atlas.dao;
 
 import br.com.atlas.model.Person;
-import br.com.atlas.util.ConnectionDb;
 
 import java.sql.*;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
 public class PersonDAO {
 
-    public boolean insert(Person person) {
-        String sql = "INSERT INTO Person (cpf, name, socialName, email, gender, birthDate, password, phone, rg) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    private final Connection connection;
 
-        try (Connection conn = ConnectionDb.getConexao();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
+    public PersonDAO(Connection connection) {
+        this.connection = connection;
+    }
 
+    // CREATE
+    public void insert(Person person) throws SQLException {
+        String sql = "INSERT INTO person (cpf, name, email, gender, birthDate) VALUES (?,?,?,?,?)";
+
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setString(1, person.getCpf());
             stmt.setString(2, person.getName());
-            stmt.setString(3, person.getSocialName());
-            stmt.setString(4, person.getEmail());
-            stmt.setString(5, person.getGender());
-            stmt.setDate(6, Date.valueOf(person.getBirthDate()));
-            stmt.setString(7, person.getPassword());
-            stmt.setString(8, person.getPhone());
-            stmt.setString(9, person.getRg());
-
-            stmt.executeUpdate();
-            return true;
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-
-            return false;
-        }
-    }
-
-    public List<Person> findAll() {
-        List<Person> list = new ArrayList<>();
-        String sql = "SELECT * FROM Person";
-
-        try (Connection conn = ConnectionDb.getConexao();
-             PreparedStatement stmt = conn.prepareStatement(sql);
-             ResultSet rs = stmt.executeQuery()) {
-
-            while (rs.next()) {
-                Person p = new Person();
-                p.setCpf(rs.getString("cpf"));
-                p.setName(rs.getString("name"));
-                p.setSocialName(rs.getString("socialName"));
-                p.setEmail(rs.getString("email"));
-                p.setGender(rs.getString("gender"));
-                p.setBirthDate(rs.getDate("birthDate").toLocalDate());
-                p.setPassword(rs.getString("password"));
-                p.setPhone(rs.getString("phone"));
-                p.setRg(rs.getString("rg"));
-
-                list.add(p);
-            }
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        return list;
-    }
-
-    public Person findById(String cpf) {
-        String sql = "SELECT * FROM Person WHERE cpf = ?";
-        Person p = null;
-
-        try (Connection conn = ConnectionDb.getConexao();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-
-            stmt.setString(1, cpf);
-            try (ResultSet rs = stmt.executeQuery()) {
-                if (rs.next()) {
-                    p = new Person();
-                    p.setCpf(rs.getString("cpf"));
-                    p.setName(rs.getString("name"));
-                    p.setSocialName(rs.getString("socialName"));
-                    p.setEmail(rs.getString("email"));
-                    p.setGender(rs.getString("gender"));
-                    p.setBirthDate(rs.getDate("birthDate").toLocalDate());
-                    p.setPassword(rs.getString("password"));
-                    p.setPhone(rs.getString("phone"));
-                    p.setRg(rs.getString("rg"));
-                }
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return p;
-    }
-
-    public boolean update(Person person) {
-        String sql = "UPDATE Person SET name=?, socialName=?, email=?, gender=?, birthDate=?, password=?, phone=?, rg=? WHERE cpf=?";
-
-        try (Connection conn = ConnectionDb.getConexao();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-
-            stmt.setString(1, person.getName());
-            stmt.setString(2, person.getSocialName());
             stmt.setString(3, person.getEmail());
             stmt.setString(4, person.getGender());
             stmt.setDate(5, Date.valueOf(person.getBirthDate()));
-            stmt.setString(6, person.getPassword());
-            stmt.setString(7, person.getPhone());
-            stmt.setString(8, person.getRg());
-            stmt.setString(9, person.getCpf());
-
             stmt.executeUpdate();
-            return true;
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return false;
         }
     }
 
-    public boolean delete(String cpf) {
-        String sql = "DELETE FROM Person WHERE cpf=?";
+    // READ ALL
+    public List<Person> findAll() throws SQLException {
+        String sql = "SELECT cpf, name, email, gender, birthDate FROM person";
+        List<Person> persons = new ArrayList<>(); // faz a busca de todos e armazena nessa lista
 
-        try (Connection conn = ConnectionDb.getConexao();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
+        try (PreparedStatement stmt = connection.prepareStatement(sql);
+            ResultSet rs = stmt.executeQuery()) {
 
+            while (rs.next()) {
+                persons.add(mapResultSet(rs));
+            }
+        }
+
+        return persons;
+    }
+
+    // ISSO EH PRA SABER NO BANCO DE DADOS QUEM VC QUER ALTERAR/DELETAR JA QUE EH A CHAVE PRIMARIA
+    public Person findByCpf(String cpf) throws SQLException {
+        String sql = "SELECT cpf, name, email, gender, birthDate FROM person WHERE cpf = ?";
+
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setString(1, cpf);
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return mapResultSet(rs);
+                }
+            }
+        }
+
+        return null; // não encontrou
+    }
+
+    // UPDATE
+    public void update(Person person) throws SQLException {
+        String sql = "UPDATE person SET name = ?, email = ?, gender = ?, birthDate = ? WHERE cpf = ?";
+
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setString(1, person.getName());
+            stmt.setString(2, person.getEmail());
+            stmt.setString(3, person.getGender());
+            stmt.setDate(4, Date.valueOf(person.getBirthDate()));
+            stmt.setString(5, person.getCpf());
+            stmt.executeUpdate();
+        }
+    }
+
+    // DELETE
+    public void delete(String cpf) throws SQLException {
+        String sql = "DELETE FROM person WHERE cpf = ?";
+
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setString(1, cpf);
             stmt.executeUpdate();
-            return true;
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return false;
         }
+    }
+
+    // MÉTODO AUXILIAR
+    private Person mapResultSet(ResultSet rs) throws SQLException {
+        String cpf = rs.getString("cpf");
+        String name = rs.getString("name");
+        String email = rs.getString("email");
+        String gender = rs.getString("gender");
+
+        Date date = rs.getDate("birthDate");
+        LocalDate birthDate = (date != null) ? date.toLocalDate() : null;
+
+        return new Person(cpf, name, email, gender, birthDate);
     }
 }

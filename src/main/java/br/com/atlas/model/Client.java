@@ -12,10 +12,10 @@ public class Client extends Person {
     private List<Loan> loans; 
 
     public Client(String cpf, String name, String email, String gender, 
-        LocalDate birthDate, String adress) {
+        LocalDate birthDate, String address) {
         
         super(cpf, name, email, gender, birthDate);
-        this.address = adress;
+        this.address = address;
         startSuspensionDate = null;
         endSuspensionDate = null;
         loans = new ArrayList<>();
