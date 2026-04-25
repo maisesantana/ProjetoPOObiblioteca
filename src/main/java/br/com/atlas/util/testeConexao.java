@@ -1,10 +1,10 @@
-package br.com.atlas.test;
+package br.com.atlas.util;
 
 import br.com.atlas.dao.ClientDAO;
 import br.com.atlas.dao.PersonDAO;
 import br.com.atlas.model.Client;
 import br.com.atlas.model.Person;
-import br.com.atlas.util.ConnectionDb;
+// import br.com.atlas.util.ConnectionDb;
 
 import java.sql.Connection;
 import java.time.LocalDate;

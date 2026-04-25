@@ -6,6 +6,7 @@ import java.sql.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class PersonDAO {
 
@@ -15,8 +16,51 @@ public class PersonDAO {
         this.connection = connection;
     }
 
+    // verificação se o cpf existe
+    // !! protegida para que outras classes q herdam de pessoa consigam usar
+    protected boolean existsByCpf(String cpf) throws SQLException {
+        String sql = "SELECT 1 FROM person WHERE cpf = ?";
+
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setString(1, cpf); // procura o cpf no banco
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                return rs.next(); // true se já existe
+            }
+        }
+    }
+
+    // VALIDAÇÃO CENTRALIZADA
+    private void validatePerson(Person person) {
+
+        if (person.getCpf() == null || person.getCpf().trim().isEmpty()) {
+            throw new IllegalArgumentException("CPF é obrigatório!");
+        }
+        if (person.getName() == null || person.getName().trim().isEmpty()) {
+            throw new IllegalArgumentException("Nome é obrigatório!");
+        }
+        if (person.getEmail() == null || person.getEmail().trim().isEmpty()) {
+            throw new IllegalArgumentException("Email é obrigatório!");
+        }
+        if (person.getGender() == null || person.getGender().trim().isEmpty()) {
+            throw new IllegalArgumentException("Gênero é obrigatório!");
+        }
+        if (person.getBirthDate() == null) {
+            throw new IllegalArgumentException("Data de nascimento é obrigatória!");
+        }
+    }
+
     // CREATE
     public void insert(Person person) throws SQLException {
+
+        // obriga colocar todos os campos
+        validatePerson(person);
+
+        // VALIDAÇÃO ANTES DE INSERIR
+        if (existsByCpf(person.getCpf())) {
+            throw new SQLException("CPF já cadastrado: " + person.getCpf());
+        }
+
         String sql = "INSERT INTO person (cpf, name, email, gender, birthDate) VALUES (?,?,?,?,?)";
 
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
@@ -45,8 +89,8 @@ public class PersonDAO {
         return persons;
     }
 
-    // ISSO EH PRA SABER NO BANCO DE DADOS QUEM VC QUER ALTERAR/DELETAR JA QUE EH A CHAVE PRIMARIA
-    public Person findByCpf(String cpf) throws SQLException {
+    // aq é pra saber quem no bd vc quer alterar/deletar ja q é uma pk
+    public Optional<Person> findByCpf(String cpf) throws SQLException {
         String sql = "SELECT cpf, name, email, gender, birthDate FROM person WHERE cpf = ?";
 
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
@@ -54,16 +98,19 @@ public class PersonDAO {
 
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
-                    return mapResultSet(rs);
+                    return Optional.of(mapResultSet(rs));
                 }
             }
         }
 
-        return null; // não encontrou
+        return Optional.empty(); // não encontrou
     }
 
     // UPDATE
     public void update(Person person) throws SQLException {
+
+        validatePerson(person);
+
         String sql = "UPDATE person SET name = ?, email = ?, gender = ?, birthDate = ? WHERE cpf = ?";
 
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
@@ -72,17 +119,23 @@ public class PersonDAO {
             stmt.setString(3, person.getGender());
             stmt.setDate(4, Date.valueOf(person.getBirthDate()));
             stmt.setString(5, person.getCpf());
-            stmt.executeUpdate();
+            int rows = stmt.executeUpdate(); // executa o update e retorna quantas linhas foram afetadas
+            if (rows == 0) { // verifica se aquele cpf existe
+                throw new SQLException("Nenhum registro encontrado com o CPF: " + person.getCpf());
+            }
         }
     }
 
-    // DELETE
+    // DELETE atraves do cpf
     public void delete(String cpf) throws SQLException {
         String sql = "DELETE FROM person WHERE cpf = ?";
 
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-            stmt.setString(1, cpf);
-            stmt.executeUpdate();
+            stmt.setString(1, cpf); // um unico parametro que é justament o cpf
+            int rows = stmt.executeUpdate();
+            if (rows == 0) {
+                throw new SQLException("Nenhum registro encontrado com o CPF: " + cpf);
+            }
         }
     }
 
@@ -93,8 +146,7 @@ public class PersonDAO {
         String email = rs.getString("email");
         String gender = rs.getString("gender");
 
-        Date date = rs.getDate("birthDate");
-        LocalDate birthDate = (date != null) ? date.toLocalDate() : null;
+        LocalDate birthDate = rs.getDate("birthDate").toLocalDate();
 
         return new Person(cpf, name, email, gender, birthDate);
     }
