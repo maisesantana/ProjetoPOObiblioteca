@@ -1,5 +1,7 @@
 package br.com.atlas.model;
 
+import java.util.ArrayList;
+import java.util.List;
 
 public class Book {
 
@@ -8,21 +10,38 @@ public class Book {
     private String bookLocation;
     private int numberOfPages;
     private String bookSubject;
-    private String bookOrigin;
-    private Publisher publisher;
+    private String publisher;
+    private List<String> authors;
+    private List<String> categories;
+    private List<BookCopy> copies;
 
-    public Book() {
+    public Book(String bookName, String bookLocation, int numberOfPages,
+        String bookSubject, String publisher) {
+
+        this.bookName = bookName;
+        this.bookLocation = bookLocation;
+        this.numberOfPages = numberOfPages;
+        this.bookSubject = bookSubject;
+        this.publisher = publisher;
+
+        this.authors = new ArrayList<>();
+        this.categories = new ArrayList<>();
+        this.copies = new ArrayList<>();
     }
 
     public Book(int bookId, String bookName, String bookLocation, int numberOfPages,
-                String bookSubject, String bookOrigin, Publisher publisher) {
+        String bookSubject, String publisher) {
+
         this.bookId = bookId;
         this.bookName = bookName;
         this.bookLocation = bookLocation;
         this.numberOfPages = numberOfPages;
         this.bookSubject = bookSubject;
-        this.bookOrigin = bookOrigin;
         this.publisher = publisher;
+
+        this.authors = new ArrayList<>();
+        this.categories = new ArrayList<>();
+        this.copies = new ArrayList<>();
     }
 
     public int getBookId() {
@@ -65,12 +84,59 @@ public class Book {
         this.bookSubject = bookSubject;
     }
 
-    public String getBookOrigin() {
-        return bookOrigin;
+    public String getPublisher() {
+        return publisher;
     }
 
-    public void setBookOrigin(String bookOrigin) {
-        this.bookOrigin = bookOrigin;
+    public void setPublisher(String publisher) {
+        this.publisher = publisher;
     }
 
+    public List<String> getAuthors() {
+        return authors;
+    }
+
+    public List<String> getCategories() {
+        return categories;
+    }
+
+    public List<BookCopy> getCopies() {
+        return copies;
+    }
+
+    public void addAuthor(String author) {
+        authors.add(author);
+    }
+
+    public void removeAuthor(String author) {
+        authors.remove(author);
+    }
+
+    public void addCategory(String category) {
+        categories.add(category);
+    }
+
+    public void removeCategory(String category) {
+        categories.remove(category);
+    }
+
+    public void addCopy(BookCopy copy) {
+        copies.add(copy);
+    }
+
+    public void removeCopy(BookCopy copy) {
+        copies.remove(copy);
+    }
+
+    public int totalAvailableCopies() {
+        int count = 0;
+
+        for (BookCopy c : copies) {
+            if (c.isAvailable()) {
+                count++;
+            }
+        }
+
+        return count;
+    }
 }

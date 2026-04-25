@@ -4,15 +4,17 @@ public class BookCopy {
 
     private int bookCopyId;
     private Book book;
-    private boolean statusAvailable;
+    private boolean available;
 
-    public BookCopy() {
+    public BookCopy(Book book) {
+        this.book = book;
+        available = true;
     }
 
-    public BookCopy(int bookCopyId, Book book, boolean statusAvailable) {
+    public BookCopy(int bookCopyId, Book book, boolean available) {
         this.bookCopyId = bookCopyId;
         this.book = book;
-        this.statusAvailable = statusAvailable;
+        this.available = available;
     }
 
     public int getBookCopyId() {
@@ -31,11 +33,11 @@ public class BookCopy {
         this.book = book;
     }
 
-    public boolean isStatusAvailable() {
-        return statusAvailable;
+    public boolean isAvailable() {
+        return available;
     }
 
-    public void setStatusAvailable(boolean statusAvailable) {
-        this.statusAvailable = statusAvailable;
+    public void setAvailable(boolean available) {
+        this.available = available;
     }
 }

@@ -27,6 +27,13 @@ public class ReturnBook {
         return 0;
     }
 
+    public boolean isLate() {
+        if (calculateDelayDays() != 0) {
+            return true;
+        }
+        return false;
+    }
+
     public int calculateSuspensionDays() {
         return calculateDelayDays() * 2;
     }

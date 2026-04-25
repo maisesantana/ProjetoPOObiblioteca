@@ -9,7 +9,6 @@ public class Loan {
     private int loanId;
     private LocalDateTime loanDate;
     private LocalDateTime expectedReturnDate;
-    private int renewalsNumber;
     private boolean active;
     private List<Renewal> renewals;
     private Client client;
@@ -22,7 +21,6 @@ public class Loan {
         this.bookCopy = bookCopy;
         loanDate = LocalDateTime.now();
         expectedReturnDate = loanDate.plusDays(7);
-        renewalsNumber = 0;
         renewals = new ArrayList<>();
     }
 
@@ -33,7 +31,6 @@ public class Loan {
         this.bookCopy = bookCopy;
         loanDate = LocalDateTime.now();
         expectedReturnDate = loanDate.plusDays(7);
-        renewalsNumber = 0;
         renewals = new ArrayList<>();
     }
 
@@ -52,7 +49,7 @@ public class Loan {
     }
     
     public boolean canRenew() {
-        return renewalsNumber < 3 && active;
+        return renewals.size() < 3 && active;
     }
 
     public void finishLoan() {
@@ -99,25 +96,12 @@ public class Loan {
         this.expectedReturnDate = expectedReturnDate;
     }
 
-    public int getRenewalsNumber() {
-        return renewalsNumber;
-    }
-
-    public void setRenewalsNumber(int renewalsNumber) {
-        this.renewalsNumber = renewalsNumber;
-    }
-
     public boolean isActive() {
         return active;
     }
 
     public void setActive(boolean active) {
         this.active = active;
-    }
-
-    public boolean isLate() {
-        //ainda sera implementado
-        return false;
     }
 
     public void addRenew(Renewal r) {

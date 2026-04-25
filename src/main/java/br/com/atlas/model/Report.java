@@ -7,16 +7,16 @@ public class Report {
     private int reportId;
     private String reportType;
     private LocalDate generationDate;
-    private Librarian librarian;
 
-    public Report() {
+    public Report(String reportType) {
+        this.reportType = reportType;
+        this.generationDate = LocalDate.now();
     }
 
-    public Report(int reportId, String reportType, LocalDate generationDate, Librarian librarian) {
+    public Report(int reportId, String reportType, LocalDate generationDate) {
         this.reportId = reportId;
         this.reportType = reportType;
         this.generationDate = generationDate;
-        this.librarian = librarian;
     }
 
     public int getReportId() {
@@ -41,13 +41,5 @@ public class Report {
 
     public void setGenerationDate(LocalDate generationDate) {
         this.generationDate = generationDate;
-    }
-
-    public Librarian getLibrarian() {
-        return librarian;
-    }
-
-    public void setLibrarian(Librarian librarian) {
-        this.librarian = librarian;
     }
 }

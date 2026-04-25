@@ -74,7 +74,7 @@ public class Client extends Person {
         if (isSuspended()) return false;
 
         for (Loan loan : loans) {
-            if (loan.isLate()) {
+            if (loan.getReturnBook().isLate()) {
                 return false;
             }
         }

@@ -50,14 +50,14 @@ public class Attendant extends Employee {
             return;
         }
         //ver se exemplar ta disponivel
-        if (!bc.isStatusAvailable()) {
+        if (!bc.isAvailable()) {
             System.out.println("Exemplar não disponível");
             return;
         }
 
         Loan l = new Loan(c, bc);
         c.addLoan(l);
-        bc.setStatusAvailable(false);
+        bc.setAvailable(false);
         System.out.println("Empréstimo feito.");
     }
 
@@ -73,9 +73,8 @@ public class Attendant extends Employee {
         }
 
         //aki ele renova a data
-        l.setExpectedReturnDate(l.getExpectedReturnDate().plusDays(7));
-        l.setRenewalsNumber(l.getRenewalsNumber() + 1);
-        Renewal r = new Renewal(l.getExpectedReturnDate(), l.getRenewalsNumber(), l);
+        l.setExpectedReturnDate(l.getExpectedReturnDate().plusDays(8));
+        Renewal r = new Renewal(l.getExpectedReturnDate(), l.getRenewals().size() + 1, l);
         l.addRenew(r);
         System.out.println("Renovação concluída!");
     }
@@ -86,13 +85,22 @@ public class Attendant extends Employee {
             return;
         }
 
-        if (l.isLate()) {
-            //tratar aki
-            return;
-        }
-
         l.setActive(false);
         ReturnBook r = new ReturnBook(LocalDateTime.now(), l);
+        if (r.isLate()) {
+
+            l.setReturnBook(r);
+            if (l.getClient().isSuspended()) {
+                l.getClient().setEndSuspensionDate(l.getClient().getStartSuspensionDate().plusDays(r.calculateSuspensionDays()));
+                System.out.println("O cliente recebeu a devida suspensão.");
+                return;
+            }
+            
+            l.getClient().setStartSuspensionDate(LocalDate.now());
+            l.getClient().setEndSuspensionDate(l.getClient().getStartSuspensionDate().plusDays(r.calculateSuspensionDays()));
+            System.out.println("O cliente recebeu a devida suspensão.");
+            return;
+        }
         l.setReturnBook(r);
     }
 }
