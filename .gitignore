@@ -1,7 +1,15 @@
-/target/
-/.settings/
-/.project
-/.classpath
-/bin/
+# IDE
+.idea/
+.settings/
+.vscode/
+
+# Build
+target/
+bin/
+
+# Logs
 *.log
+
+# OS
 .DS_Store
+Thumbs.db
