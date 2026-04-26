@@ -4,7 +4,7 @@ import br.com.atlas.dao.*;
 import br.com.atlas.model.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Collections;
+//import java.util.Collections;
 
 public class testeConexao {
 
