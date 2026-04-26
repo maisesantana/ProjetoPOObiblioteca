@@ -3,7 +3,6 @@ package br.com.atlas.dao;
 import br.com.atlas.model.Book;
 import br.com.atlas.model.BookCopy;
 import br.com.atlas.util.ConnectionDb;
-
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -11,18 +10,17 @@ import java.util.List;
 public class BookCopyDAO {
 
     public boolean insert(BookCopy copy) {
-        String sql = "INSERT INTO BookCopy (bookId, statusAvailable, publicationYear) VALUES (?, ?, ?)";
+        
+        String sql = "INSERT INTO BookCopy (BookId, StatusAvailable) VALUES (?, ?)";
 
         try (Connection conn = ConnectionDb.getConexao();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setInt(1, copy.getBook().getBookId());
-            stmt.setBoolean(2, copy.isStatusAvailable());
-            stmt.setInt(3, copy.getPublicationYear());
+            stmt.setBoolean(2, copy.isAvailable()); 
 
             stmt.executeUpdate();
             return true;
-
         } catch (SQLException e) {
             e.printStackTrace();
             return false;
@@ -31,7 +29,8 @@ public class BookCopyDAO {
 
     public List<BookCopy> findAll() {
         List<BookCopy> list = new ArrayList<>();
-        String sql = "SELECT bc.*, b.bookName FROM BookCopy bc " +  "INNER JOIN Book b ON bc.bookId = b.bookId";
+        String sql = "SELECT bc.*, b.BookName FROM BookCopy bc " +
+                     "INNER JOIN Book b ON bc.BookId = b.BookId";
 
         try (Connection conn = ConnectionDb.getConexao();
              PreparedStatement stmt = conn.prepareStatement(sql);
@@ -39,17 +38,15 @@ public class BookCopyDAO {
 
             while (rs.next()) {
                 BookCopy copy = new BookCopy();
-                copy.setBookCopyId(rs.getInt("bookCopyId"));
-                copy.setStatusAvailable(rs.getBoolean("statusAvailable"));
-                copy.setPublicationYear(rs.getInt("publicationYear"));
+                copy.setBookCopyId(rs.getInt("BookCopyId"));
+                copy.setAvailable(rs.getBoolean("StatusAvailable"));
 
                 Book b = new Book();
-                b.setBookId(rs.getInt("bookId"));
-                b.setBookOrigin(rs.getString("bookId"));
+                b.setBookId(rs.getInt("BookId"));
+                b.setBookName(rs.getString("BookName"));
 
                 copy.setBook(b);
                 list.add(copy);
-
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -57,71 +54,61 @@ public class BookCopyDAO {
         return list;
     }
 
-    public BookCopy findById(int id){
-        String sql = "SELECT bc.*, b.bookName FROM BookCopy bc " +
-        "INNER JOIN Book b ON bc.bookId = b.bookId WHERE bc.bookCopyId = ?";
+    public BookCopy findById(int id) {
+        String sql = "SELECT bc.*, b.BookName FROM BookCopy bc " +
+                     "INNER JOIN Book b ON bc.BookId = b.BookId WHERE bc.BookCopyId = ?";
 
         try (Connection conn = ConnectionDb.getConexao();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setInt(1, id);
-
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
                     BookCopy copy = new BookCopy();
-                    copy.setBookCopyId(rs.getInt("bookCopyId"));
-                    copy.setStatusAvailable(rs.getBoolean("statusAvailable"));
-                    copy.setPublicationYear(rs.getInt("publicationYear"));
+                    copy.setBookCopyId(rs.getInt("BookCopyId"));
+                    copy.setAvailable(rs.getBoolean("StatusAvailable"));
 
                     Book b = new Book();
-                    b.setBookId(rs.getInt("bookId"));
-                    b.setBookName(rs.getString("bookName"));
+                    b.setBookId(rs.getInt("BookId"));
+                    b.setBookName(rs.getString("BookName"));
 
                     copy.setBook(b);
                     return copy;
                 }
-
             }
-
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
         return null;
     }
+
     public boolean update(BookCopy copy) {
-        String sql = "UPDATE BookCopy SET bookId=?, statusAvailable=?, publicationYear=? WHERE bookCopyId=?";
+        String sql = "UPDATE BookCopy SET StatusAvailable = ? WHERE BookCopyId = ?";
 
         try (Connection conn = ConnectionDb.getConexao();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
-            stmt.setInt(1, copy.getBook().getBookId());
-            stmt.setBoolean(2, copy.isStatusAvailable());
-            stmt.setInt(3, copy.getPublicationYear());
-            stmt.setInt(4, copy.getBookCopyId());
+            stmt.setBoolean(1, copy.isAvailable());
+            stmt.setInt(2, copy.getBookCopyId());
 
             stmt.executeUpdate();
             return true;
-
         } catch (SQLException e) {
             e.printStackTrace();
             return false;
         }
     }
-    public boolean delete(int id) {
-        String sql = "DELETE FROM BookCopy WHERE bookCopyId=?";
 
+    public boolean delete(int id) {
+        String sql = "DELETE FROM BookCopy WHERE BookCopyId = ?";
         try (Connection conn = ConnectionDb.getConexao();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
-
             stmt.setInt(1, id);
             stmt.executeUpdate();
             return true;
-
         } catch (SQLException e) {
             e.printStackTrace();
             return false;
         }
     }
-
 }

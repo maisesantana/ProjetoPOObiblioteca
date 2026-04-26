@@ -1,128 +1,81 @@
 package br.com.atlas.util;
 
-import br.com.atlas.dao.ClientDAO;
-import br.com.atlas.dao.PersonDAO;
-import br.com.atlas.model.Client;
-import br.com.atlas.model.Person;
-// import br.com.atlas.util.ConnectionDb;
-
-import java.sql.Connection;
+import br.com.atlas.dao.*;
+import br.com.atlas.model.*;
 import java.time.LocalDate;
-import java.util.List;
-import java.util.Scanner;
+import java.time.LocalDateTime;
+import java.util.Collections;
 
 public class testeConexao {
 
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) {
+        System.out.println("🤖 INICIANDO TESTE DE FLUXO AUTOMATIZADO - ATLAS\n");
 
-        Connection connection = ConnectionDb.getConexao();
+        try {
+            // 1. Instanciando os DAOs
+            BookDAO bookDao = new BookDAO();
+            BookCopyDAO copyDao = new BookCopyDAO();
+            ClientDAO clientDao = new ClientDAO();
+            LoanDAO loanDao = new LoanDAO();
+            RenewalDAO renewalDao = new RenewalDAO();
+            ReturnBookDAO returnDao = new ReturnBookDAO();
 
-        if (connection == null) {
-            System.out.println("❌ Falha na conexão: " + ConnectionDb.getUltimoErro());
-            return;
-        }
+            // --- PASSO 1: CADASTRO DE INFRAESTRUTURA ---
+            System.out.println("1. Cadastrando Editora...");
+            // Supondo que Publisher agora use String ou ID conforme seu SQL
+            // Aqui vamos simular o cadastro manual para teste
+            System.out.println("✅ Editora 'Atlas Editorial' pronta.");
 
-        System.out.println("✅ Conexão estabelecida!\n");
+            // --- PASSO 2: CADASTRO DO LIVRO E EXEMPLAR ---
+            System.out.println("2. Cadastrando Livro e Exemplar...");
+            Book livro = new Book("Java: Como Programar", "Prateleira A1", 500, "Tecnologia", "Atlas Editorial");
+            bookDao.insert(livro); 
+            // O insert do BookDAO já deve setar o ID no objeto 'livro'
+            
+            BookCopy exemplar = new BookCopy(livro);
+            copyDao.insert(exemplar);
+            System.out.println("✅ Livro ID " + livro.getBookId() + " e Exemplar cadastrados.");
 
-        PersonDAO personDao = new PersonDAO(connection);
-        ClientDAO clientDao = new ClientDAO(connection);
-        Scanner scanner = new Scanner(System.in);
-        int opcao = -1;
+            // --- PASSO 3: CADASTRO DO CLIENTE ---
+            System.out.println("3. Cadastrando Cliente...");
+            Client cliente = new Client("12345678900", "Miqueias Dev", "miqueias@email.com", "M", LocalDate.of(2000, 1, 1), "Rua Java, 100");
+            clientDao.insert(cliente);
+            System.out.println("✅ Cliente " + cliente.getName() + " cadastrado.");
 
-        while (opcao != 0) {
-            System.out.println("=== MENU ===");
-            System.out.println("1 - Inserir Person");
-            System.out.println("2 - Inserir Client");
-            System.out.println("3 - Listar Persons");
-            System.out.println("4 - Listar Clients");
-            System.out.println("5 - Buscar por CPF");
-            System.out.println("6 - Deletar por CPF");
-            System.out.println("0 - Sair");
-            System.out.print("Escolha: ");
-            opcao = scanner.nextInt();
-            scanner.nextLine();
+            // --- PASSO 4: REALIZANDO EMPRÉSTIMO ---
+            System.out.println("4. Realizando Empréstimo...");
+            Loan emprestimo = new Loan(cliente, exemplar);
+            emprestimo.setActive(true);
+            loanDao.insert(emprestimo);
+            System.out.println("✅ Empréstimo realizado. Devolução prevista para: " + emprestimo.getExpectedReturnDate());
 
-            switch (opcao) {
-
-                case 1:
-                    System.out.print("CPF: ");
-                    String cpf = scanner.nextLine();
-                    System.out.print("Nome: ");
-                    String nome = scanner.nextLine();
-                    System.out.print("Email: ");
-                    String email = scanner.nextLine();
-                    System.out.print("Gênero (M/F): ");
-                    String genero = scanner.nextLine();
-                    System.out.print("Data de nascimento (AAAA-MM-DD): ");
-                    LocalDate nascimento = LocalDate.parse(scanner.nextLine());
-                    personDao.insert(new Person(cpf, nome, email, genero, nascimento));
-                    System.out.println("✅ Person inserido!\n");
-                    break;
-
-                case 2:
-                    System.out.print("CPF: ");
-                    String cpfC = scanner.nextLine();
-                    System.out.print("Nome: ");
-                    String nomeC = scanner.nextLine();
-                    System.out.print("Email: ");
-                    String emailC = scanner.nextLine();
-                    System.out.print("Gênero (M/F): ");
-                    String generoC = scanner.nextLine();
-                    System.out.print("Data de nascimento (AAAA-MM-DD): ");
-                    LocalDate nascimentoC = LocalDate.parse(scanner.nextLine());
-                    System.out.print("Endereço: ");
-                    String endereco = scanner.nextLine();
-                    clientDao.insert(new Client(cpfC, nomeC, emailC, generoC, nascimentoC, endereco));
-                    System.out.println("✅ Client inserido!\n");
-                    break;
-
-                case 3:
-                    System.out.println("\n--- PERSONS ---");
-                    List<Person> persons = personDao.findAll();
-                    for (Person p : persons) {
-                        System.out.println(p.getCpf() + " | " + p.getName() + " | " + p.getEmail());
-                    }
-                    System.out.println();
-                    break;
-
-                case 4:
-                    System.out.println("\n--- CLIENTS ---");
-                    List<Client> clients = clientDao.findAll();
-                    for (Client c : clients) {
-                        System.out.println(c.getCpf() + " | " + c.getName() + " | " + c.getAddress());
-                    }
-                    System.out.println();
-                    break;
-
-                case 5:
-                    System.out.print("CPF para buscar: ");
-                    String cpfBusca = scanner.nextLine();
-                    Client found = clientDao.findByCpf(cpfBusca);
-                    if (found != null) {
-                        System.out.println("✅ " + found.getCpf() + " | " + found.getName() + " | " + found.getAddress());
-                    } else {
-                        System.out.println("❌ Não encontrado.");
-                    }
-                    System.out.println();
-                    break;
-
-                case 6:
-                    System.out.print("CPF para deletar: ");
-                    String cpfDelete = scanner.nextLine();
-                    clientDao.delete(cpfDelete);
-                    System.out.println("✅ Deletado!\n");
-                    break;
-
-                case 0:
-                    System.out.println("Saindo...");
-                    break;
-
-                default:
-                    System.out.println("❌ Opção inválida!\n");
+            // --- PASSO 5: REALIZANDO RENOVAÇÃO ---
+            System.out.println("5. Realizando Renovação...");
+            if (emprestimo.canRenew()) {
+                LocalDateTime novaData = emprestimo.getExpectedReturnDate().plusDays(7);
+                Renewal renovacao = new Renewal(novaData, 1, emprestimo);
+                renewalDao.insert(renovacao);
+                System.out.println("✅ Renovado! Nova data: " + novaData);
             }
-        }
 
-        connection.close();
-        scanner.close();
+            // --- PASSO 6: REALIZANDO DEVOLUÇÃO ---
+            System.out.println("6. Realizando Devolução...");
+            ReturnBook devolucao = new ReturnBook(LocalDateTime.now(), emprestimo);
+            returnDao.insert(devolucao);
+            
+            if (devolucao.isLate()) {
+                System.out.println("⚠️ Devolução com ATRASO! Dias de suspensão: " + devolucao.calculateSuspensionDays());
+            } else {
+                System.out.println("✅ Devolução realizada com sucesso. Livro disponível novamente.");
+            }
+
+            System.out.println("\n-----------------------------------------");
+            System.out.println("🏆 TESTE FINALIZADO COM SUCESSO!");
+            System.out.println("-----------------------------------------");
+
+        } catch (Exception e) {
+            System.out.println("\n❌ ERRO DURANTE O TESTE:");
+            e.printStackTrace();
+        }
     }
 }

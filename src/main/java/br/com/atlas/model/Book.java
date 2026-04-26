@@ -15,6 +15,12 @@ public class Book {
     private List<String> categories;
     private List<BookCopy> copies;
 
+    public Book() {
+        this.authors = new ArrayList<>();
+        this.categories = new ArrayList<>();
+        this.copies = new ArrayList<>();
+    }
+
     public Book(String bookName, String bookLocation, int numberOfPages,
         String bookSubject, String publisher) {
 

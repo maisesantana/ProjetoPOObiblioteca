@@ -6,6 +6,8 @@ public class BookCopy {
     private Book book;
     private boolean available;
 
+    public BookCopy() {}
+
     public BookCopy(Book book) {
         this.book = book;
         available = true;

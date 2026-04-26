@@ -2,7 +2,6 @@ package br.com.atlas.controller;
 
 import br.com.atlas.dao.BookDAO;
 import br.com.atlas.model.Book;
-import br.com.atlas.model.Publisher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -25,17 +24,11 @@ public class BookController extends HttpServlet {
         String bookLocation = request.getParameter("bookLocation");
         int numberOfPages = Integer.parseInt(request.getParameter("numberOfPages"));
         String bookSubject = request.getParameter("bookSubject");
-        String bookOrigin = request.getParameter("bookOrigin");
-        int publisherId = Integer.parseInt(request.getParameter("publisherId"));
+       String publisher = request.getParameter("publisher");
 
-        // 2. Monta o objeto Publisher (Editora)
-        Publisher publisher = new Publisher();
-        publisher.setPublisherId(publisherId);
+// Criando o livro conforme o Model (String publisher)
+        Book newBook = new Book(bookName, bookLocation, numberOfPages, bookSubject, publisher);
 
-        // 3. Monta o objeto Book (usando o construtor da classe Book.java)
-        Book newBook = new Book(0, bookName, bookLocation, numberOfPages, bookSubject, bookOrigin, publisher);
-
-        // 4. Salva usando o DAO
         BookDAO bookDao = new BookDAO();
         bookDao.insert(newBook);
 

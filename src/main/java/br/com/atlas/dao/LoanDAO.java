@@ -11,7 +11,7 @@ import java.util.List;
 public class LoanDAO {
 
     public void insert(Loan loan) {
-        String sql = "INSERT INTO Loan (cpf, bookCopyId, loanDate, expectedReturnDate, renewals, active) VALUES (?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO Loan (Cpf, BookCopyId, LoanDate, ExpectedReturnDate, Renewals, Active) VALUES (?, ?, ?, ?, ?, ?)";
 
         try (Connection conn = ConnectionDb.getConexao();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -20,19 +20,20 @@ public class LoanDAO {
             stmt.setInt(2, loan.getBookCopy().getBookCopyId());
             stmt.setTimestamp(3, Timestamp.valueOf(loan.getLoanDate()));
             stmt.setTimestamp(4, Timestamp.valueOf(loan.getExpectedReturnDate()));
-            stmt.setInt(5, loan.getRenewals());
+            
+            // O banco espera um INT, então pegamos o tamanho da lista de renovações
+            stmt.setInt(5, loan.getRenewals().size());
             stmt.setBoolean(6, loan.isActive());
 
             stmt.executeUpdate();
 
+            // Atualiza o exemplar para indisponível
             BookCopyDAO bcDAO = new BookCopyDAO();
-            loan.getBookCopy().setStatusAvailable(false);
+            loan.getBookCopy().setAvailable(false); 
             bcDAO.update(loan.getBookCopy());
-
 
         } catch (SQLException e) {
             e.printStackTrace();
-
         }
     }
 
@@ -45,24 +46,18 @@ public class LoanDAO {
              ResultSet rs = stmt.executeQuery()) {
 
             while (rs.next()) {
-                Loan l = new Loan();
-                l.setLoanId(rs.getInt("loanId"));
+                // Usando construtor que aceita os objetos conforme o Model
                 Client c = new Client();
-                c.setCpf(rs.getString("cpf"));
-                l.setClient(c);
+                c.setCpf(rs.getString("Cpf"));
+                
                 BookCopy bc = new BookCopy();
-                bc.setBookCopyId(rs.getInt("bookCopyId"));
-                l.setBookCopy(bc);
+                bc.setBookCopyId(rs.getInt("BookCopyId"));
 
-                if (rs.getTimestamp("loanDate") != null) {
-                    l.setLoanDate(rs.getTimestamp("loanDate").toLocalDateTime());
-                }
-                if (rs.getTimestamp("expectedReturnDate") != null) {
-                    l.setExpectedReturnDate(rs.getTimestamp("expectedReturnDate").toLocalDateTime());
-                }
-
-                l.setRenewals(rs.getInt("renewals"));
-                l.setActive(rs.getBoolean("active"));
+                Loan l = new Loan(c, bc);
+                l.setLoanId(rs.getInt("LoanId"));
+                l.setLoanDate(rs.getTimestamp("LoanDate").toLocalDateTime());
+                l.setExpectedReturnDate(rs.getTimestamp("ExpectedReturnDate").toLocalDateTime());
+                l.setActive(rs.getBoolean("Active"));
 
                 list.add(l);
             }
@@ -73,46 +68,34 @@ public class LoanDAO {
     }
 
     public Loan findById(int id) {
-        String sql = "SELECT * FROM Loan WHERE loanId = ?";
-        Loan loan = null;
-
+        String sql = "SELECT * FROM Loan WHERE LoanId = ?";
         try (Connection conn = ConnectionDb.getConexao();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setInt(1, id);
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
-                    loan = new Loan();
-                    loan.setLoanId(rs.getInt("loanId"));
-
                     Client c = new Client();
-                    c.setCpf(rs.getString("cpf"));
-                    loan.setClient(c);
-
+                    c.setCpf(rs.getString("Cpf"));
                     BookCopy bc = new BookCopy();
-                    bc.setBookCopyId(rs.getInt("bookCopyId"));
-                    loan.setBookCopy(bc);
+                    bc.setBookCopyId(rs.getInt("BookCopyId"));
 
-                    if (rs.getTimestamp("loanDate") != null) {
-                        loan.setLoanDate(rs.getTimestamp("loanDate").toLocalDateTime());
-                    }
-                    if (rs.getTimestamp("expectedReturnDate") != null) {
-                        loan.setExpectedReturnDate(rs.getTimestamp("expectedReturnDate").toLocalDateTime());
-                    }
-
-                    loan.setRenewals(rs.getInt("renewals"));
-                    loan.setActive(rs.getBoolean("active"));
+                    Loan loan = new Loan(c, bc);
+                    loan.setLoanId(rs.getInt("LoanId"));
+                    loan.setLoanDate(rs.getTimestamp("LoanDate").toLocalDateTime());
+                    loan.setExpectedReturnDate(rs.getTimestamp("ExpectedReturnDate").toLocalDateTime());
+                    loan.setActive(rs.getBoolean("Active"));
+                    return loan;
                 }
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return loan;
+        return null;
     }
 
     public boolean update(Loan loan) {
-        String sql = "UPDATE Loan SET cpf=?, bookCopyId=?, loanDate=?, expectedReturnDate=?, renewals=?, active=? WHERE loanId=?";
-
+        String sql = "UPDATE Loan SET Cpf=?, BookCopyId=?, LoanDate=?, ExpectedReturnDate=?, Renewals=?, Active=? WHERE LoanId=?";
         try (Connection conn = ConnectionDb.getConexao();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
@@ -120,39 +103,15 @@ public class LoanDAO {
             stmt.setInt(2, loan.getBookCopy().getBookCopyId());
             stmt.setTimestamp(3, Timestamp.valueOf(loan.getLoanDate()));
             stmt.setTimestamp(4, Timestamp.valueOf(loan.getExpectedReturnDate()));
-            stmt.setInt(5, loan.getRenewals());
+            stmt.setInt(5, loan.getRenewals().size());
             stmt.setBoolean(6, loan.isActive());
             stmt.setInt(7, loan.getLoanId());
 
             stmt.executeUpdate();
-
-            // TÓPICO 3: Se o empréstimo foi desativado (devolução), o livro fica DISPONÍVEL
-            if (!loan.isActive()) {
-                BookCopyDAO bcDAO = new BookCopyDAO();
-                loan.getBookCopy().setStatusAvailable(true);
-                bcDAO.update(loan.getBookCopy());
-            }
-
             return true;
         } catch (SQLException e) {
             e.printStackTrace();
             return false;
         }
     }
-
-    public boolean delete(int id) {
-        String sql = "DELETE FROM Loan WHERE loanId=?";
-
-        try (Connection conn = ConnectionDb.getConexao();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-
-            stmt.setInt(1, id);
-            stmt.executeUpdate();
-            return true;
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return false;
-        }
-    }
-
 }

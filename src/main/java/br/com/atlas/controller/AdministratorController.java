@@ -1,7 +1,7 @@
 package br.com.atlas.controller;
 
-import br.com.atlas.dao.ClientDAO;
-import br.com.atlas.model.Client;
+import br.com.atlas.dao.AdministratorDAO;
+import br.com.atlas.model.Administrator;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -10,31 +10,35 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.time.LocalDate;
 
-@WebServlet("/registerClient")
-public class ClientController extends HttpServlet {
-    
+@WebServlet("/registerAdmin")
+public class AdministratorController extends HttpServlet {
+
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) 
             throws ServletException, IOException {
-      
+
         try {
+            // Captura de dados da tela
             String cpf = request.getParameter("cpf");
             String name = request.getParameter("name");
             String email = request.getParameter("email");
             String gender = request.getParameter("gender");
             LocalDate birthDate = LocalDate.parse(request.getParameter("birthDate"));
-            String address = request.getParameter("address");
+            int password = Integer.parseInt(request.getParameter("password"));
 
-            // Novo construtor de 6 parâmetros
-            Client newClient = new Client(cpf, name, email, gender, birthDate, address);
+            // Instancia a sua Model exatamente como você definiu
+            Administrator newAdmin = new Administrator(cpf, name, email, gender, birthDate, password);
 
-            ClientDAO clientDao = new ClientDAO();
-            clientDao.insert(newClient);
-            
-            response.sendRedirect("views/clerk/success.jsp");
+            // Usa o DAO especializado
+            AdministratorDAO dao = new AdministratorDAO();
+            dao.insert(newAdmin);
+
+            // Redirecionamento para a área de gestão de equipe
+            response.sendRedirect("views/admin/team_management.jsp?status=success");
+
         } catch (Exception e) {
             e.printStackTrace();
-            response.sendRedirect("views/clerk/error.jsp");
+            response.sendRedirect("views/admin/error.jsp?msg=erro_cadastro_admin");
         }
     }
 }

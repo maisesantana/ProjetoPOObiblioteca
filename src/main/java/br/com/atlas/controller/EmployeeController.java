@@ -1,7 +1,7 @@
 package br.com.atlas.controller;
 
-import br.com.atlas.dao.ClientDAO;
-import br.com.atlas.model.Client;
+import br.com.atlas.dao.EmployeeDAO;
+import br.com.atlas.model.Employee;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -10,31 +10,36 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.time.LocalDate;
 
-@WebServlet("/registerClient")
-public class ClientController extends HttpServlet {
-    
+@WebServlet("/registerEmployee")
+public class EmployeeController extends HttpServlet {
+
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) 
             throws ServletException, IOException {
-      
+
         try {
+            // Captura os dados do formulário (JSP)
             String cpf = request.getParameter("cpf");
             String name = request.getParameter("name");
             String email = request.getParameter("email");
             String gender = request.getParameter("gender");
             LocalDate birthDate = LocalDate.parse(request.getParameter("birthDate"));
-            String address = request.getParameter("address");
+            int password = Integer.parseInt(request.getParameter("password"));
 
-            // Novo construtor de 6 parâmetros
-            Client newClient = new Client(cpf, name, email, gender, birthDate, address);
+            // Instancia a Model exatamente como mandou
+            Employee newEmp = new Employee(cpf, name, email, gender, birthDate, password);
 
-            ClientDAO clientDao = new ClientDAO();
-            clientDao.insert(newClient);
-            
-            response.sendRedirect("views/clerk/success.jsp");
+            // Chama o DAO para salvar no banco
+            EmployeeDAO dao = new EmployeeDAO();
+            dao.insert(newEmp);
+
+            // Redireciona para uma tela de sucesso
+            response.sendRedirect("views/admin/success_employee.jsp");
+
         } catch (Exception e) {
             e.printStackTrace();
-            response.sendRedirect("views/clerk/error.jsp");
+            // Em caso de erro, volta para a página com uma mensagem
+            response.sendRedirect("views/admin/error.jsp?msg=erro_cadastro");
         }
     }
 }

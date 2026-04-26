@@ -4,12 +4,15 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+
 public class Client extends Person {
 
     private String address;
     private LocalDate startSuspensionDate;
     private LocalDate endSuspensionDate;
     private List<Loan> loans; 
+
+    public Client() {}
 
     public Client(String cpf, String name, String email, String gender, 
         LocalDate birthDate, String address) {

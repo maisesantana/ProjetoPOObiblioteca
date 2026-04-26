@@ -10,6 +10,8 @@ public class Person {
     private String gender;
     private LocalDate birthDate;
 
+    public Person() {}
+
     public Person(String cpf, String name, String email, String gender, LocalDate birthDate) {
         this.cpf = cpf;
         this.name = name;
