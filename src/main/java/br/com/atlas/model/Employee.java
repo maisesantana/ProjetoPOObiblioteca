@@ -2,6 +2,8 @@ package br.com.atlas.model;
 
 import java.time.LocalDate;
 
+import br.com.atlas.service.Administrator;
+
 public class Employee extends Person {
 
     private int password;

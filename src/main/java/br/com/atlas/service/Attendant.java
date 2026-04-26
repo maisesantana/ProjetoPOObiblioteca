@@ -1,7 +1,16 @@
-package br.com.atlas.model;
+package br.com.atlas.service;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+
+import br.com.atlas.model.BookCopy;
+import br.com.atlas.model.Client;
+import br.com.atlas.model.Employee;
+import br.com.atlas.model.Loan;
+import br.com.atlas.model.Manage;
+import br.com.atlas.model.Person;
+import br.com.atlas.model.Renewal;
+import br.com.atlas.model.ReturnBook;
 
 public class Attendant extends Employee {
 

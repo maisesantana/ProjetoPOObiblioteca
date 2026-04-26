@@ -1,6 +1,10 @@
-package br.com.atlas.model;
+package br.com.atlas.service;
 
 import java.time.LocalDate;
+
+import br.com.atlas.model.Employee;
+import br.com.atlas.model.Manage;
+import br.com.atlas.model.Person;
 
 public class Administrator extends Employee {
 

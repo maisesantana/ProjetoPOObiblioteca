@@ -3,7 +3,7 @@ package br.com.atlas.model;
 import java.util.List;
 import java.util.ArrayList;
 
-class Manage {
+public class Manage {
 
     private List<Client> clients;
     private List<Employee> employees;

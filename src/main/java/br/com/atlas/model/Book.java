@@ -134,6 +134,15 @@ public class Book {
         copies.remove(copy);
     }
 
+    public BookCopy findAvailableCopy() {
+        for (BookCopy c : copies) {
+            if (c.isAvailable()) {
+                return c; // retorna o primeiro exemplar disponivel
+            }
+        }
+        return null;
+    }
+
     public int totalAvailableCopies() {
         int count = 0;
 

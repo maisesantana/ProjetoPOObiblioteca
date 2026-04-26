@@ -1,6 +1,6 @@
 package br.com.atlas.dao;
 
-import br.com.atlas.model.Administrator;
+import br.com.atlas.service.Administrator;
 import br.com.atlas.util.ConnectionDb;
 import java.sql.*;
 

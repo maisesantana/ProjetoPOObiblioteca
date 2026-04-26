@@ -1,7 +1,7 @@
 package br.com.atlas.controller;
 
 import br.com.atlas.dao.AdministratorDAO;
-import br.com.atlas.model.Administrator;
+import br.com.atlas.service.Administrator;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
