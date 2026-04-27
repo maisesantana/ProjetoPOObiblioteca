@@ -3,11 +3,14 @@ package br.com.atlas.service;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
+import br.com.atlas.dao.BookCopyDAO;
+import br.com.atlas.dao.ClientDAO;
+import br.com.atlas.dao.LoanDAO;
+import br.com.atlas.dao.ReturnBookDAO;
 import br.com.atlas.model.BookCopy;
 import br.com.atlas.model.Client;
 import br.com.atlas.model.Employee;
 import br.com.atlas.model.Loan;
-import br.com.atlas.model.Manage;
 import br.com.atlas.model.Person;
 import br.com.atlas.model.Renewal;
 import br.com.atlas.model.ReturnBook;
@@ -20,96 +23,161 @@ public class Attendant extends Employee {
     }
 
     @Override
-    public void register(Person c, Manage m) {
-        if (c instanceof Client) { //Só insere se for instancia de cliente!!
-            m.addClient((Client) c); //faz conversao de pessoa pra cliente
+    public void register(Person c) {
+
+        if (!(c instanceof Client)) {
+            throw new IllegalArgumentException("Somente clientes podem ser cadastrados!");
+        }
+
+        try {
+            ClientDAO client = new ClientDAO();
+            client.insert((Client)c);
+        } catch (Exception e) {
+            throw new RuntimeException("Erro ao cadastrar cliente", e);
         }
     }
 
     @Override
-    public void remove(Person c, Manage m) {
-        if (c instanceof Client) { //Só remove se for instancia de cliente!!
-            m.removeClient((Client) c); //faz conversao de pessoa pra cliente
+    public void remove(String cpf) {
+        try {
+            ClientDAO clientDao = new ClientDAO();
+            clientDao.delete(cpf);
+        } catch (Exception e) {
+            throw new RuntimeException("Erro ao remover cliente", e);
         }
     }
 
     @Override
-    public void update(Person c,  Manage m) {
-        if (c instanceof Client) {
-            for (Person rc : m.getPeople()) { //rc = real client, um cliente q ja existe
-                //se o cpf do cliente q existe bater com o do novo objeto passado 
-                //por parametro, ele vai editar a pessoa existente.
-                if (rc.getCpf().equals(c.getCpf())) {
-                
-                    rc.setName(c.getName());
-                    rc.setEmail(c.getEmail());
-                    rc.setGender(c.getGender());
-                    rc.setBirthDate(c.getBirthDate());
+    public void update(Person c) {
+        if (!(c instanceof Client)) {
+            throw new IllegalArgumentException("Somente clientes podem ser atualizados!");
+        }
 
-                    break; //sai do loop qnd encontra!
-                }
+        try {
+            ClientDAO clientDao = new ClientDAO();
+            clientDao.update((Client)c);
+        } catch (Exception e) {
+            throw new RuntimeException("Erro ao atualizar cliente", e);
+        }
+    }
+
+    public void registerLoan(String cpf, int copyId) {
+        try {
+            ClientDAO clientDao = new ClientDAO();
+            BookCopyDAO copyDao = new BookCopyDAO();
+            LoanDAO loanDao = new LoanDAO();
+
+            Client c = clientDao.findByCpf(cpf);
+            BookCopy bc = copyDao.findById(copyId);
+
+            if (c == null) {
+                throw new RuntimeException("Cliente não encontrado");
             }
+
+            if (bc == null) {
+                throw new RuntimeException("Exemplar não encontrado");
+            }
+
+            if (!c.canBorrow()) {
+                throw new RuntimeException("Cliente não pode pegar livro emprestado");
+            }
+
+            if (!bc.isAvailable()) {
+                throw new RuntimeException("Exemplar não disponível");
+            }
+
+            Loan l = new Loan(c, bc);
+
+            c.addLoan(l);
+            bc.setAvailable(false);
+
+            loanDao.insert(l);
+
+        } catch (Exception e) {
+            throw new RuntimeException("Erro ao registrar empréstimo", e);
         }
     }
 
-    public void registerLoan(Client c, BookCopy bc) {
-        //ver se o cliente pode pegar emprestado
-        if (!c.canBorrow()) {
-            System.out.println("O cliente não pode pegar livro emprestado!");
-            return;
-        }
-        //ver se exemplar ta disponivel
-        if (!bc.isAvailable()) {
-            System.out.println("Exemplar não disponível");
-            return;
+    public void registerRenewal(int loanId) {
+
+        Loan l = loanDAO.findById(loanId);
+
+        if (l == null) {
+            throw new RuntimeException("Empréstimo não encontrado");
         }
 
-        Loan l = new Loan(c, bc);
-        c.addLoan(l);
-        bc.setAvailable(false);
-        System.out.println("Empréstimo feito.");
-    }
-
-    public void registerRenewal(Loan l) {
-        if (l.canRenew()) {
-            System.out.println("Máximo de renovações efetuadas. Não é posível renovar!");
-            return;
+        if (!l.canRenew()) {
+            throw new RuntimeException("Limite de renovações atingido");
         }
-        
+
         if (LocalDateTime.now().isAfter(l.getExpectedReturnDate())) {
-            System.out.println("Não é possível renovar, pois o empréstimo já passou da data de devolução.");
-            return;
+            throw new RuntimeException("Não é possível renovar um empréstimo atrasado");
         }
 
-        //aki ele renova a data
+        // atualiza data
         l.setExpectedReturnDate(l.getExpectedReturnDate().plusDays(8));
-        Renewal r = new Renewal(l.getExpectedReturnDate(), l.getRenewals().size() + 1, l);
+
+        Renewal r = new Renewal(
+            l.getExpectedReturnDate(),
+            l.getRenewals().size() + 1,
+            l
+        );
+
         l.addRenew(r);
-        System.out.println("Renovação concluída!");
+        //insere no BD
+        renewalDAO.insert(r);
+        loanDAO.update(l);
     }
 
-    public void registerReturnBook(Loan l) {
-        if (!l.isActive()) {
-            System.out.println("O empréstimo já foi concluido.");
-            return;
-        }
+    public void registerReturn(int loanId) {
 
-        l.setActive(false);
-        ReturnBook r = new ReturnBook(LocalDateTime.now(), l);
-        if (r.isLate()) {
+        try {
+            LoanDAO loanDAO = new LoanDAO();
+            ReturnBookDAO returnDAO = new ReturnBookDAO();
+            BookCopyDAO copyDAO = new BookCopyDAO();
+            ClientDAO clientDAO = new ClientDAO();
 
-            l.setReturnBook(r);
-            if (l.getClient().isSuspended()) {
-                l.getClient().setEndSuspensionDate(l.getClient().getStartSuspensionDate().plusDays(r.calculateSuspensionDays()));
-                System.out.println("O cliente recebeu a devida suspensão.");
-                return;
+            Loan l = loanDAO.findById(loanId);
+
+            if (l == null) {
+                throw new RuntimeException("Empréstimo não encontrado");
             }
-            
-            l.getClient().setStartSuspensionDate(LocalDate.now());
-            l.getClient().setEndSuspensionDate(l.getClient().getStartSuspensionDate().plusDays(r.calculateSuspensionDays()));
-            System.out.println("O cliente recebeu a devida suspensão.");
-            return;
+
+            if (!l.isActive()) {
+                throw new RuntimeException("Empréstimo já finalizado");
+            }
+
+            l.setActive(false);
+
+            ReturnBook r = new ReturnBook(LocalDateTime.now(), l);
+            l.setReturnBook(r);
+
+            // SALVA DEVOLUÇÃO
+            returnDAO.insert(r);
+
+            if (r.isLate()) {
+                int dias = r.calculateSuspensionDays();
+                Client c = l.getClient();
+                if (c.isSuspended()) {
+                    c.setEndSuspensionDate(c.getEndSuspensionDate().plusDays(dias));
+                } else {
+                    c.setStartSuspensionDate(LocalDate.now());
+                    c.setEndSuspensionDate(c.getStartSuspensionDate().plusDays(dias));
+                }
+
+                //salva atualização do cliente
+                clientDAO.update(c);
+            }
+
+            // libera exemplar
+            l.getBookCopy().setAvailable(true);
+            copyDAO.update(l.getBookCopy());
+
+            //salva atualização do empréstimo
+            loanDAO.update(l);
+
+        } catch (Exception e) {
+            throw new RuntimeException("Erro ao registrar devolução", e);
         }
-        l.setReturnBook(r);
     }
 }

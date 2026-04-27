@@ -8,7 +8,6 @@ import br.com.atlas.model.Employee;
 import br.com.atlas.model.Person;
 import br.com.atlas.util.ConnectionDb;
 
-
 public class Administrator extends Employee {
 
 
@@ -20,7 +19,7 @@ public class Administrator extends Employee {
     @Override
     public void register(Person emp) {
         if (!(emp instanceof Employee)) { //Só insere se for instancia de funcionario!!
-            System.out.println("Somente funcionários podem ser cadastrados!");
+            throw new IllegalArgumentException("Somente funcionários podem ser cadastrados!");
         }
 
         try {
@@ -34,8 +33,9 @@ public class Administrator extends Employee {
     @Override
     public void remove(String cpf) {
         try {
-            PersonDAO personDAO = new PersonDAO(ConnectionDb.getConexao());
-            personDAO.delete(cpf);
+            
+            EmployeeDAO employeeDAO = new EmployeeDAO();
+            employeeDAO.delete(cpf);
         } catch (Exception e) {
             throw new RuntimeException("Erro ao remover funcionário", e);
         }
@@ -49,7 +49,7 @@ public class Administrator extends Employee {
 
         try {
             PersonDAO personDAO = new PersonDAO(ConnectionDb.getConexao());
-            personDAO.update(emp);
+            personDAO.update((Employee)emp);
         } catch (Exception e) {
             throw new RuntimeException("Erro ao atualizar funcionário", e);
         }   
