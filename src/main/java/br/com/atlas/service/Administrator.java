@@ -1,16 +1,10 @@
 package br.com.atlas.service;
 
 import java.time.LocalDate;
-<<<<<<< Updated upstream
-import br.com.atlas.model.Employee;
-import br.com.atlas.dao.EmployeeDAO;
-import br.com.atlas.model.Manage;
-=======
 
 import br.com.atlas.dao.EmployeeDAO;
 import br.com.atlas.dao.PersonDAO;
 import br.com.atlas.model.Employee;
->>>>>>> Stashed changes
 import br.com.atlas.model.Person;
 import br.com.atlas.util.ConnectionDb;
 
