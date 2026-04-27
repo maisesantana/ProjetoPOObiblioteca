@@ -10,6 +10,7 @@ import br.com.atlas.model.Collection;
 import br.com.atlas.model.Employee;
 import br.com.atlas.model.Loan;
 import br.com.atlas.model.Manage;
+import br.com.atlas.model.Person;
 import br.com.atlas.model.Report;
 import br.com.atlas.model.Client;
 
@@ -115,5 +116,23 @@ public class Librarian extends Employee {
             }
         }
         return r;
+    }
+
+    /*ATENÇÃO! POR TER DEIXADO EMPLOYEE COMO ABSTRATA, 
+    FOI NECESSARIO, PRA FAZER O POLIMORFISMO, QUE TODAS 
+    AS CLASSES IMPLEMENTASSEM OS SEGUINTES MÉTODOS. PORÉM,
+    BIBLIOTECÁRIO NÃO REGISTRAS PESSOAS, POR ISSO OS METODOS
+    ESTÃO VAZIOS.*/
+    @Override
+    public void register(Person p) {
+
+    }
+    @Override
+    public void remove(String cpf) {
+
+    }
+    @Override
+    public void update(Person p) {
+
     }
 }
