@@ -1,52 +1,62 @@
 package br.com.atlas.dao;
 
 import br.com.atlas.service.Administrator;
-import br.com.atlas.util.ConnectionDb;
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
-/**
- * DAO especializado para Administradores.
- * Estende EmployeeDAO para reaproveitar a lógica de persistência de funcionários.
- */
 public class AdministratorDAO extends EmployeeDAO {
 
-    /**
-     * Insere um Administrador no banco.
-     * Segue a hierarquia: Person -> Employee -> Administrator.
-     */
+    public AdministratorDAO(Connection connection) {
+        super(connection); // mesma conexão para toda a hierarquia
+    }
+
     public void insert(Administrator adm) throws SQLException {
-        // 1. Chama o insert da classe pai (EmployeeDAO)
-        // Isso já resolve a gravação nas tabelas Person e Employee automaticamente!
+        // 1. Insere Person + Employee (usa a mesma conexão herdada)
         super.insert(adm);
 
-        // 2. Agora gravamos na tabela específica de Administrador
-        // Note que usamos apenas o CPF para fazer o vínculo (FK)
+        // 2. Insere na tabela Administrator
         String sqlAdmin = "INSERT INTO Administrator (Cpf) VALUES (?)";
-
-        try (Connection conn = ConnectionDb.getConexao();
-             PreparedStatement stmtA = conn.prepareStatement(sqlAdmin)) {
-            
+        try (PreparedStatement stmtA = connection.prepareStatement(sqlAdmin)) {
             stmtA.setString(1, adm.getCpf());
             stmtA.executeUpdate();
-            
-            // Aqui não precisamos de commit/rollback manual porque 
-            // o super.insert já gerencia a conexão dele ou usa uma nova.
-            // Para ser 100% rigoroso, poderíamos passar a mesma conexão, 
-            // mas para o seu nível de projeto, essa separação é bem aceita.
+        }
+        // Ainda sem commit — a transação continua aberta para quem chamou
+    }
+
+    public boolean isAdministrator(String cpf) throws SQLException {
+        String sql = "SELECT 1 FROM Administrator WHERE Cpf = ?";
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setString(1, cpf);
+            try (ResultSet rs = stmt.executeQuery()) {
+                return rs.next();
+            }
         }
     }
 
-    /**
-     * Busca se um CPF pertence a um Administrador.
-     */
-    public boolean isAdministrator(String cpf) throws SQLException {
-        String sql = "SELECT 1 FROM Administrator WHERE Cpf = ?";
-        try (Connection conn = ConnectionDb.getConexao();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setString(1, cpf);
-            try (ResultSet rs = stmt.executeQuery()) {
-                return rs.next(); // Se houver resultado, ele é admin
+    public List<Administrator> findAllAdministrators() throws SQLException {
+        List<Administrator> list = new ArrayList<>();
+        String sql = """
+            SELECT p.*, e.Password
+            FROM Person p
+            INNER JOIN Employee e ON p.Cpf = e.Cpf
+            INNER JOIN Administrator a ON p.Cpf = a.Cpf
+            """;
+
+        try (PreparedStatement stmt = connection.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+
+            while (rs.next()) {
+                list.add(new Administrator(
+                    rs.getString("Cpf"),
+                    rs.getString("Name"),
+                    rs.getString("Email"),
+                    rs.getString("Gender"),
+                    rs.getDate("BirthDate").toLocalDate(),
+                    rs.getInt("Password")
+                ));
             }
         }
+        return list;
     }
 }

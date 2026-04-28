@@ -2,14 +2,11 @@ package br.com.atlas.service;
 
 import java.time.LocalDate;
 
-import br.com.atlas.dao.EmployeeDAO;
-import br.com.atlas.dao.PersonDAO;
 import br.com.atlas.model.Employee;
+import br.com.atlas.model.Manage;
 import br.com.atlas.model.Person;
-import br.com.atlas.util.ConnectionDb;
 
 public class Administrator extends Employee {
-
 
     public Administrator(String cpf, String name, String email, String gender,
             LocalDate birthDate, int password) {
@@ -17,41 +14,35 @@ public class Administrator extends Employee {
     }
 
     @Override
-    public void register(Person emp) {
-        if (!(emp instanceof Employee)) { //Só insere se for instancia de funcionario!!
-            throw new IllegalArgumentException("Somente funcionários podem ser cadastrados!");
-        }
-
-        try {
-            EmployeeDAO employeeDAO = new EmployeeDAO();
-            employeeDAO.insert((Employee)emp); //converto pra Funcionario
-        }  catch (Exception e) {
-        throw new RuntimeException("Erro ao cadastrar funcionário", e);
+    public void register(Person e, Manage m) {
+        if (e instanceof Employee) { //Só insere se for instancia de funcionario!!
+            m.addEmployee((Employee) e); //faz conversao de pessoa pra funcionario
         }
     }
 
     @Override
-    public void remove(String cpf) {
-        try {
-            
-            EmployeeDAO employeeDAO = new EmployeeDAO();
-            employeeDAO.delete(cpf);
-        } catch (Exception e) {
-            throw new RuntimeException("Erro ao remover funcionário", e);
+    public void remove(Person e, Manage m) {
+        if (e instanceof Employee) { //Só remove se for instancia de funcionario!!
+            m.removeEmployee((Employee) e); //faz conversao de pessoa pra funcionario
         }
     }
 
     @Override
-    public void update(Person emp) {
-        if (!(emp instanceof Employee)) { //Só insere se for instancia de funcionario!!
-            System.out.println("Somente funcionários podem ser atualizados!");
-        }
+    public void update(Person e,  Manage m) {
+        if (e instanceof Employee) {
+            for (Person re : m.getPeople()) { //re = real employee, um funcionario q ja existe
+                //se o cpf do funcionario q existe bater com o do novo objeto passado 
+                //por parametro, ele vai editar a pessoa existente.
+                if (re.getCpf().equals(e.getCpf())) {
+                
+                    re.setName(e.getName());
+                    re.setEmail(e.getEmail());
+                    re.setGender(e.getGender());
+                    re.setBirthDate(e.getBirthDate());
 
-        try {
-            PersonDAO personDAO = new PersonDAO(ConnectionDb.getConexao());
-            personDAO.update((Employee)emp);
-        } catch (Exception e) {
-            throw new RuntimeException("Erro ao atualizar funcionário", e);
-        }   
+                    break; //sai do loop qnd encontra!
+                }
+            }
+        }
     }
 }

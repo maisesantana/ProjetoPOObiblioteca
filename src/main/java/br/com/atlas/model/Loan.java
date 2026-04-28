@@ -2,6 +2,7 @@ package br.com.atlas.model;
 
 import java.util.List;
 import java.util.ArrayList;
+//import java.util.Date; comentei aq pq tava falando q ñ tava sendo usado
 import java.time.LocalDateTime;
 
 public class Loan {
@@ -15,23 +16,25 @@ public class Loan {
     private BookCopy bookCopy;
     private ReturnBook returnBook;
 
-    public Loan(Client client, BookCopy bookCopy) {
+    public Loan(Client client, BookCopy bookCopy) { //cria novo emprestimo q vai pro banco
         
         this.client = client;
         this.bookCopy = bookCopy;
         loanDate = LocalDateTime.now();
         expectedReturnDate = loanDate.plusDays(7);
         renewals = new ArrayList<>();
+        this.active = true; //pra ativar o emprestimo q eu to inserindo no banco
     }
 
-    public Loan(int loanId, Client client, BookCopy bookCopy) {
+    public Loan(int loanId, Client client, BookCopy bookCopy, LocalDateTime loanDate, LocalDateTime expectedReturnDate, boolean active) { //reconstroi o objeto a partir dos dados do banco
         
         this.loanId = loanId;
         this.client = client;
         this.bookCopy = bookCopy;
-        loanDate = LocalDateTime.now();
-        expectedReturnDate = loanDate.plusDays(7);
+        this.loanDate = loanDate; //agr sim ele pega a data
+        this.expectedReturnDate = expectedReturnDate; //usa oq o banco mandou
         renewals = new ArrayList<>();
+        this.active = active; // preserva o status q ta no banco
     }
 
     public List<Renewal> getRenewals () {
