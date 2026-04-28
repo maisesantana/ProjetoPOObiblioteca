@@ -2,7 +2,10 @@ package br.com.atlas.service;
 
 import java.time.LocalDate;
 
+import br.com.atlas.dao.AdministratorDAO;
+import br.com.atlas.dao.AttendantDAO;
 import br.com.atlas.dao.EmployeeDAO;
+import br.com.atlas.dao.LibrarianDAO;
 import br.com.atlas.dao.PersonDAO;
 import br.com.atlas.model.Employee;
 import br.com.atlas.model.Person;
@@ -18,24 +21,54 @@ public class Administrator extends Employee {
 
     @Override
     public void register(Person emp) {
-        if (!(emp instanceof Employee)) { //Só insere se for instancia de funcionario!!
+        if (!(emp instanceof Employee)) {
             throw new IllegalArgumentException("Somente funcionários podem ser cadastrados!");
         }
 
         try {
-            EmployeeDAO employeeDAO = new EmployeeDAO();
-            employeeDAO.insert((Employee)emp); //converto pra Funcionario
-        }  catch (Exception e) {
-        throw new RuntimeException("Erro ao cadastrar funcionário", e);
+            EmployeeDAO employeeDAO = new EmployeeDAO(ConnectionDb.getConexao());
+            employeeDAO.insert((Employee) emp);
+
+            if (emp instanceof Attendant) {
+                AttendantDAO dao = new AttendantDAO();
+                dao.insert((Attendant) emp);
+
+            } else if (emp instanceof Librarian) {
+                LibrarianDAO dao = new LibrarianDAO(ConnectionDb.getConexao());
+                dao.insert((Librarian) emp);
+
+            } else if (emp instanceof Administrator) {
+                AdministratorDAO dao = new AdministratorDAO(ConnectionDb.getConexao());
+                dao.insert((Administrator) emp);
+            }
+
+        } catch (Exception e) {
+            throw new RuntimeException("Erro ao cadastrar funcionário", e);
         }
     }
 
     @Override
     public void remove(String cpf) {
         try {
-            
-            EmployeeDAO employeeDAO = new EmployeeDAO();
+            // remove da tabela específica primeiro
+            AttendantDAO attendantDAO = new AttendantDAO();
+            LibrarianDAO librarianDAO = new LibrarianDAO(ConnectionDb.getConexao());
+            AdministratorDAO adminDAO = new AdministratorDAO(ConnectionDb.getConexao());
+
+            if (attendantDAO.exists(cpf)) {
+                attendantDAO.delete(cpf);
+            } else if (librarianDAO.exists(cpf)) {
+                librarianDAO.delete(cpf);
+            } else if (adminDAO.exists(cpf)) {
+                adminDAO.delete(cpf);
+            }
+
+            //remove das tabelas pai
+            EmployeeDAO employeeDAO = new EmployeeDAO(ConnectionDb.getConexao());
             employeeDAO.delete(cpf);
+
+            PersonDAO personDAO = new PersonDAO(ConnectionDb.getConexao());
+            personDAO.delete(cpf);
         } catch (Exception e) {
             throw new RuntimeException("Erro ao remover funcionário", e);
         }
@@ -49,7 +82,10 @@ public class Administrator extends Employee {
 
         try {
             PersonDAO personDAO = new PersonDAO(ConnectionDb.getConexao());
-            personDAO.update((Employee)emp);
+            personDAO.update(emp);
+            EmployeeDAO employeeDAO = new EmployeeDAO(ConnectionDb.getConexao());
+            employeeDAO.update((Employee) emp);
+
         } catch (Exception e) {
             throw new RuntimeException("Erro ao atualizar funcionário", e);
         }   
