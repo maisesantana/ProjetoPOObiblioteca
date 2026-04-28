@@ -10,6 +10,7 @@ import br.com.atlas.model.Collection;
 import br.com.atlas.model.Employee;
 import br.com.atlas.model.Loan;
 import br.com.atlas.model.Manage;
+import br.com.atlas.model.Person;
 import br.com.atlas.model.Report;
 import br.com.atlas.model.Client;
 
@@ -57,18 +58,23 @@ public class Librarian extends Employee {
         b.addCopy(bc);
     }
 
-    // public void generateReport(String type, Manage m) {
+        /*ATENÇÃO! POR TER DEIXADO EMPLOYEE COMO ABSTRATA, 
+    FOI NECESSARIO, PRA FAZER O POLIMORFISMO, QUE TODAS 
+    AS CLASSES IMPLEMENTASSEM OS SEGUINTES MÉTODOS. PORÉM,
+    BIBLIOTECÁRIO NÃO REGISTRAS PESSOAS, POR ISSO OS METODOS
+    ESTÃO VAZIOS.*/
+    @Override
+    public void register(Person p) {
 
-    //     if (type.equalsIgnoreCase("mensal")) {
-    //         System.out.println("Gerando relatório mensal...");
-    //         Report r = generateMonthlyReport(m);
-    //     } else if (type.equalsIgnoreCase("mais emprestados")) {
-    //         System.out.println("Gerando relatório de livros mais emprestados...");
-    //         Report r = generateMostBorrowedReport(m);
-    //     } else {
-    //         System.out.println("O tipo de relatório é inválido.");
-    //     }
-    // }
+    }
+    @Override
+    public void remove(String cpf) {
+
+    }
+    @Override
+    public void update(Person p) {
+
+    }
 
     public Report generateReport(String type, Manage m) {
 
