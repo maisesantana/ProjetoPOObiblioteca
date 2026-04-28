@@ -1,57 +1,61 @@
 package br.com.atlas.dao;
 
 import br.com.atlas.model.Employee;
+
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
 
 public class EmployeeDAO {
 
-    protected final Connection connection;
+    // conexão com o banco de dados usada pelo DAO 
+    // (final para não ser alterada após inicialização)
+    private final Connection connection;
 
     public EmployeeDAO(Connection connection) {
         this.connection = connection;
     }
 
-    public void insert(Employee emp) throws SQLException {
-        String sqlPerson = "INSERT INTO Person (Cpf, Name, Email, Gender, BirthDate) VALUES (?,?,?,?,?)";
-        String sqlEmp    = "INSERT INTO Employee (Cpf, Password) VALUES (?,?)";
+    // verificação se o cpf existe
+    public boolean exists(String cpf) throws SQLException {
+        String sql = "SELECT 1 FROM employee WHERE cpf = ?";
 
-        try (PreparedStatement stmtP = connection.prepareStatement(sqlPerson)) {
-            stmtP.setString(1, emp.getCpf());
-            stmtP.setString(2, emp.getName());
-            stmtP.setString(3, emp.getEmail());
-            stmtP.setString(4, emp.getGender());
-            stmtP.setDate(5, Date.valueOf(emp.getBirthDate()));
-            stmtP.executeUpdate();
-        }
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setString(1, cpf);
 
-        try (PreparedStatement stmtE = connection.prepareStatement(sqlEmp)) {
-            stmtE.setString(1, emp.getCpf());
-            stmtE.setInt(2, emp.getPassword());
-            stmtE.executeUpdate();
-        }
-        // Sem commit aqui — a transação é controlada por quem chamou
-    }
-
-    public List<Employee> findAll() throws SQLException {
-        List<Employee> list = new ArrayList<>();
-        String sql = "SELECT p.*, e.Password FROM Person p INNER JOIN Employee e ON p.Cpf = e.Cpf";
-
-        try (PreparedStatement stmt = connection.prepareStatement(sql);
-            ResultSet rs = stmt.executeQuery()) {
-
-            while (rs.next()) {
-                list.add(new Employee(
-                    rs.getString("Cpf"),
-                    rs.getString("Name"),
-                    rs.getString("Email"),
-                    rs.getString("Gender"),
-                    rs.getDate("BirthDate").toLocalDate(),
-                    rs.getInt("Password")
-                ));
+            try (ResultSet rs = stmt.executeQuery()) {
+                return rs.next();
             }
         }
-        return list;
+    }
+
+    // CREATE
+    public void insert(Employee emp) throws SQLException {
+        String sql = "INSERT INTO employee (cpf, senha) VALUES (?, ?)";
+
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setString(1, emp.getCpf()); // herda de Person
+            stmt.setInt(2, emp.getPassword()); // atributo próprio de Employee
+            stmt.executeUpdate();
+        }
+    }
+
+    // UPDATE
+    public void update(Employee emp) throws SQLException {
+        String sql = "UPDATE employee SET senha = ? WHERE cpf = ?";
+
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setInt(1, emp.getPassword());
+            stmt.setString(2, emp.getCpf());
+            stmt.executeUpdate();
+        }
+    }
+
+    // DELETE
+    public void delete(String cpf) throws SQLException {
+        String sql = "DELETE FROM employee WHERE cpf = ?";
+
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setString(1, cpf);
+            stmt.executeUpdate();
+        }
     }
 }

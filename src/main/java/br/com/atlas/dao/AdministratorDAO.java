@@ -1,62 +1,133 @@
 package br.com.atlas.dao;
 
-import br.com.atlas.service.Administrator;
+import br.com.atlas.model.Administrator;
+
 import java.sql.*;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
-public class AdministratorDAO extends EmployeeDAO {
+public class AdministratorDAO {
+
+    // conexão com o banco de dados usada pelo DAO (final para não ser alterada após inicialização)
+    private final Connection connection;
 
     public AdministratorDAO(Connection connection) {
-        super(connection); // mesma conexão para toda a hierarquia
+        this.connection = connection;
     }
 
-    public void insert(Administrator adm) throws SQLException {
-        // 1. Insere Person + Employee (usa a mesma conexão herdada)
-        super.insert(adm);
+    // verificação se o cpf existe
+    public boolean exists(String cpf) throws SQLException {
+        String sql = "SELECT 1 FROM administrator WHERE cpf = ?";
 
-        // 2. Insere na tabela Administrator
-        String sqlAdmin = "INSERT INTO Administrator (Cpf) VALUES (?)";
-        try (PreparedStatement stmtA = connection.prepareStatement(sqlAdmin)) {
-            stmtA.setString(1, adm.getCpf());
-            stmtA.executeUpdate();
-        }
-        // Ainda sem commit — a transação continua aberta para quem chamou
-    }
-
-    public boolean isAdministrator(String cpf) throws SQLException {
-        String sql = "SELECT 1 FROM Administrator WHERE Cpf = ?";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setString(1, cpf);
+
             try (ResultSet rs = stmt.executeQuery()) {
                 return rs.next();
             }
         }
     }
 
-    public List<Administrator> findAllAdministrators() throws SQLException {
-        List<Administrator> list = new ArrayList<>();
+    // CREATE
+    public void insert(Administrator admin) throws SQLException {
+        String sql = "INSERT INTO administrator (cpf) VALUES (?)";
+
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setString(1, admin.getCpf());
+            stmt.executeUpdate();
+        }
+    }
+
+    // READ ALL
+    public List<Administrator> findAll() throws SQLException {
         String sql = """
-            SELECT p.*, e.Password
-            FROM Person p
-            INNER JOIN Employee e ON p.Cpf = e.Cpf
-            INNER JOIN Administrator a ON p.Cpf = a.Cpf
-            """;
+            SELECT p.cpf, p.name, p.email, p.gender, p.birthDate, e.senha
+            FROM person p
+            JOIN employee e ON p.cpf = e.cpf
+            JOIN administrator a ON a.cpf = e.cpf
+        """;
+
+        List<Administrator> admins = new ArrayList<>();
 
         try (PreparedStatement stmt = connection.prepareStatement(sql);
              ResultSet rs = stmt.executeQuery()) {
 
             while (rs.next()) {
-                list.add(new Administrator(
-                    rs.getString("Cpf"),
-                    rs.getString("Name"),
-                    rs.getString("Email"),
-                    rs.getString("Gender"),
-                    rs.getDate("BirthDate").toLocalDate(),
-                    rs.getInt("Password")
-                ));
+                admins.add(mapResultSet(rs));
             }
         }
-        return list;
+
+        return admins;
+    }
+
+    // READ BY CPF
+    public Optional<Administrator> findByCpf(String cpf) throws SQLException {
+        String sql = """
+            SELECT p.cpf, p.name, p.email, p.gender, p.birthDate, e.senha
+            FROM person p
+            JOIN employee e ON p.cpf = e.cpf
+            JOIN administrator a ON a.cpf = e.cpf
+            WHERE p.cpf = ?
+        """;
+
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setString(1, cpf);
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return Optional.of(mapResultSet(rs));
+                }
+            }
+        }
+
+        return Optional.empty();
+    }
+
+    // DELETE
+    public void delete(String cpf) throws SQLException {
+        String sql = "DELETE FROM administrator WHERE cpf = ?";
+
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setString(1, cpf);
+            stmt.executeUpdate();
+        }
+    }
+
+    // MÉTODO AUXILIAR
+    private Administrator mapResultSet(ResultSet rs) throws SQLException {
+        String cpf = rs.getString("cpf");
+        String name = rs.getString("name");
+        String email = rs.getString("email");
+        String gender = rs.getString("gender");
+        LocalDate birthDate = rs.getDate("birthDate").toLocalDate();
+        int senha = rs.getInt("senha");
+
+        return new Administrator(cpf, name, email, gender, birthDate, senha);
+    }
+
+    // READ BY NAME
+    public List<Administrator> findByName(String name) throws SQLException {
+        String sql = """
+            SELECT p.cpf, p.name, p.email, p.gender, p.birthDate, e.senha
+            FROM person p
+            JOIN employee e ON p.cpf = e.cpf
+            JOIN administrator a ON a.cpf = e.cpf
+            WHERE p.name LIKE ?
+        """;
+
+        List<Administrator> admins = new ArrayList<>();
+
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setString(1, "%" + name + "%");
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    admins.add(mapResultSet(rs));
+                }
+            }
+        }
+        return admins;
     }
 }

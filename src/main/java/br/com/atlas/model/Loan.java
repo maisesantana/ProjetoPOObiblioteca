@@ -2,7 +2,6 @@ package br.com.atlas.model;
 
 import java.util.List;
 import java.util.ArrayList;
-//import java.util.Date; comentei aq pq tava falando q ñ tava sendo usado
 import java.time.LocalDateTime;
 
 public class Loan {
@@ -11,52 +10,66 @@ public class Loan {
     private LocalDateTime loanDate;
     private LocalDateTime expectedReturnDate;
     private boolean active;
-    private List<Renewal> renewals;
+
+    private List<Renewal> renewals; // usado pelo Attendant
+    private int renewalCount; // usado pelo banco
+
     private Client client;
     private BookCopy bookCopy;
     private ReturnBook returnBook;
 
-    public Loan(Client client, BookCopy bookCopy) { //cria novo emprestimo q vai pro banco
-        
+    // NOVO EMPRÉSTIMO
+    public Loan(Client client, BookCopy bookCopy) {
+
         this.client = client;
         this.bookCopy = bookCopy;
-        loanDate = LocalDateTime.now();
-        expectedReturnDate = loanDate.plusDays(7);
-        renewals = new ArrayList<>();
-        this.active = true; //pra ativar o emprestimo q eu to inserindo no banco
+
+        this.loanDate = LocalDateTime.now();
+        this.expectedReturnDate = loanDate.plusDays(7);
+
+        this.renewals = new ArrayList<>();
+        this.renewalCount = 0;
+
+        this.active = true;
     }
 
-    public Loan(int loanId, Client client, BookCopy bookCopy, LocalDateTime loanDate, LocalDateTime expectedReturnDate, boolean active) { //reconstroi o objeto a partir dos dados do banco
-        
+    // OBJETO DO BANCO
+    public Loan(int loanId, Client client, BookCopy bookCopy,
+                LocalDateTime loanDate, LocalDateTime expectedReturnDate, boolean active) {
+
         this.loanId = loanId;
         this.client = client;
         this.bookCopy = bookCopy;
-        this.loanDate = loanDate; //agr sim ele pega a data
-        this.expectedReturnDate = expectedReturnDate; //usa oq o banco mandou
-        renewals = new ArrayList<>();
-        this.active = active; // preserva o status q ta no banco
+
+        this.loanDate = loanDate;
+        this.expectedReturnDate = expectedReturnDate;
+
+        this.renewals = new ArrayList<>();
+        this.renewalCount = 0; // será preenchido pelo DAO
+
+        this.active = active;
     }
 
-    public List<Renewal> getRenewals () {
-        return renewals;
-    }
-    public void setRenewals(List<Renewal> renewals) {
-        this.renewals = renewals;
-    }
-
-    public ReturnBook getReturnBook() {
-        return returnBook;
-    }
-    public void setReturnBook(ReturnBook returnBook) {
-        this.returnBook = returnBook;
-    }
-    
     public boolean canRenew() {
-        return renewals.size() < 3 && active;
+        return getRenewalTotal() < 3 && active;
     }
 
     public void finishLoan() {
         this.active = false;
+    }
+
+    public void addRenew(Renewal r) {
+        renewals.add(r);
+        renewalCount++; 
+    }
+
+    public int getRenewalTotal() {
+        // se lista tiver dados, usa ela
+        if (!renewals.isEmpty()) {
+            return renewals.size();
+        }
+        // senão, usa valor do banco
+        return renewalCount;
     }
 
     public int getLoanId() {
@@ -107,7 +120,27 @@ public class Loan {
         this.active = active;
     }
 
-    public void addRenew(Renewal r) {
-        renewals.add(r);
+    public List<Renewal> getRenewals() {
+        return renewals;
+    }
+
+    public void setRenewals(List<Renewal> renewals) {
+        this.renewals = renewals;
+    }
+
+    public ReturnBook getReturnBook() {
+        return returnBook;
+    }
+
+    public void setReturnBook(ReturnBook returnBook) {
+        this.returnBook = returnBook;
+    }
+
+    public int getRenewalCount() {
+        return renewalCount;
+    }
+
+    public void setRenewalCount(int renewalCount) {
+        this.renewalCount = renewalCount;
     }
 }

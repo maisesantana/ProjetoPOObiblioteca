@@ -1,4 +1,4 @@
-package br.com.atlas.service;
+package br.com.atlas.model;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -7,13 +7,7 @@ import br.com.atlas.dao.BookCopyDAO;
 import br.com.atlas.dao.ClientDAO;
 import br.com.atlas.dao.LoanDAO;
 import br.com.atlas.dao.ReturnBookDAO;
-import br.com.atlas.model.BookCopy;
-import br.com.atlas.model.Client;
-import br.com.atlas.model.Employee;
-import br.com.atlas.model.Loan;
-import br.com.atlas.model.Person;
-import br.com.atlas.model.Renewal;
-import br.com.atlas.model.ReturnBook;
+import br.com.atlas.dao.RenewalDAO; // import necessário
 
 public class Attendant extends Employee {
 
@@ -100,6 +94,10 @@ public class Attendant extends Employee {
 
     public void registerRenewal(int loanId) {
 
+        // instanciar os DAOs
+        LoanDAO loanDAO = new LoanDAO();
+        RenewalDAO renewalDAO = new RenewalDAO();
+
         Loan l = loanDAO.findById(loanId);
 
         if (l == null) {
@@ -119,12 +117,13 @@ public class Attendant extends Employee {
 
         Renewal r = new Renewal(
             l.getExpectedReturnDate(),
-            l.getRenewals().size() + 1,
+            l.getRenewalCount() + 1, // usa contador do banco
             l
         );
 
         l.addRenew(r);
-        //insere no BD
+
+        // salva no banco
         renewalDAO.insert(r);
         loanDAO.update(l);
     }
@@ -165,7 +164,7 @@ public class Attendant extends Employee {
                     c.setEndSuspensionDate(c.getStartSuspensionDate().plusDays(dias));
                 }
 
-                //salva atualização do cliente
+                // salva atualização do cliente
                 clientDAO.update(c);
             }
 
@@ -173,7 +172,7 @@ public class Attendant extends Employee {
             l.getBookCopy().setAvailable(true);
             copyDAO.update(l.getBookCopy());
 
-            //salva atualização do empréstimo
+            // salva atualização do empréstimo
             loanDAO.update(l);
 
         } catch (Exception e) {
