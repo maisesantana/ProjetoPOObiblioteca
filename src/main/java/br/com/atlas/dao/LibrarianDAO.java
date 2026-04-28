@@ -1,6 +1,7 @@
 package br.com.atlas.dao;
 
 import br.com.atlas.service.Librarian;
+
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -34,26 +35,72 @@ public class LibrarianDAO extends EmployeeDAO {
     public List<Librarian> findAllLibrarians() throws SQLException {
         List<Librarian> list = new ArrayList<>();
         String sql = """
-            SELECT p.*, e.Password
-            FROM Person p
-            INNER JOIN Employee e ON p.Cpf = e.Cpf
-            INNER JOIN Librarian l ON p.Cpf = l.Cpf
-            """;
+                SELECT p.*, e.Password
+                FROM Person p
+                INNER JOIN Employee e ON p.Cpf = e.Cpf
+                INNER JOIN Librarian l ON p.Cpf = l.Cpf
+                """;
 
         try (PreparedStatement stmt = connection.prepareStatement(sql);
              ResultSet rs = stmt.executeQuery()) {
 
             while (rs.next()) {
                 list.add(new Librarian(
-                    rs.getString("Cpf"),
-                    rs.getString("Name"),
-                    rs.getString("Email"),
-                    rs.getString("Gender"),
-                    rs.getDate("BirthDate").toLocalDate(),
-                    rs.getInt("Password")
+                        rs.getString("Cpf"),
+                        rs.getString("Name"),
+                        rs.getString("Email"),
+                        rs.getString("Gender"),
+                        rs.getDate("BirthDate").toLocalDate(),
+                        rs.getInt("Password")
                 ));
             }
         }
         return list;
     }
+
+    public Librarian findByCpf(String cpf) throws SQLException {
+        String sql = """
+                    SELECT p.*, e.Password
+                    FROM Person p
+                    JOIN Employee e ON p.Cpf = e.Cpf
+                    JOIN Librarian l ON p.Cpf = l.Cpf
+                    WHERE p.Cpf = ?
+                """;
+
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+
+            stmt.setString(1, cpf);
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return new Librarian(
+                            rs.getString("Cpf"),
+                            rs.getString("Name"),
+                            rs.getString("Email"),
+                            rs.getString("Gender"),
+                            rs.getDate("BirthDate").toLocalDate(),
+                            rs.getInt("Password")
+                    );
+
+                }
+                return null;
+            }
+
+        }
+    }
+    public void update (Librarian lib) throws SQLException {
+        super.update(lib);
+    }
+
+    public void delete(String cpf) throws SQLException {
+        String sql = "DELETE FROM Librarian WHERE Cpf = ?";
+
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setString(1, cpf);
+            stmt.executeUpdate();
+        }
+
+        super.delete(cpf);
+    }
+    //detar cpf das outras tabelas employee e de person
 }
