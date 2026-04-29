@@ -12,10 +12,6 @@ public abstract class Employee extends Person {
         this.password = password;
     }
 
-    public boolean isAdmin() {
-        return this instanceof Administrator;
-    }
-
     public int getPassword() {
         return password;
     }

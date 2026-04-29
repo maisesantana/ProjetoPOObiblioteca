@@ -29,7 +29,7 @@ public class EmployeeDAO {
 
     // CREATE
     public void insert(Employee emp) throws SQLException {
-        String sql = "INSERT INTO employee (cpf, senha) VALUES (?, ?)";
+        String sql = "INSERT INTO employee (cpf, password) VALUES (?, ?)";
 
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setString(1, emp.getCpf()); // herda de Person
@@ -40,7 +40,7 @@ public class EmployeeDAO {
 
     // UPDATE
     public void update(Employee emp) throws SQLException {
-        String sql = "UPDATE employee SET senha = ? WHERE cpf = ?";
+        String sql = "UPDATE employee SET password = ? WHERE cpf = ?";
 
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setInt(1, emp.getPassword());

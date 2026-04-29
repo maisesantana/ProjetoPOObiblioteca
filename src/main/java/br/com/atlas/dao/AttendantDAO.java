@@ -43,7 +43,7 @@ public class AttendantDAO {
     // READ ALL (com JOIN para pegar dados de Person + Employee)
     public List<Attendant> findAll() throws SQLException {
         String sql = """
-            SELECT p.cpf, p.name, p.email, p.gender, p.birthDate, e.senha
+            SELECT p.cpf, p.name, p.email, p.gender, p.birthDate, e.password
             FROM person p
             JOIN employee e ON p.cpf = e.cpf
             JOIN attendant a ON a.cpf = e.cpf
@@ -65,7 +65,7 @@ public class AttendantDAO {
     // READ BY CPF
     public Optional<Attendant> findByCpf(String cpf) throws SQLException {
         String sql = """
-            SELECT p.cpf, p.name, p.email, p.gender, p.birthDate, e.senha
+            SELECT p.cpf, p.name, p.email, p.gender, p.birthDate, e.password
             FROM person p
             JOIN employee e ON p.cpf = e.cpf
             JOIN attendant a ON a.cpf = e.cpf
@@ -102,15 +102,15 @@ public class AttendantDAO {
         String email = rs.getString("email");
         String gender = rs.getString("gender");
         LocalDate birthDate = rs.getDate("birthDate").toLocalDate();
-        int senha = rs.getInt("senha");
+        int password = rs.getInt("password");
 
-        return new Attendant(cpf, name, email, gender, birthDate, senha);
+        return new Attendant(cpf, name, email, gender, birthDate, password);
     }
 
     // READ BY NAME
     public List<Attendant> findByName(String name) throws SQLException {
         String sql = """
-            SELECT p.cpf, p.name, p.email, p.gender, p.birthDate, e.senha
+            SELECT p.cpf, p.name, p.email, p.gender, p.birthDate, e.password
             FROM person p
             JOIN employee e ON p.cpf = e.cpf
                 JOIN attendant a ON a.cpf = e.cpf

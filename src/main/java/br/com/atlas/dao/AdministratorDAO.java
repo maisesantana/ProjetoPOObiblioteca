@@ -43,7 +43,7 @@ public class AdministratorDAO {
     // READ ALL
     public List<Administrator> findAll() throws SQLException {
         String sql = """
-            SELECT p.cpf, p.name, p.email, p.gender, p.birthDate, e.senha
+            SELECT p.cpf, p.name, p.email, p.gender, p.birthDate, e.password
             FROM person p
             JOIN employee e ON p.cpf = e.cpf
             JOIN administrator a ON a.cpf = e.cpf
@@ -65,7 +65,7 @@ public class AdministratorDAO {
     // READ BY CPF
     public Optional<Administrator> findByCpf(String cpf) throws SQLException {
         String sql = """
-            SELECT p.cpf, p.name, p.email, p.gender, p.birthDate, e.senha
+            SELECT p.cpf, p.name, p.email, p.gender, p.birthDate, e.password
             FROM person p
             JOIN employee e ON p.cpf = e.cpf
             JOIN administrator a ON a.cpf = e.cpf
@@ -102,15 +102,15 @@ public class AdministratorDAO {
         String email = rs.getString("email");
         String gender = rs.getString("gender");
         LocalDate birthDate = rs.getDate("birthDate").toLocalDate();
-        int senha = rs.getInt("senha");
+        int password = rs.getInt("password");
 
-        return new Administrator(cpf, name, email, gender, birthDate, senha);
+        return new Administrator(cpf, name, email, gender, birthDate, password);
     }
 
     // READ BY NAME
     public List<Administrator> findByName(String name) throws SQLException {
         String sql = """
-            SELECT p.cpf, p.name, p.email, p.gender, p.birthDate, e.senha
+            SELECT p.cpf, p.name, p.email, p.gender, p.birthDate, e.password
             FROM person p
             JOIN employee e ON p.cpf = e.cpf
             JOIN administrator a ON a.cpf = e.cpf
