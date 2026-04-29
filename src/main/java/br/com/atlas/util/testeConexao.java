@@ -79,6 +79,47 @@ public class testeConexao {
                 System.out.println("✅ Devolução realizada com sucesso. Livro disponível novamente.");
             }
 
+            // --- PASSO 7: TESTE DE AUTENTICAÇÃO ---
+System.out.println("\n7. Testando Sistema de Login...");
+LoginDAO loginDao = new LoginDAO(br.com.atlas.util.ConnectionDb.getConexao());
+
+// Cenário A: Login da Ana (Bibliotecária) com a senha correta (1234)
+System.out.print("   -> Tentando login [Ana - Correto]: ");
+java.util.Optional<Employee> loginSucesso = loginDao.authenticate("98765432100", 1234);
+
+if (loginSucesso.isPresent()) {
+    Employee user = loginSucesso.get();
+    System.out.println("✅ LOGADO!");
+    System.out.println("      Usuário: " + user.getName());
+    
+    // Testando o Polimorfismo e Cargo
+    if (user instanceof Librarian) {
+        System.out.println("      Cargo Detectado: 📚 Bibliotecário (Acesso ao Acervo liberado)");
+    } else if (user instanceof Administrator) {
+        System.out.println("      Cargo Detectado: 👑 Administrador (Acesso Total)");
+    }
+} else {
+    System.out.println("❌ Erro inesperado: O login deveria ter funcionado.");
+}
+
+// Cenário B: Login com SENHA ERRADA
+System.out.print("   -> Tentando login [Ana - Senha Errada]: ");
+java.util.Optional<Employee> loginSenhaErrada = loginDao.authenticate("98765432100", 9999);
+if (loginSenhaErrada.isEmpty()) {
+    System.out.println("✅ BLOQUEADO (Senha incorreta funcionou)");
+} else {
+    System.out.println("❌ FALHA DE SEGURANÇA: Login permitido com senha errada!");
+}
+
+// Cenário C: Login com CPF que não existe
+System.out.print("   -> Tentando login [CPF Inexistente]: ");
+java.util.Optional<Employee> loginInexistente = loginDao.authenticate("11111111111", 1234);
+if (loginInexistente.isEmpty()) {
+    System.out.println("✅ BLOQUEADO (CPF inexistente funcionou)");
+} else {
+    System.out.println("❌ FALHA: O sistema inventou um usuário!");
+}
+
             System.out.println("\n-----------------------------------------");
             System.out.println("🏆 TESTE FINALIZADO COM SUCESSO!");
             System.out.println("-----------------------------------------");
