@@ -2,7 +2,11 @@ package br.com.atlas.model;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-
+import java.util.List;
+import java.sql.Connection;
+import br.com.atlas.dao.BookDAO;
+import br.com.atlas.util.ConnectionDb;
+import br.com.atlas.model.Book;
 import br.com.atlas.dao.BookCopyDAO;
 import br.com.atlas.dao.ClientDAO;
 import br.com.atlas.dao.LoanDAO;
@@ -177,6 +181,16 @@ public class Attendant extends Employee {
 
         } catch (Exception e) {
             throw new RuntimeException("Erro ao registrar devolução", e);
+        }
+    }
+
+    // Adicione isso tanto no Librarian quanto no Attendant
+    public List<Book> searchBooks(String name) {
+        try (Connection conn = ConnectionDb.getConexao()) {
+            BookDAO dao = new BookDAO(conn);
+            return dao.findByName(name);
+        } catch (Exception e) {
+            throw new RuntimeException("Erro ao buscar livros", e);
         }
     }
 }

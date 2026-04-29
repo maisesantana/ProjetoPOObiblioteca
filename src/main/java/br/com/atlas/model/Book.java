@@ -141,4 +141,12 @@ public class Book {
 
         return count;
     }
+    // Dentro da classe Book.java
+    public void setAuthors(List<String> authors) {
+        this.authors = authors;
+    }
+
+    public void setCategories(List<String> categories) {
+        this.categories = categories;
+    }
 }

@@ -1,9 +1,12 @@
 package br.com.atlas.model;
 
+import java.sql.Connection;
 import java.time.LocalDate;
+import java.util.List;
 
 import br.com.atlas.dao.BookCopyDAO;
 import br.com.atlas.dao.BookDAO;
+import br.com.atlas.util.ConnectionDb;
 
 public class Librarian extends Employee {
 
@@ -13,8 +16,8 @@ public class Librarian extends Employee {
     }
 
     public void registerBook(Book b) {
-        try {
-            BookDAO bookDAO = new BookDAO();
+        try (Connection conn = ConnectionDb.getConexao()) {
+            BookDAO bookDAO = new BookDAO(conn);
             bookDAO.insert(b);
 
         } catch (Exception e) {
@@ -23,8 +26,8 @@ public class Librarian extends Employee {
     }
 
     public void removeBook(int bookId) {
-        try {
-            BookDAO bookDAO = new BookDAO();
+        try (Connection conn = ConnectionDb.getConexao()) {
+            BookDAO bookDAO = new BookDAO(conn);
             bookDAO.delete(bookId);
 
         } catch (Exception e) {
@@ -33,8 +36,8 @@ public class Librarian extends Employee {
     }
 
     public void updateBook(Book b) {
-        try {
-            BookDAO bookDAO = new BookDAO();
+        try (Connection conn = ConnectionDb.getConexao()) {
+            BookDAO bookDAO = new BookDAO(conn);
             bookDAO.update(b);
 
         } catch (Exception e) {
@@ -43,9 +46,9 @@ public class Librarian extends Employee {
     }
 
     public void addCopies(int bookId, int quantity) {
-        try {
-            BookDAO bookDAO = new BookDAO();
-            BookCopyDAO copyDAO = new BookCopyDAO();
+        try (Connection conn = ConnectionDb.getConexao()) {
+            BookDAO bookDAO = new BookDAO(conn);
+            BookCopyDAO copyDAO = new BookCopyDAO(conn);
 
             Book book = bookDAO.findById(bookId);
 
@@ -64,13 +67,28 @@ public class Librarian extends Employee {
     }
 
     public void registerCopy(int bookId) {
-        try {
-            BookCopyDAO copyDAO = new BookCopyDAO();
+        try (Connection conn = ConnectionDb.getConexao()) {
+            BookCopyDAO copyDAO = new BookCopyDAO(conn);
             copyDAO.insertByBookId(bookId);
 
         } catch (Exception e) {
             throw new RuntimeException("Erro ao cadastrar exemplar", e);
         }
+    }
+
+    // Adicione isso tanto no Librarian quanto no Attendant
+    public List<Book> searchBooks(String name) {
+        try (Connection conn = ConnectionDb.getConexao()) {
+            BookDAO dao = new BookDAO(conn);
+            return dao.findByName(name); // Você precisará criar o findByName no BookDAO
+        } catch (Exception e) {
+            throw new RuntimeException("Erro ao buscar livros", e);
+        }
+    }
+
+    public void generateInventoryReport() {
+        // A lógica de PDF geralmente fica no Controller ou em um Service 
+        // para conseguir enviar o arquivo para o navegador.
     }
 
         /*ATENÇÃO! POR TER DEIXADO EMPLOYEE COMO ABSTRATA, 

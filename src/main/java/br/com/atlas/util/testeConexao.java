@@ -2,18 +2,23 @@ package br.com.atlas.util;
 
 import br.com.atlas.dao.*;
 import br.com.atlas.model.*;
+
+import java.sql.Connection;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 //import java.util.Collections;
 
 public class testeConexao {
+    
 
     public static void main(String[] args) {
+        Connection conn = ConnectionDb.getConexao();
+        
         System.out.println("🤖 INICIANDO TESTE DE FLUXO AUTOMATIZADO - ATLAS\n");
 
         try {
             // 1. Instanciando os DAOs
-            BookDAO bookDao = new BookDAO();
+            BookDAO bookDao = new BookDAO(conn);
             BookCopyDAO copyDao = new BookCopyDAO();
             ClientDAO clientDao = new ClientDAO();
             LoanDAO loanDao = new LoanDAO();
