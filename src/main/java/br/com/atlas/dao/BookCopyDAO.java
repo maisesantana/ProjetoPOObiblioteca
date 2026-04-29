@@ -111,4 +111,21 @@ public class BookCopyDAO {
             return false;
         }
     }
+
+    public boolean insertByBookId(int bookId) {
+        String sql = "INSERT INTO BookCopy (BookId, StatusAvailable) VALUES (?, ?)";
+
+        try (Connection conn = ConnectionDb.getConexao();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, bookId);
+            stmt.setBoolean(2, true);
+
+            stmt.executeUpdate();
+            return true;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
 }

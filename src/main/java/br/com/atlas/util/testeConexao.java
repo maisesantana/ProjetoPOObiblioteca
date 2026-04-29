@@ -20,6 +20,16 @@ public class testeConexao {
             RenewalDAO renewalDao = new RenewalDAO();
             ReturnBookDAO returnDao = new ReturnBookDAO();
 
+            // --- PASSO 0: CADASTRO DE FUNCIONÁRIO ---
+            System.out.println("0. Cadastrando Funcionário...");
+            Librarian bibliotecario = new Librarian("98765432100", "Ana Bibliotecária", "ana@atlas.com", "F", LocalDate.of(1990, 5, 15), 1234);
+
+            // Administrator precisa de uma Connection, então usamos o register diretamente
+            // Precisamos de um Administrator instanciado para chamar register()
+            Administrator admin = new Administrator("00000000000", "Admin Teste", "admin@atlas.com", "M", LocalDate.of(1985, 1, 1), 9999);
+            admin.register(bibliotecario);
+            System.out.println("✅ Funcionário " + bibliotecario.getName() + " cadastrado.");
+
             // --- PASSO 1: CADASTRO DE INFRAESTRUTURA ---
             System.out.println("1. Cadastrando Editora...");
             // Supondo que Publisher agora use String ou ID conforme seu SQL

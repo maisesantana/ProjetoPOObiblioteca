@@ -1,8 +1,8 @@
 package br.com.atlas.controller;
-
-import br.com.atlas.dao.AdministratorDAO;
 import br.com.atlas.model.Administrator;
+import br.com.atlas.model.Attendant;
 import br.com.atlas.model.Employee;
+import br.com.atlas.model.Librarian;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -11,6 +11,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession; // Para gerenciar a sessão
 import java.io.IOException;
 import java.time.LocalDate;
+
 
 @WebServlet("/manageEmployee")
 public class AdministratorController extends HttpServlet {
@@ -40,11 +41,17 @@ public class AdministratorController extends HttpServlet {
             int password = Integer.parseInt(request.getParameter("password"));
 
             // 3. Cria o Employee (O novo Atendente ou Bibliotecário)
-            Employee newEmployee = new Employee(cpf, name, email, gender, birthDate, password);
+            String role = request.getParameter("role");
+            Employee newEmployee;
+            if ("bibliotecario".equals(role)) {
+                newEmployee = new Librarian(cpf, name, email, gender, birthDate, password);
+            } else {
+                newEmployee = new Attendant(cpf, name, email, gender, birthDate, password);
+            }
 
             // 4. O Administrador (Service) executa a ação de registro
             // Usamos o objeto que já está na sessão, pois ele é o "executor" real
-            adminLogado.registerEmployee(newEmployee);
+            adminLogado.register(newEmployee);
 
             response.sendRedirect("views/admin/team_management.jsp?status=success");
 
