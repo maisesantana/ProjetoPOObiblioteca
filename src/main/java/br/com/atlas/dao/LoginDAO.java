@@ -15,13 +15,13 @@ public class LoginDAO {
     /**
      * Tenta autenticar o usuário e retorna o objeto com o cargo correto.
      */
-    public Optional<Employee> authenticate(String cpf, int senha) {
+    public Optional<Employee> authenticate(String cpf, int password) {
         // 1. Primeiro validamos o básico: CPF e Senha existem na tabela Employee?
-        String sql = "SELECT 1 FROM employee WHERE cpf = ? AND senha = ?";
+        String sql = "SELECT 1 FROM employee WHERE cpf = ? AND password = ?";
 
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setString(1, cpf);
-            stmt.setInt(2, senha);
+            stmt.setInt(2, password);
 
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {

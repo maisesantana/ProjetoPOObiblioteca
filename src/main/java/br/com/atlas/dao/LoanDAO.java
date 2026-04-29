@@ -13,14 +13,12 @@ public class LoanDAO {
 
     // CREATE (insere novo empréstimo no banco)
     public void insert(Loan loan) {
-
         String sql = "INSERT INTO loan (cpf, bookCopyId, loanDate, expectedReturnDate, renewals, active) VALUES (?, ?, ?, ?, ?, ?)";
 
         try (Connection conn = ConnectionDb.getConexao()) {
-
             conn.setAutoCommit(false); // controla transação (commit/rollback)
 
-            try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            try (PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
                 stmt.setString(1, loan.getClient().getCpf());
                 stmt.setInt(2, loan.getBookCopy().getBookCopyId());
@@ -34,15 +32,24 @@ public class LoanDAO {
 
                 stmt.executeUpdate();
 
-                // atualiza disponibilidade do exemplar (fica indisponível)
-                BookCopyDAO bcDAO = new BookCopyDAO();
+                // Recupera o ID gerado para que os próximos passos (Renovação/Devolução) funcionem
+                try (ResultSet rs = stmt.getGeneratedKeys()) {
+                    if (rs.next()) {
+                        loan.setLoanId(rs.getInt(1));
+                    }
+                }
+
+                // MUDANÇA CRUCIAL: Passamos a conexão 'conn' para o DAO de Exemplar
+                BookCopyDAO bcDAO = new BookCopyDAO(conn); 
+                
                 loan.getBookCopy().setAvailable(false);
                 bcDAO.update(loan.getBookCopy());
 
-                conn.commit(); // confirma tudo no banco
+                conn.commit(); // Agora sim, confirma as duas operações juntas!
+                System.out.println("✅ Empréstimo e atualização de exemplar confirmados.");
 
             } catch (SQLException e) {
-                conn.rollback(); // desfaz tudo se der erro
+                conn.rollback(); // Se der erro no insert ou no update, desfaz TUDO
                 throw e;
             }
 

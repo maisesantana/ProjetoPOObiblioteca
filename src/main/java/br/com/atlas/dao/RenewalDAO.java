@@ -15,13 +15,20 @@ public class RenewalDAO {
         String sql = "INSERT INTO Renewal (NewReturnDate, RenewalNumber, LoanId) VALUES (?, ?, ?)";
 
         try (Connection conn = ConnectionDb.getConexao();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
+             PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
             stmt.setTimestamp(1, Timestamp.valueOf(renewal.getNewReturnDate()));
             stmt.setInt(2, renewal.getRenewalNumber());
             stmt.setInt(3, renewal.getLoan().getLoanId());
 
             stmt.executeUpdate();
+
+            // Recupera o ID gerado para o objeto Java
+            try (ResultSet rs = stmt.getGeneratedKeys()) {
+                if (rs.next()) {
+                    renewal.setRenewalId(rs.getInt(1));
+                }
+            }
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -49,7 +56,7 @@ public class RenewalDAO {
                         rs.getInt("RenewalNumber"),
                         null // não precisa carregar Loan completo
                     );
-
+                    r.setRenewalId(rs.getInt("renewalId")); // Garante que o ID venha na busca
                     list.add(r);
                 }
             }

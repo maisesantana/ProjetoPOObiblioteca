@@ -38,7 +38,7 @@ public class testeConexao {
 
             // --- PASSO 2: CADASTRO DO LIVRO E EXEMPLAR ---
             System.out.println("2. Cadastrando Livro e Exemplar...");
-            Book livro = new Book("Java: Como Programar", "Prateleira A1", 500, "Tecnologia", "Atlas Editorial");
+            Book livro = new Book("Java: Como Programar", "Prateleira A1", 500, "Atlas Editorial");
             bookDao.insert(livro); 
             // O insert do BookDAO já deve setar o ID no objeto 'livro'
             

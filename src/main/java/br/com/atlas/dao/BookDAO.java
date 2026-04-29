@@ -9,18 +9,23 @@ import java.util.List;
 public class BookDAO {
 
     public void insert(Book book) {
-        String sql = "INSERT INTO Book (BookName, BookLocation, NumberOfPages, BookSubject, Publisher) VALUES (?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO Book (BookName, BookLocation, NumberOfPages, Publisher) VALUES (?, ?, ?, ?)";
 
         try (Connection conn = ConnectionDb.getConexao();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
+             PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
             stmt.setString(1, book.getBookName());
             stmt.setString(2, book.getBookLocation());
             stmt.setInt(3, book.getNumberOfPages());
-            stmt.setString(4, book.getBookSubject());
-            stmt.setString(5, book.getPublisher()); // Agora é String!
+            stmt.setString(4, book.getPublisher()); // Agora é String!
 
             stmt.executeUpdate();
+            // BUSCA O ID GERADO PELO BANCO
+            try (ResultSet rs = stmt.getGeneratedKeys()) {
+                if (rs.next()) {
+                    book.setBookId(rs.getInt(1)); // Define o ID real no objeto Livro
+                }
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -40,7 +45,6 @@ public class BookDAO {
                 b.setBookName(rs.getString("BookName"));
                 b.setBookLocation(rs.getString("BookLocation"));
                 b.setNumberOfPages(rs.getInt("NumberOfPages"));
-                b.setBookSubject(rs.getString("BookSubject"));
                 b.setPublisher(rs.getString("Publisher"));
                 list.add(b);
             }
@@ -54,7 +58,7 @@ public class BookDAO {
         String sql = "DELETE FROM Book WHERE BookId = ?";
 
         try (Connection conn = ConnectionDb.getConexao();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
+        PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setInt(1, bookId);
             stmt.executeUpdate();
@@ -64,7 +68,7 @@ public class BookDAO {
     }
 
     public void update(Book book) {
-        String sql = "UPDATE Book SET BookName=?, BookLocation=?, NumberOfPages=?, BookSubject=?, Publisher=? WHERE BookId=?";
+        String sql = "UPDATE Book SET BookName=?, BookLocation=?, NumberOfPages=?, Publisher=? WHERE BookId=?";
 
         try (Connection conn = ConnectionDb.getConexao();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -72,9 +76,8 @@ public class BookDAO {
             stmt.setString(1, book.getBookName());
             stmt.setString(2, book.getBookLocation());
             stmt.setInt(3, book.getNumberOfPages());
-            stmt.setString(4, book.getBookSubject());
-            stmt.setString(5, book.getPublisher());
-            stmt.setInt(6, book.getBookId());
+            stmt.setString(4, book.getPublisher());
+            stmt.setInt(5, book.getBookId());
             stmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -96,7 +99,6 @@ public class BookDAO {
                 b.setBookName(rs.getString("BookName"));
                 b.setBookLocation(rs.getString("BookLocation"));
                 b.setNumberOfPages(rs.getInt("NumberOfPages"));
-                b.setBookSubject(rs.getString("BookSubject"));
                 b.setPublisher(rs.getString("Publisher"));
                 return b;
             }

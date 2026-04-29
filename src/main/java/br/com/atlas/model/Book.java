@@ -9,7 +9,6 @@ public class Book {
     private String bookName;
     private String bookLocation;
     private int numberOfPages;
-    private String bookSubject;
     private String publisher;
     private List<String> authors;
     private List<String> categories;
@@ -21,13 +20,11 @@ public class Book {
         this.copies = new ArrayList<>();
     }
 
-    public Book(String bookName, String bookLocation, int numberOfPages,
-        String bookSubject, String publisher) {
+    public Book(String bookName, String bookLocation, int numberOfPages, String publisher) {
 
         this.bookName = bookName;
         this.bookLocation = bookLocation;
         this.numberOfPages = numberOfPages;
-        this.bookSubject = bookSubject;
         this.publisher = publisher;
 
         this.authors = new ArrayList<>();
@@ -35,14 +32,12 @@ public class Book {
         this.copies = new ArrayList<>();
     }
 
-    public Book(int bookId, String bookName, String bookLocation, int numberOfPages,
-        String bookSubject, String publisher) {
+    public Book(int bookId, String bookName, String bookLocation, int numberOfPages, String publisher) {
 
         this.bookId = bookId;
         this.bookName = bookName;
         this.bookLocation = bookLocation;
         this.numberOfPages = numberOfPages;
-        this.bookSubject = bookSubject;
         this.publisher = publisher;
 
         this.authors = new ArrayList<>();
@@ -80,14 +75,6 @@ public class Book {
 
     public void setNumberOfPages(int numberOfPages) {
         this.numberOfPages = numberOfPages;
-    }
-
-    public String getBookSubject() {
-        return bookSubject;
-    }
-
-    public void setBookSubject(String bookSubject) {
-        this.bookSubject = bookSubject;
     }
 
     public String getPublisher() {
