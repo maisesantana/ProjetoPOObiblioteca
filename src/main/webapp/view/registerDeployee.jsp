@@ -9,7 +9,7 @@
  
   <header>
     <a href="#">
-      <img src="logo.png" alt="Atlas - Gestão de Biblioteca" />
+      <img src="logo.png" alt="Atlas - "Gestão de Biblioteca" />
     </a>
   </header>
  
@@ -27,7 +27,7 @@
  
       <div>
         <label for="nome">Nome completo</label>
-        <input type="text" id="nome" name="nome" placeholder="insira o nome" />
+        <input type="text" id="nome" name="name" placeholder="insira o nome" />
       </div>
  
       <div>
@@ -36,46 +36,31 @@
       </div>
  
       <div>
-        <label for="nomeSocial">Nome Social</label>
-        <input type="text" id="nomeSocial" name="nomeSocial" placeholder="insira seu nome social" />
-      </div>
- 
-      <div>
         <label for="email">Email</label>
         <input type="email" id="email" name="email" placeholder="insira o e-mail" />
       </div>
  
       <div>
-        <label for="telefone">Telefone</label>
-        <input type="tel" id="telefone" name="telefone" placeholder="+DD (**) *****-****" />
-      </div>
- 
-      <div>
         <label for="dataNascimento">Data de nascimento</label>
-        <input type="date" id="dataNascimento" name="dataNascimento" />
-      </div>
- 
-      <div>
-        <label for="rg">RG</label>
-        <input type="text" id="rg" name="rg" placeholder="insira seu número do RG" />
+        <input type="date" id="dataNascimento" name="birthDate" />
       </div>
  
       <fieldset>
         <legend>Sexo</legend>
         <label>
-          <input type="radio" name="sexo" value="masculino" checked /> Masculino
+          <input type="radio" name="gender" value="masculino" checked /> Masculino
         </label>
         <label>
-          <input type="radio" name="sexo" value="feminino" /> Feminino
+          <input type="radio" name="gender" value="feminino" /> Feminino
         </label>
         <label>
-          <input type="radio" name="sexo" value="outro" /> Outro
+          <input type="radio" name="gender" value="outro" /> Outro
         </label>
       </fieldset>
  
       <div>
         <label for="senha">Criar senha</label>
-        <input type="password" id="senha" name="senha" placeholder="senha numérica" />
+        <input type="password" id="senha" name="password" placeholder="insira sua senha" />
       </div>
  
       <div>
