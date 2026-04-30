@@ -19,7 +19,7 @@ public class AttendantDAO {
 
     // verificação se o cpf existe
     public boolean exists(String cpf) throws SQLException {
-        String sql = "SELECT 1 FROM attendant WHERE cpf = ?";
+        String sql = "SELECT 1 FROM Attendant WHERE cpf = ?";
 
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setString(1, cpf);
@@ -32,7 +32,7 @@ public class AttendantDAO {
 
     // CREATE
     public void insert(Attendant att) throws SQLException {
-        String sql = "INSERT INTO attendant (cpf) VALUES (?)";
+        String sql = "INSERT INTO Attendant (cpf) VALUES (?)";
 
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setString(1, att.getCpf());
@@ -44,9 +44,9 @@ public class AttendantDAO {
     public List<Attendant> findAll() throws SQLException {
         String sql = """
             SELECT p.cpf, p.name, p.email, p.gender, p.birthDate, e.password
-            FROM person p
-            JOIN employee e ON p.cpf = e.cpf
-            JOIN attendant a ON a.cpf = e.cpf
+            FROM Person p
+            JOIN Employee e ON p.cpf = e.cpf
+            JOIN Attendant a ON a.cpf = e.cpf
         """;
 
         List<Attendant> attendants = new ArrayList<>();
@@ -66,9 +66,9 @@ public class AttendantDAO {
     public Optional<Attendant> findByCpf(String cpf) throws SQLException {
         String sql = """
             SELECT p.cpf, p.name, p.email, p.gender, p.birthDate, e.password
-            FROM person p
-            JOIN employee e ON p.cpf = e.cpf
-            JOIN attendant a ON a.cpf = e.cpf
+            FROM Person p
+            JOIN Employee e ON p.cpf = e.cpf
+            JOIN Attendant a ON a.cpf = e.cpf
             WHERE p.cpf = ?
         """;
 
@@ -87,7 +87,7 @@ public class AttendantDAO {
 
     // DELETE
     public void delete(String cpf) throws SQLException {
-        String sql = "DELETE FROM attendant WHERE cpf = ?";
+        String sql = "DELETE FROM Attendant WHERE cpf = ?";
 
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setString(1, cpf);
@@ -111,9 +111,9 @@ public class AttendantDAO {
     public List<Attendant> findByName(String name) throws SQLException {
         String sql = """
             SELECT p.cpf, p.name, p.email, p.gender, p.birthDate, e.password
-            FROM person p
-            JOIN employee e ON p.cpf = e.cpf
-                JOIN attendant a ON a.cpf = e.cpf
+            FROM Person p
+            JOIN Employee e ON p.cpf = e.cpf
+            JOIN Attendant a ON a.cpf = e.cpf
             WHERE p.name LIKE ?
         """;
 

@@ -13,11 +13,11 @@ public class LoginDAO {
     }
 
     /**
-     * Tenta autenticar o usuário e retorna o objeto com o cargo correto.
+     * Tenta autenticar o usurio e retorna o objeto com o cargo correto.
      */
     public Optional<Employee> authenticate(String cpf, int password) {
-        // 1. Primeiro validamos o básico: CPF e Senha existem na tabela Employee?
-        String sql = "SELECT 1 FROM employee WHERE cpf = ? AND password = ?";
+        // 1. Primeiro validamos o bsico: CPF e Senha existem na tabela Employee?
+        String sql = "SELECT 1 FROM Employee WHERE cpf = ? AND password = ?";
 
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setString(1, cpf);
@@ -25,21 +25,21 @@ public class LoginDAO {
 
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
-                    // 2. Credenciais válidas! Agora vamos descobrir o cargo por "eliminação"
-                    
-                    // Verificamos se é Administrador
+                    // 2. Credenciais vlidas! Agora vamos descobrir o cargo por "eliminao"
+
+                    // Verificamos se  Administrador
                     AdministratorDAO adminDAO = new AdministratorDAO(connection);
                     if (adminDAO.exists(cpf)) {
                         return adminDAO.findByCpf(cpf).map(admin -> (Employee) admin);
                     }
 
-                    // Verificamos se é Bibliotecário
+                    // Verificamos se  Bibliotecrio
                     LibrarianDAO libDAO = new LibrarianDAO(connection);
                     if (libDAO.exists(cpf)) {
                         return libDAO.findByCpf(cpf).map(lib -> (Employee) lib);
                     }
 
-                    // Verificamos se é Atendente
+                    // Verificamos se  Atendente
                     AttendantDAO attDAO = new AttendantDAO(connection);
                     if (attDAO.exists(cpf)) {
                         return attDAO.findByCpf(cpf).map(att -> (Employee) att);
@@ -49,7 +49,7 @@ public class LoginDAO {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        
-        return Optional.empty(); // Retorna vazio se a senha estiver errada ou o CPF não existir
+
+        return Optional.empty(); // Retorna vazio se a senha estiver errada ou o CPF no existir
     }
 }

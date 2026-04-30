@@ -19,7 +19,7 @@ public class AdministratorDAO {
 
     // verificação se o cpf existe
     public boolean exists(String cpf) throws SQLException {
-        String sql = "SELECT 1 FROM administrator WHERE cpf = ?";
+        String sql = "SELECT 1 FROM Administrator WHERE cpf = ?";
 
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setString(1, cpf);
@@ -32,7 +32,7 @@ public class AdministratorDAO {
 
     // CREATE
     public void insert(Administrator admin) throws SQLException {
-        String sql = "INSERT INTO administrator (cpf) VALUES (?)";
+        String sql = "INSERT INTO Administrator (cpf) VALUES (?)";
 
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setString(1, admin.getCpf());
@@ -44,9 +44,9 @@ public class AdministratorDAO {
     public List<Administrator> findAll() throws SQLException {
         String sql = """
             SELECT p.cpf, p.name, p.email, p.gender, p.birthDate, e.password
-            FROM person p
-            JOIN employee e ON p.cpf = e.cpf
-            JOIN administrator a ON a.cpf = e.cpf
+            FROM Person p
+            JOIN Employee e ON p.cpf = e.cpf
+            JOIN Administrator a ON a.cpf = e.cpf
         """;
 
         List<Administrator> admins = new ArrayList<>();
@@ -66,9 +66,9 @@ public class AdministratorDAO {
     public Optional<Administrator> findByCpf(String cpf) throws SQLException {
         String sql = """
             SELECT p.cpf, p.name, p.email, p.gender, p.birthDate, e.password
-            FROM person p
-            JOIN employee e ON p.cpf = e.cpf
-            JOIN administrator a ON a.cpf = e.cpf
+            FROM Person p
+            JOIN Employee e ON p.cpf = e.cpf
+            JOIN Administrator a ON a.cpf = e.cpf
             WHERE p.cpf = ?
         """;
 
@@ -87,7 +87,7 @@ public class AdministratorDAO {
 
     // DELETE
     public void delete(String cpf) throws SQLException {
-        String sql = "DELETE FROM administrator WHERE cpf = ?";
+        String sql = "DELETE FROM Administrator WHERE cpf = ?";
 
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setString(1, cpf);
@@ -111,9 +111,9 @@ public class AdministratorDAO {
     public List<Administrator> findByName(String name) throws SQLException {
         String sql = """
             SELECT p.cpf, p.name, p.email, p.gender, p.birthDate, e.password
-            FROM person p
-            JOIN employee e ON p.cpf = e.cpf
-            JOIN administrator a ON a.cpf = e.cpf
+            FROM Person p
+            JOIN Employee e ON p.cpf = e.cpf
+            JOIN Administrator a ON a.cpf = e.cpf
             WHERE p.name LIKE ?
         """;
 

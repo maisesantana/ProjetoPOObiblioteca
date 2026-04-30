@@ -10,16 +10,16 @@ import java.util.Optional;
 
 public class LibrarianDAO {
 
-    // conexão com o banco de dados usada pelo DAO (final para não ser alterada após inicialização)
+    // conexo com o banco de dados usada pelo DAO (final para no ser alterada aps inicializao)
     private final Connection connection;
 
     public LibrarianDAO(Connection connection) {
         this.connection = connection;
     }
 
-    // verificação se o cpf existe
+    // verificao se o cpf existe
     public boolean exists(String cpf) throws SQLException {
-        String sql = "SELECT 1 FROM librarian WHERE cpf = ?";
+        String sql = "SELECT 1 FROM Librarian WHERE cpf = ?";
 
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setString(1, cpf);
@@ -32,7 +32,7 @@ public class LibrarianDAO {
 
     // CREATE
     public void insert(Librarian lib) throws SQLException {
-        String sql = "INSERT INTO librarian (cpf) VALUES (?)";
+        String sql = "INSERT INTO Librarian (cpf) VALUES (?)";
 
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setString(1, lib.getCpf());
@@ -44,9 +44,9 @@ public class LibrarianDAO {
     public List<Librarian> findAll() throws SQLException {
         String sql = """
             SELECT p.cpf, p.name, p.email, p.gender, p.birthDate, e.password
-            FROM person p
-            JOIN employee e ON p.cpf = e.cpf
-            JOIN librarian l ON l.cpf = e.cpf
+            FROM Person p
+            JOIN Employee e ON p.cpf = e.cpf
+            JOIN Librarian l ON l.cpf = e.cpf
         """;
 
         List<Librarian> librarians = new ArrayList<>();
@@ -66,9 +66,9 @@ public class LibrarianDAO {
     public Optional<Librarian> findByCpf(String cpf) throws SQLException {
         String sql = """
             SELECT p.cpf, p.name, p.email, p.gender, p.birthDate, e.password
-            FROM person p
-            JOIN employee e ON p.cpf = e.cpf
-            JOIN librarian l ON l.cpf = e.cpf
+            FROM Person p
+            JOIN Employee e ON p.cpf = e.cpf
+            JOIN Librarian l ON l.cpf = e.cpf
             WHERE p.cpf = ?
         """;
 
@@ -87,7 +87,7 @@ public class LibrarianDAO {
 
     // DELETE
     public void delete(String cpf) throws SQLException {
-        String sql = "DELETE FROM librarian WHERE cpf = ?";
+        String sql = "DELETE FROM Librarian WHERE cpf = ?";
 
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setString(1, cpf);
@@ -95,7 +95,7 @@ public class LibrarianDAO {
         }
     }
 
-    // MÉTODO AUXILIAR
+    // MTODO AUXILIAR
     private Librarian mapResultSet(ResultSet rs) throws SQLException {
         String cpf = rs.getString("cpf");
         String name = rs.getString("name");
@@ -111,9 +111,9 @@ public class LibrarianDAO {
     public List<Librarian> findByName(String name) throws SQLException {
         String sql = """
             SELECT p.cpf, p.name, p.email, p.gender, p.birthDate, e.password
-            FROM person p
-            JOIN employee e ON p.cpf = e.cpf
-            JOIN librarian l ON l.cpf = e.cpf
+            FROM Person p
+            JOIN Employee e ON p.cpf = e.cpf
+            JOIN Librarian l ON l.cpf = e.cpf
             WHERE p.name LIKE ?
         """;
 
