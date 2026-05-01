@@ -6,7 +6,6 @@ import java.util.List;
 import java.sql.Connection;
 import br.com.atlas.dao.BookDAO;
 import br.com.atlas.util.ConnectionDb;
-import br.com.atlas.model.Book;
 import br.com.atlas.dao.BookCopyDAO;
 import br.com.atlas.dao.ClientDAO;
 import br.com.atlas.dao.LoanDAO;
@@ -119,9 +118,7 @@ public class Attendant extends Employee {
         // atualiza data
         l.setExpectedReturnDate(l.getExpectedReturnDate().plusDays(8));
 
-        Renewal r = new Renewal(
-            l.getExpectedReturnDate(),
-            l.getRenewalCount() + 1, // usa contador do banco
+        Renewal r = new Renewal(l.getExpectedReturnDate(), l.getRenewalCount() + 1, // usa contador do banco
             l
         );
 
@@ -184,7 +181,6 @@ public class Attendant extends Employee {
         }
     }
 
-    // Adicione isso tanto no Librarian quanto no Attendant
     public List<Book> searchBooks(String name) {
         try (Connection conn = ConnectionDb.getConexao()) {
             BookDAO dao = new BookDAO(conn);

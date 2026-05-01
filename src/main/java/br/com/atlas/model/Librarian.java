@@ -76,7 +76,6 @@ public class Librarian extends Employee {
         }
     }
 
-    // Adicione isso tanto no Librarian quanto no Attendant
     public List<Book> searchBooks(String name) {
         try (Connection conn = ConnectionDb.getConexao()) {
             BookDAO dao = new BookDAO(conn);
@@ -86,12 +85,7 @@ public class Librarian extends Employee {
         }
     }
 
-    public void generateInventoryReport() {
-        // A lógica de PDF geralmente fica no Controller ou em um Service 
-        // para conseguir enviar o arquivo para o navegador.
-    }
-
-        /*ATENÇÃO! POR TER DEIXADO EMPLOYEE COMO ABSTRATA, 
+    /*ATENÇÃO! POR TER DEIXADO EMPLOYEE COMO ABSTRATA, 
     FOI NECESSARIO, PRA FAZER O POLIMORFISMO, QUE TODAS 
     AS CLASSES IMPLEMENTASSEM OS SEGUINTES MÉTODOS. PORÉM,
     BIBLIOTECÁRIO NÃO REGISTRAS PESSOAS, POR ISSO OS METODOS
