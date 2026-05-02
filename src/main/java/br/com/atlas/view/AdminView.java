@@ -25,7 +25,7 @@ public class AdminView extends EmployeeView {
     public int showMenu() {
         
         int op;
-        
+
         System.out.println("====== MENU ======");
         System.out.println("1 - Visualizar funcionários");
         System.out.println("2 - Registrar funcionários");
@@ -57,6 +57,7 @@ public class AdminView extends EmployeeView {
         return op;
     }
 
+    @Override
     public Person registerP() {
         int op = selectKindOfEmployee();
         if (op == 0) {
@@ -64,10 +65,10 @@ public class AdminView extends EmployeeView {
             return null;
         }
         clearScreen();
-        return viewRegister(op);
+        return doRegister(op);
     }
 
-    public Person viewRegister(int op) {
+    public Person doRegister(int op) {
         String cpf, name, email, birthDate; 
         char gender;
         int password, validatePassword;
@@ -76,35 +77,31 @@ public class AdminView extends EmployeeView {
         System.out.println("====== REGISTRAR FUNCIONÁRIO ======");
 
         System.out.print("CPF: ");
-        cpf = sc.next();
-        sc.nextLine(); //limpa buffer
+        cpf = sc.nextLine();
         
         System.out.print("\nNome: ");
         name = sc.nextLine();
-        sc.nextLine(); //limpa buffer
         
         System.out.print("\nEmail: ");
         email = sc.nextLine();
-        sc.nextLine(); //limpa buffer
         
         System.out.print("\nSexo (caractere único): ");
         gender = sc.next().charAt(0);
-        sc.nextLine(); //limpa buffer
-        
+        sc.nextLine();
+
         System.out.print("\nData de nascimento: (dd/mm/aaaa): ");
         birthDate = sc.nextLine();
-        sc.nextLine(); //limpa buffer
         //conversao de string para tipo data no formato EUA:
         bDate = LocalDate.parse(birthDate, dateFormatter);
 
         do {
             System.out.print("\nSenha numérica: ");
             password = sc.nextInt();
-            sc.nextLine(); //limpa buffer
+            sc.nextLine(); // limpar buffer
 
             System.out.print("\nConfirme a senha numérica: ");
             validatePassword = sc.nextInt();
-            sc.nextLine();
+            sc.nextLine(); // limpar buffer
 
             if (password != validatePassword) {
                 System.out.println("A senha numérica precisa ser igual ao confirmar! Digite novamente.");
@@ -129,36 +126,36 @@ public class AdminView extends EmployeeView {
         } else {
             int i = 0;
             System.out.println("====== ATENDENTES ======");
-            System.out.println("ÍNDICE \tCPF \tNOME \tEMAIL \tSEXO \tDATA DE NASC. \tSENHA");
+            System.out.printf("%-5s %-15s %-15s %-25s %-5s %-15s %-10s\n","IDX", "CPF", "NOME", "EMAIL", "SEXO", "NASCIMENTO", "SENHA");
             for (Attendant a : attendants) {
                 i++;
-                System.out.println(i + "\t" + a.getCpf() + "\t" + a.getName() + "\t" + a.getEmail() + "\t" + a.getGender() + "\t" + a.getBirthDate() + "\t" + a.getPassword());
+                System.out.printf("%-5d %-15s %-15s %-25s %-5c %-15s %-10d\n", i, a.getCpf(), a.getName(), a.getEmail(), a.getGender(), a.getBirthDate(), a.getPassword());
             }
         }
 
         // BIBLIOTECÁRIOS
         if (librarians == null || librarians.isEmpty()) {
-            System.out.println("Não há bibliotecários cadastrados no sistema.");
+            System.out.println("\nNão há bibliotecários cadastrados no sistema.");
         } else {
             int i = 0;
-                System.out.println("====== BIBLIOTECÁRIOS ======");
-            System.out.println("ÍNDICE \tCPF \tNOME \tEMAIL \tSEXO \tDATA DE NASC. \tSENHA");
+                System.out.println("\n====== BIBLIOTECÁRIOS ======");
+                System.out.printf("%-5s %-15s %-15s %-25s %-5s %-15s %-10s\n","IDX", "CPF", "NOME", "EMAIL", "SEXO", "NASCIMENTO", "SENHA");
             for (Librarian l : librarians) {
                 i++;
-                System.out.println(i + "\t" + l.getCpf() + "\t" + l.getName() + "\t" + l.getEmail() + "\t" + l.getGender() + "\t" + l.getBirthDate() + "\t" + l.getPassword());
+                System.out.printf("%-5d %-15s %-15s %-25s %-5c %-15s %-10d\n", i, l.getCpf(), l.getName(), l.getEmail(), l.getGender(), l.getBirthDate(), l.getPassword());
             }
         }
 
         // ADMIN
         if (admins == null || admins.isEmpty()) {
-            System.out.println("Não há administradores cadastrados no sistema.");
+            System.out.println("\nNão há administradores cadastrados no sistema.");
         } else {
             int i = 0;
-            System.out.println("====== ADMINISTRADORES ======");
-            System.out.println("ÍNDICE \tCPF \tNOME \tEMAIL \tSEXO \tDATA DE NASC. \tSENHA");
+            System.out.println("\n====== ADMINISTRADORES ======");
+            System.out.printf("%-5s %-15s %-15s %-25s %-5s %-15s %-10s\n","IDX", "CPF", "NOME", "EMAIL", "SEXO", "NASCIMENTO", "SENHA");
             for (Administrator ad : admins) {
                 i++;
-                System.out.println(i + "\t" + ad.getCpf() + "\t" + ad.getName() + "\t" + ad.getEmail() + "\t" + ad.getGender() + "\t" + ad.getBirthDate() + "\t" + ad.getPassword());
+                System.out.printf("%-5d %-15s %-15s %-25s %-5c %-15s %-10d\n", i, ad.getCpf(), ad.getName(), ad.getEmail(), ad.getGender(), ad.getBirthDate(), ad.getPassword());
             }
         }
     }

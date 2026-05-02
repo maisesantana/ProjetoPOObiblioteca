@@ -3,6 +3,8 @@ package br.com.atlas.view;
 import java.io.IOException; // pacote para detectar se é linux ou windows
 import java.util.Scanner;
 
+import br.com.atlas.model.Person;
+
 public class EmployeeView {
     
     public int showMenu() {
@@ -39,5 +41,9 @@ public class EmployeeView {
         } catch (Exception e) {
             throw new RuntimeException ("Erro ao limpar tela" + e);
         }
+    }
+
+    public Person registerP() {
+        return new Person();
     }
 }
