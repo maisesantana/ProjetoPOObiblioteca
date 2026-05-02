@@ -1,4 +1,4 @@
-package br.com.atlas.controller;
+package br.com.atlas.webcontroller;
 
 import br.com.atlas.dao.LoginDAO;
 import br.com.atlas.model.Administrator;

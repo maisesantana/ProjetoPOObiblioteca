@@ -5,7 +5,6 @@ import java.sql.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 public class PersonDAO {
 
@@ -16,7 +15,7 @@ public class PersonDAO {
     }
 
     // Verificação se o CPF existe
-    public boolean existsByCpf(String cpf) throws SQLException {
+    public boolean exists(String cpf) throws SQLException {
         String sql = "SELECT 1 FROM Person WHERE cpf = ?";
 
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
@@ -28,7 +27,7 @@ public class PersonDAO {
         }
     }
 
-    // CREATE - Ajustado para os 5 campos exatos da sua tabela atual
+    // CREATE
     public void insert(Person person) throws SQLException {
         String sql = "INSERT INTO Person (cpf, name, email, gender, birthDate) VALUES (?,?,?,?,?)";
 
@@ -36,7 +35,7 @@ public class PersonDAO {
             stmt.setString(1, person.getCpf());
             stmt.setString(2, person.getName());
             stmt.setString(3, person.getEmail());
-            stmt.setString(4, person.getGender());
+            stmt.setString(4, String.valueOf(person.getGender()));
             stmt.setDate(5, Date.valueOf(person.getBirthDate()));
 
             stmt.executeUpdate();
@@ -59,7 +58,7 @@ public class PersonDAO {
     }
 
     // READ BY CPF
-    public Optional<Person> findByCpf(String cpf) throws SQLException {
+    public Person findByCpf(String cpf) throws SQLException {
         String sql = "SELECT cpf, name, email, gender, birthDate FROM Person WHERE cpf = ?";
 
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
@@ -67,11 +66,11 @@ public class PersonDAO {
 
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
-                    return Optional.of(mapResultSet(rs));
+                    return mapResultSet(rs);
                 }
             }
         }
-        return Optional.empty();
+        return null;
     }
 
     // UPDATE
@@ -81,9 +80,10 @@ public class PersonDAO {
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setString(1, person.getName());
             stmt.setString(2, person.getEmail());
-            stmt.setString(3, person.getGender());
+            stmt.setString(3, String.valueOf(person.getGender()));
             stmt.setDate(4, Date.valueOf(person.getBirthDate()));
             stmt.setString(5, person.getCpf());
+
             stmt.executeUpdate();
         }
     }
@@ -98,12 +98,12 @@ public class PersonDAO {
         }
     }
 
-    // Método Auxiliar para converter o resultado do Banco em Objeto Java
+    // MÉTODO AUXILIAR
     private Person mapResultSet(ResultSet rs) throws SQLException {
         String cpf = rs.getString("cpf");
         String name = rs.getString("name");
         String email = rs.getString("email");
-        String gender = rs.getString("gender");
+        char gender = rs.getString("gender").charAt(0);
         LocalDate birthDate = rs.getDate("birthDate").toLocalDate();
 
         return new Person(cpf, name, email, gender, birthDate);

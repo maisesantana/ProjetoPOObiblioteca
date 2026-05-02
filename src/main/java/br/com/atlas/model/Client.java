@@ -14,13 +14,23 @@ public class Client extends Person {
 
     public Client() {}
 
-    public Client(String cpf, String name, String email, String gender, 
+    public Client(String cpf, String name, String email, char gender, 
         LocalDate birthDate, String address) {
         
         super(cpf, name, email, gender, birthDate);
         this.address = address;
         startSuspensionDate = null;
         endSuspensionDate = null;
+        loans = new ArrayList<>();
+    }
+
+    public Client(String cpf, String name, String email, char gender, 
+        LocalDate birthDate, String address, LocalDate startSuspensionDate, LocalDate endSuspensionDate) {
+        
+        super(cpf, name, email, gender, birthDate);
+        this.address = address;
+        this.startSuspensionDate = startSuspensionDate;
+        this.endSuspensionDate = endSuspensionDate;
         loans = new ArrayList<>();
     }
 

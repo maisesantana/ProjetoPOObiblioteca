@@ -6,7 +6,7 @@ public abstract class Employee extends Person {
 
     private int password;
 
-    public Employee(String cpf, String name, String email, String gender,
+    public Employee(String cpf, String name, String email, char gender,
                 LocalDate birthDate, int password) {
         super(cpf, name, email, gender, birthDate);
         this.password = password;

@@ -27,7 +27,7 @@ public class ClientDAO {
                 stmtP.setString(1, client.getCpf());
                 stmtP.setString(2, client.getName());
                 stmtP.setString(3, client.getEmail());
-                stmtP.setString(4, client.getGender());
+                stmtP.setString(4, String.valueOf(client.getGender()));
                 stmtP.setDate(5, Date.valueOf(client.getBirthDate()));
                 stmtP.executeUpdate();
 
@@ -133,7 +133,7 @@ public class ClientDAO {
                 // atualiza PERSON
                 stmtP.setString(1, client.getName());
                 stmtP.setString(2, client.getEmail());
-                stmtP.setString(3, client.getGender());
+                stmtP.setString(3, String.valueOf(client.getGender()));
                 stmtP.setDate(4, Date.valueOf(client.getBirthDate()));
                 stmtP.setString(5, client.getCpf());
                 stmtP.executeUpdate();
@@ -192,7 +192,7 @@ public class ClientDAO {
             rs.getString("cpf"),
             rs.getString("name"),
             rs.getString("email"),
-            rs.getString("gender"),
+            rs.getString("gender").charAt(0),
             rs.getDate("birthDate").toLocalDate(),
             rs.getString("address")
         );

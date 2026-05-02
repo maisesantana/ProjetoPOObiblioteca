@@ -1,4 +1,4 @@
-package br.com.atlas.controller;
+package br.com.atlas.webcontroller;
 import br.com.atlas.model.Administrator;
 import br.com.atlas.model.Attendant;
 import br.com.atlas.model.Employee;

@@ -46,7 +46,7 @@ public class testeConexao {
             // --- PASSO 2: CADASTRO ---
             System.out.println("\n--- PASSO 2: TESTE DE CADASTRO ---");
 
-            Person p = new Person(cpfTeste, "Ana Bibliotecaria", "ana@atlas.com", "F", LocalDate.of(1990, 5, 15));
+            Person p = new Person(cpfTeste, "Ana Bibliotecaria", "ana@atlas.com", 'F', LocalDate.of(1990, 5, 15));
             personDAO.insert(p);
             System.out.println("✅ 1/3: Person inserida.");
 
@@ -58,7 +58,7 @@ public class testeConexao {
             }
             System.out.println("✅ 2/3: Employee inserido.");
 
-            Librarian lib = new Librarian(cpfTeste, "Ana Bibliotecaria", "ana@atlas.com", "F", LocalDate.of(1990, 5, 15), 1234);
+            Librarian lib = new Librarian(cpfTeste, "Ana Bibliotecaria", "ana@atlas.com", 'F', LocalDate.of(1990, 5, 15), 1234);
             librarianDAO.insert(lib);
             System.out.println("✅ 3/3: Librarian inserido.");
 

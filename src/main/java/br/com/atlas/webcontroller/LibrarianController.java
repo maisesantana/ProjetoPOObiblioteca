@@ -1,4 +1,4 @@
-package br.com.atlas.controller;
+package br.com.atlas.webcontroller;
 
 import br.com.atlas.model.Librarian;
 import br.com.atlas.model.Book;

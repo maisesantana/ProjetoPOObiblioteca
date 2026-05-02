@@ -100,7 +100,7 @@ public class AttendantDAO {
         String cpf = rs.getString("cpf");
         String name = rs.getString("name");
         String email = rs.getString("email");
-        String gender = rs.getString("gender");
+        char gender = rs.getString("gender").charAt(0);
         LocalDate birthDate = rs.getDate("birthDate").toLocalDate();
         int password = rs.getInt("password");
 

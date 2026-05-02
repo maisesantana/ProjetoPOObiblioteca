@@ -2,13 +2,14 @@ package br.com.atlas.model;
 
 import java.sql.Connection;
 import java.time.LocalDate;
+import java.util.List;
 
 import br.com.atlas.dao.*;
 import br.com.atlas.util.ConnectionDb;
 
 public class Administrator extends Employee {
 
-    public Administrator(String cpf, String name, String email, String gender,
+    public Administrator(String cpf, String name, String email, char gender,
             LocalDate birthDate, int password) {
         super(cpf, name, email, gender, birthDate, password);
     }
@@ -133,6 +134,60 @@ public class Administrator extends Employee {
                 ex.printStackTrace();
             }
             throw new RuntimeException("Erro ao atualizar funcionário", e);
+        }
+    }
+
+    public void findPerson(String cpf) {
+        try {
+            Connection conn = ConnectionDb.getConexao();
+            EmployeeDAO eDao = new EmployeeDAO(conn);
+
+            if (eDao.exists(cpf)) {
+
+                LibrarianDAO lDao = new LibrarianDAO(conn);
+                AttendantDAO aDao = new AttendantDAO(conn);
+                AdministratorDAO adDao = new AdministratorDAO(conn);
+
+                if (lDao.exists(cpf)) {
+                    
+                }
+                
+                
+            } else {
+                throw new IllegalArgumentException("Cpf inexistente no sistema.");
+            }
+        } catch (Exception e) {
+            throw new RuntimeException("Erro ao encontrar funcionário", e);
+        }
+    }
+
+    public List<Attendant> getAllAttendants() {
+        try {
+            Connection conn = ConnectionDb.getConexao();
+            AttendantDAO attDAO = new AttendantDAO(conn);
+            return attDAO.findAll();
+        } catch (Exception e) {
+            throw new RuntimeException("Erro ao exibir atendentes", e);
+        }
+    }
+
+    public List<Librarian> getAllLibrarians() {
+        try {
+            Connection conn = ConnectionDb.getConexao();
+            LibrarianDAO libDAO = new LibrarianDAO(conn);
+            return libDAO.findAll();
+        } catch (Exception e) {
+            throw new RuntimeException("Erro ao exibir bibliotecários", e);
+        }
+    }
+
+    public List<Administrator> getAllAdmins() {
+        try {
+            Connection conn = ConnectionDb.getConexao();
+            AdministratorDAO adminDAO = new AdministratorDAO(conn);
+            return adminDAO.findAll();
+        } catch (Exception e) {
+            throw new RuntimeException("Erro ao exibir administradores", e);
         }
     }
 }

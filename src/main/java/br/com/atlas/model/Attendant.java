@@ -14,7 +14,7 @@ import br.com.atlas.dao.RenewalDAO; // import necessário
 
 public class Attendant extends Employee {
 
-    public Attendant(String cpf, String name, String email, String gender,
+    public Attendant(String cpf, String name, String email, char gender,
             LocalDate birthDate, int password) {
         super(cpf, name, email, gender, birthDate, password);
     }

@@ -7,12 +7,12 @@ public class Person {
     private String cpf;
     private String name;
     private String email;
-    private String gender;
+    private char gender;
     private LocalDate birthDate;
 
     public Person() {}
 
-    public Person(String cpf, String name, String email, String gender, LocalDate birthDate) {
+    public Person(String cpf, String name, String email, char gender, LocalDate birthDate) {
         this.cpf = cpf;
         this.name = name;
         this.email = email;
@@ -44,11 +44,11 @@ public class Person {
         this.email = email;
     }
 
-    public String getGender() {
+    public char getGender() {
         return gender;
     }
 
-    public void setGender(String gender) {
+    public void setGender(char gender) {
         this.gender = gender;
     }
 

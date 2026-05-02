@@ -20,15 +20,20 @@ public class PersonService {
         if (person.getCpf() == null || person.getCpf().trim().isEmpty()) {
             throw new IllegalArgumentException("CPF é obrigatório!");
         }
+
         if (person.getName() == null || person.getName().trim().isEmpty()) {
             throw new IllegalArgumentException("Nome é obrigatório!");
         }
+
         if (person.getEmail() == null || person.getEmail().trim().isEmpty()) {
             throw new IllegalArgumentException("Email é obrigatório!");
         }
-        if (person.getGender() == null || person.getGender().trim().isEmpty()) {
+
+        //char não pode ser null, logo verifica se é vazio (char padrão = '\0')
+        if (person.getGender() == '\0') {
             throw new IllegalArgumentException("Gênero é obrigatório!");
         }
+
         if (person.getBirthDate() == null) {
             throw new IllegalArgumentException("Data de nascimento é obrigatória!");
         }
@@ -38,7 +43,7 @@ public class PersonService {
     public void insert(Person person) throws SQLException {
         validatePerson(person);
 
-        if (dao.existsByCpf(person.getCpf())) {
+        if (dao.exists(person.getCpf())) {
             throw new IllegalArgumentException("CPF já cadastrado: " + person.getCpf());
         }
 
