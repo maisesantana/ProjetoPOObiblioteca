@@ -30,19 +30,22 @@ public class LoginDAO {
                     // Verificamos se  Administrador
                     AdministratorDAO adminDAO = new AdministratorDAO(connection);
                     if (adminDAO.exists(cpf)) {
-                        return adminDAO.findByCpf(cpf).map(admin -> (Employee) admin);
+                        Administrator admin = adminDAO.findByCpf(cpf);
+                        return Optional.ofNullable(admin);
                     }
 
                     // Verificamos se  Bibliotecrio
                     LibrarianDAO libDAO = new LibrarianDAO(connection);
                     if (libDAO.exists(cpf)) {
-                        return libDAO.findByCpf(cpf).map(lib -> (Employee) lib);
+                        Librarian lib = libDAO.findByCpf(cpf);
+                        return Optional.ofNullable(lib);
                     }
 
                     // Verificamos se  Atendente
                     AttendantDAO attDAO = new AttendantDAO(connection);
                     if (attDAO.exists(cpf)) {
-                        return attDAO.findByCpf(cpf).map(att -> (Employee) att);
+                        Attendant att = attDAO.findByCpf(cpf);
+                        return Optional.ofNullable(att);
                     }
                 }
             }

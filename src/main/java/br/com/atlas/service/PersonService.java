@@ -57,14 +57,14 @@ public class PersonService {
 
     // READ BY CPF
     public Optional<Person> findByCpf(String cpf) throws SQLException {
-        return dao.findByCpf(cpf);
+        return Optional.ofNullable(dao.findByCpf(cpf));
     }
 
     // UPDATE
     public void update(Person person) throws SQLException {
         validatePerson(person);
 
-        Optional<Person> existing = dao.findByCpf(person.getCpf());
+        Optional<Person> existing = Optional.ofNullable(dao.findByCpf(person.getCpf()));
         if (existing.isEmpty()) {
             throw new IllegalArgumentException("Nenhum registro encontrado com o CPF: " + person.getCpf());
         }
@@ -78,7 +78,7 @@ public class PersonService {
             throw new IllegalArgumentException("CPF é obrigatório para deletar!");
         }
 
-        Optional<Person> existing = dao.findByCpf(cpf);
+        Optional<Person> existing = Optional.ofNullable(dao.findByCpf(cpf));
         if (existing.isEmpty()) {
             throw new IllegalArgumentException("Nenhum registro encontrado com o CPF: " + cpf);
         }
