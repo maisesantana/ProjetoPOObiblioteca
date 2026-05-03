@@ -23,4 +23,5 @@ public abstract class Employee extends Person {
     public abstract void register(Person p);
     public abstract void remove(String cpf);
     public abstract void update(Person p);
+    public abstract Person findPersonByCpf(String cpf);
 }

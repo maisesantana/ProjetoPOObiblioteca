@@ -90,10 +90,8 @@ public class Librarian extends Employee {
     AS CLASSES IMPLEMENTASSEM OS SEGUINTES MÉTODOS. PORÉM,
     BIBLIOTECÁRIO NÃO REGISTRAS PESSOAS, POR ISSO OS METODOS
     ESTÃO VAZIOS.*/
-    @Override
-    public void register(Person p) {}
-    @Override
-    public void remove(String cpf) {}
-    @Override
-    public void update(Person p) {}
+    @Override public void register(Person p) {}
+    @Override public void remove(String cpf) {}
+    @Override public void update(Person p) {}
+    @Override public Person findPersonByCpf(String cpf) { return new Person(); }
 }

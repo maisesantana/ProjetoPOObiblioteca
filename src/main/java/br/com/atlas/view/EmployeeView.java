@@ -1,15 +1,30 @@
 package br.com.atlas.view;
 
 import java.io.IOException; // pacote para detectar se é linux ou windows
+import java.time.format.DateTimeFormatter;
 import java.util.Scanner;
 
 import br.com.atlas.model.Person;
 
 public class EmployeeView {
     
+    private Scanner sc;
+    private DateTimeFormatter dateFormatter;
+
+    public EmployeeView() {
+        this.sc = new Scanner(System.in);
+        this.dateFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+    }
+
+    public Scanner getSc() {
+        return sc;
+    }
+    public DateTimeFormatter getDateFormatter() {
+        return dateFormatter;
+    }
+
     public int showMenu() {
 
-        Scanner sc = new Scanner(System.in);
         int op;
 
         System.out.println("====== MENU ======");
@@ -45,5 +60,25 @@ public class EmployeeView {
 
     public Person registerP() {
         return new Person();
+    }
+
+    public String passCpf() {
+        String cpf;
+        System.out.println("====== PESQUISAR PESSOA POR CPF =======");
+        System.out.print("Digite o CPF a ser buscado: ");
+
+        cpf = sc.nextLine();
+        System.out.println("");
+
+        return cpf;
+    }
+
+    public void editP() {
+        String cpf;
+
+        System.out.println("Para editar, é necessário que pesquise o CPF do funcionário a ser editado.");
+        cpf = passCpf();
+
+        
     }
 }

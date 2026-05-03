@@ -1,9 +1,7 @@
 package br.com.atlas.view;
 
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
-import java.util.Scanner;
 
 import br.com.atlas.model.Administrator;
 import br.com.atlas.model.Attendant;
@@ -12,14 +10,6 @@ import br.com.atlas.model.Person;
 
 
 public class AdminView extends EmployeeView {
-
-    private Scanner sc;
-    private DateTimeFormatter dateFormatter;
-
-    public AdminView() {
-        this.sc = new Scanner(System.in);
-        this.dateFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-    }
 
     @Override
     public int showMenu() {
@@ -35,7 +25,7 @@ public class AdminView extends EmployeeView {
         System.out.println("6 - Deslogar");
         System.out.println("0 - Fechar o sistema");
         
-        return op = sc.nextInt(); 
+        return op = super.getSc().nextInt(); 
     }
 
     public int selectKindOfEmployee() {
@@ -51,8 +41,8 @@ public class AdminView extends EmployeeView {
             System.out.println("3 - Admin");
             System.out.println("0 - Voltar");
 
-            op = sc.nextInt();
-            sc.nextLine(); //limpa o buffer
+            op = super.getSc().nextInt();
+            super.getSc().nextLine(); //limpa o buffer
         } while ((op != 0) && (op != 1) && (op != 2) && (op != 3));
         return op;
     }
@@ -64,11 +54,11 @@ public class AdminView extends EmployeeView {
             System.out.println("Voltando para menu principal.");
             return null;
         }
-        clearScreen();
         return doRegister(op);
     }
 
     public Person doRegister(int op) {
+        clearScreen();
         String cpf, name, email, birthDate; 
         char gender;
         int password, validatePassword;
@@ -77,31 +67,31 @@ public class AdminView extends EmployeeView {
         System.out.println("====== REGISTRAR FUNCIONÁRIO ======");
 
         System.out.print("CPF: ");
-        cpf = sc.nextLine();
+        cpf = super.getSc().nextLine();
         
         System.out.print("\nNome: ");
-        name = sc.nextLine();
+        name = super.getSc().nextLine();
         
         System.out.print("\nEmail: ");
-        email = sc.nextLine();
+        email = super.getSc().nextLine();
         
         System.out.print("\nSexo (caractere único): ");
-        gender = sc.next().charAt(0);
-        sc.nextLine();
+        gender = super.getSc().next().charAt(0);
+        super.getSc().nextLine();
 
         System.out.print("\nData de nascimento: (dd/mm/aaaa): ");
-        birthDate = sc.nextLine();
+        birthDate = super.getSc().nextLine();
         //conversao de string para tipo data no formato EUA:
-        bDate = LocalDate.parse(birthDate, dateFormatter);
+        bDate = LocalDate.parse(birthDate, super.getDateFormatter());
 
         do {
             System.out.print("\nSenha numérica: ");
-            password = sc.nextInt();
-            sc.nextLine(); // limpar buffer
+            password = super.getSc().nextInt();
+            super.getSc().nextLine(); // limpar buffer
 
             System.out.print("\nConfirme a senha numérica: ");
-            validatePassword = sc.nextInt();
-            sc.nextLine(); // limpar buffer
+            validatePassword = super.getSc().nextInt();
+            super.getSc().nextLine(); // limpar buffer
 
             if (password != validatePassword) {
                 System.out.println("A senha numérica precisa ser igual ao confirmar! Digite novamente.");
@@ -115,6 +105,18 @@ public class AdminView extends EmployeeView {
         } else {
             return new Administrator(cpf, name, email, gender, bDate, password);
         }
+    }
+
+    @Override
+    public String passCpf() {
+        String cpf;
+        System.out.println("====== PESQUISAR FUNCIONÁRIO POR CPF =======");
+        System.out.print("Digite o CPF a ser buscado: ");
+
+        cpf = super.getSc().nextLine();
+        System.out.println("");
+
+        return cpf;
     }
 
     public void showAllEmployees(List<Attendant> attendants, List<Librarian> librarians, List<Administrator> admins) {

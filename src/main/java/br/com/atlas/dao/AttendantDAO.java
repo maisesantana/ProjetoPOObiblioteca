@@ -63,7 +63,7 @@ public class AttendantDAO {
     }
 
     // READ BY CPF
-    public Optional<Attendant> findByCpf(String cpf) throws SQLException {
+    public Attendant findByCpf(String cpf) throws SQLException {
         String sql = """
             SELECT p.cpf, p.name, p.email, p.gender, p.birthDate, e.password
             FROM Person p
@@ -77,12 +77,12 @@ public class AttendantDAO {
 
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
-                    return Optional.of(mapResultSet(rs));
+                    return mapResultSet(rs);
                 }
             }
         }
 
-        return Optional.empty();
+        return null;
     }
 
     // DELETE

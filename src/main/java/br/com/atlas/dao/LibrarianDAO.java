@@ -63,7 +63,7 @@ public class LibrarianDAO {
     }
 
     // READ BY CPF
-    public Optional<Librarian> findByCpf(String cpf) throws SQLException {
+    public Librarian findByCpf(String cpf) throws SQLException {
         String sql = """
             SELECT p.cpf, p.name, p.email, p.gender, p.birthDate, e.password
             FROM Person p
@@ -77,12 +77,12 @@ public class LibrarianDAO {
 
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
-                    return Optional.of(mapResultSet(rs));
+                    return mapResultSet(rs);
                 }
             }
         }
 
-        return Optional.empty();
+        return null;
     }
 
     // DELETE
@@ -95,7 +95,7 @@ public class LibrarianDAO {
         }
     }
 
-    // MTODO AUXILIAR
+    // METODO AUXILIAR
     private Librarian mapResultSet(ResultSet rs) throws SQLException {
         String cpf = rs.getString("cpf");
         String name = rs.getString("name");

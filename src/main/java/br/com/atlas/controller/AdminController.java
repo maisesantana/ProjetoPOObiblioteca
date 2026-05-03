@@ -22,31 +22,69 @@ public class AdminController {
 
         switch (op) {
             case 1:
-                List<Attendant> atts = adm.getAllAttendants();
-                List<Librarian> libs = adm.getAllLibrarians();
-                List<Administrator> ads = adm.getAllAdmins();
-
-                admv.showAllEmployees(atts, libs, ads);
+                viewEmployees();
                 return op;
+
             case 2:
-                Person p = admv.registerP();
-
-                if (p == null) {
-                    return op;
-                }
-
-                try {
-                    adm.register(p);
-                    System.out.println("Funcionario cadastrado com sucesso.");
-                } catch (Exception e) {
-                    System.out.println(e.getMessage());
-                }
+                int num = register();
+                if (num == 1) return -1;
                 return op;
-            case 0: 
+
+            case 3:
+                edit();
                 return op;
+
+            case 0:
+                return op;
+
             default:
                 System.out.println("Digite uma opção válida!");
                 return op;
+        }
+    }
+
+    private void viewEmployees() {
+        List<Attendant> atts = adm.getAllAttendants();
+        List<Librarian> libs = adm.getAllLibrarians();
+        List<Administrator> ads = adm.getAllAdmins();
+
+        admv.showAllEmployees(atts, libs, ads);
+    }
+
+    private int register() {
+        Person p = admv.registerP();
+
+        if (p == null) return 1;
+
+        try {
+            adm.register(p);
+            System.out.println("Funcionário cadastrado com sucesso.");
+            return 0;
+
+        } catch (IllegalArgumentException e) {
+            System.out.println(e.getMessage()); // regra de negócio
+            return 2;
+
+        } catch (Exception e) {
+            System.out.println("Erro inesperado ao cadastrar funcionário.");
+            return 2;
+        }
+    }
+
+    private void edit() {
+        String cpf = admv.passCpf();
+
+        try {
+            Person p = adm.findPersonByCpf(cpf);
+
+            // aqui você continua o fluxo depois
+            System.out.println("Funcionário encontrado: " + p.getName());
+
+        } catch (IllegalArgumentException e) {
+            System.out.println(e.getMessage()); // CPF não existe
+
+        } catch (Exception e) {
+            System.out.println("Erro inesperado ao buscar funcionário.");
         }
     }
 }

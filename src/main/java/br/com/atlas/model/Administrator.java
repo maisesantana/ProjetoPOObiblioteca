@@ -23,43 +23,37 @@ public class Administrator extends Employee {
         Connection conn = ConnectionDb.getConexao();
 
         try {
-            conn.setAutoCommit(false); 
-            // controla manualmente exclusões
+            conn.setAutoCommit(false);
 
             PersonDAO personDAO = new PersonDAO(conn);
             EmployeeDAO employeeDAO = new EmployeeDAO(conn);
 
-            // INSERE PERSON (tabela pai)
+            // PERSON
             personDAO.insert(emp);
 
-            // INSERE EMPLOYEE
+            // EMPLOYEE
             employeeDAO.insert((Employee) emp);
 
-            // INSERE NA TABELA ESPECÍFICA
+            // ESPECÍFICO
             if (emp instanceof Attendant) {
-                AttendantDAO dao = new AttendantDAO(conn);
-                dao.insert((Attendant) emp);
+                new AttendantDAO(conn).insert((Attendant) emp);
 
             } else if (emp instanceof Librarian) {
-                LibrarianDAO dao = new LibrarianDAO(conn);
-                dao.insert((Librarian) emp);
+                new LibrarianDAO(conn).insert((Librarian) emp);
 
             } else if (emp instanceof Administrator) {
-                AdministratorDAO dao = new AdministratorDAO(conn);
-                dao.insert((Administrator) emp);
+                new AdministratorDAO(conn).insert((Administrator) emp);
             }
 
-            conn.commit(); 
-            // confirma tudo e salva no banco
+            conn.commit();
 
         } catch (Exception e) {
             try {
-                conn.rollback(); 
-                // desfaz tudo, logo evita dados incompletos se der erro
+                conn.rollback();
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
-            throw new RuntimeException("Erro ao cadastrar funcionário", e);
+            throw new RuntimeException("Erro ao cadastrar funcionário.", e);
         }
     }
 
@@ -68,8 +62,7 @@ public class Administrator extends Employee {
         Connection conn = ConnectionDb.getConexao();
 
         try {
-            conn.setAutoCommit(false); 
-            // controla manualmente exclusões
+            conn.setAutoCommit(false);
 
             AttendantDAO attendantDAO = new AttendantDAO(conn);
             LibrarianDAO librarianDAO = new LibrarianDAO(conn);
@@ -77,30 +70,28 @@ public class Administrator extends Employee {
             EmployeeDAO employeeDAO = new EmployeeDAO(conn);
             PersonDAO personDAO = new PersonDAO(conn);
 
-            // remove da tabela específica primeiro
             if (attendantDAO.exists(cpf)) {
                 attendantDAO.delete(cpf);
+
             } else if (librarianDAO.exists(cpf)) {
                 librarianDAO.delete(cpf);
+
             } else if (adminDAO.exists(cpf)) {
                 adminDAO.delete(cpf);
             }
 
-            // remove das tabelas pai
             employeeDAO.delete(cpf);
             personDAO.delete(cpf);
 
-            conn.commit(); 
-            // confirma remoção completa
+            conn.commit();
 
         } catch (Exception e) {
             try {
-                conn.rollback(); 
-                // cancela tudo se falhar no meio
+                conn.rollback();
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
-            throw new RuntimeException("Erro ao remover funcionário", e);
+            throw new RuntimeException("Erro ao remover funcionário.", e);
         }
     }
 
@@ -113,81 +104,87 @@ public class Administrator extends Employee {
         Connection conn = ConnectionDb.getConexao();
 
         try {
-            conn.setAutoCommit(false); 
-            // garante que update seja feito por completo
+            conn.setAutoCommit(false);
 
             PersonDAO personDAO = new PersonDAO(conn);
             EmployeeDAO employeeDAO = new EmployeeDAO(conn);
 
-            // atualiza dados
             personDAO.update(emp);
             employeeDAO.update((Employee) emp);
 
-            conn.commit(); 
-            // salva alterações
+            conn.commit();
 
         } catch (Exception e) {
             try {
-                conn.rollback(); 
-                // desfaz alterações se der erro
+                conn.rollback();
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
-            throw new RuntimeException("Erro ao atualizar funcionário", e);
+            throw new RuntimeException("Erro ao atualizar funcionário.", e);
         }
     }
 
-    public void findPerson(String cpf) {
+    @Override
+    public Person findPersonByCpf(String cpf) {
+
+        Connection conn = ConnectionDb.getConexao();
+
         try {
-            Connection conn = ConnectionDb.getConexao();
             EmployeeDAO eDao = new EmployeeDAO(conn);
 
-            if (eDao.exists(cpf)) {
-
-                LibrarianDAO lDao = new LibrarianDAO(conn);
-                AttendantDAO aDao = new AttendantDAO(conn);
-                AdministratorDAO adDao = new AdministratorDAO(conn);
-
-                if (lDao.exists(cpf)) {
-                    
-                }
-                
-                
-            } else {
-                throw new IllegalArgumentException("Cpf inexistente no sistema.");
+            if (!eDao.exists(cpf)) {
+                throw new IllegalArgumentException("CPF inexistente no sistema.");
             }
+
+            LibrarianDAO lDao = new LibrarianDAO(conn);
+            AttendantDAO aDao = new AttendantDAO(conn);
+            AdministratorDAO adDao = new AdministratorDAO(conn);
+
+            if (lDao.exists(cpf)) {
+                return lDao.findByCpf(cpf);
+
+            } else if (aDao.exists(cpf)) {
+                return aDao.findByCpf(cpf);
+
+            } else {
+                return adDao.findByCpf(cpf);
+            }
+
+        } catch (IllegalArgumentException e) {
+            throw e; // mantém erro de regra
+
         } catch (Exception e) {
-            throw new RuntimeException("Erro ao encontrar funcionário", e);
+            throw new RuntimeException("Erro ao acessar o banco de dados.", e);
         }
     }
 
     public List<Attendant> getAllAttendants() {
         try {
             Connection conn = ConnectionDb.getConexao();
-            AttendantDAO attDAO = new AttendantDAO(conn);
-            return attDAO.findAll();
+            return new AttendantDAO(conn).findAll();
+
         } catch (Exception e) {
-            throw new RuntimeException("Erro ao exibir atendentes", e);
+            throw new RuntimeException("Erro ao exibir atendentes.", e);
         }
     }
 
     public List<Librarian> getAllLibrarians() {
         try {
             Connection conn = ConnectionDb.getConexao();
-            LibrarianDAO libDAO = new LibrarianDAO(conn);
-            return libDAO.findAll();
+            return new LibrarianDAO(conn).findAll();
+
         } catch (Exception e) {
-            throw new RuntimeException("Erro ao exibir bibliotecários", e);
+            throw new RuntimeException("Erro ao exibir bibliotecários.", e);
         }
     }
 
     public List<Administrator> getAllAdmins() {
         try {
             Connection conn = ConnectionDb.getConexao();
-            AdministratorDAO adminDAO = new AdministratorDAO(conn);
-            return adminDAO.findAll();
+            return new AdministratorDAO(conn).findAll();
+
         } catch (Exception e) {
-            throw new RuntimeException("Erro ao exibir administradores", e);
+            throw new RuntimeException("Erro ao exibir administradores.", e);
         }
     }
 }
