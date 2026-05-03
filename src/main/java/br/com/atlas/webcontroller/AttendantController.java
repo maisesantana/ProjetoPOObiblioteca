@@ -81,7 +81,7 @@ public class AttendantController extends HttpServlet {
                 request.getParameter("cpf"),
                 request.getParameter("name"),
                 request.getParameter("email"),
-                request.getParameter("gender"),
+                request.getParameter("gender").charAt(0),
                 LocalDate.parse(request.getParameter("birthDate")),
                 request.getParameter("address")
         );
