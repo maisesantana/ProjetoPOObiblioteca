@@ -189,4 +189,14 @@ public class Attendant extends Employee {
             throw new RuntimeException("Erro ao buscar livros", e);
         }
     }
+
+        @Override // aq ele procura client
+    public Person findPersonByCpf(String cpf) {
+        try {
+            ClientDAO clientDAO = new ClientDAO();
+            return clientDAO.findByCpf(cpf);
+        } catch (Exception e) {
+            throw new RuntimeException("Erro ao buscar cliente por CPF", e);
+        }
+    }
 }
