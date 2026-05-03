@@ -1,13 +1,13 @@
 package br.com.atlas.view;
 
-import java.time.LocalDate;
 import java.util.List;
 
+import br.com.atlas.dto.EmployeeDTO;
+import br.com.atlas.dto.PersonDTO;
 import br.com.atlas.model.Administrator;
 import br.com.atlas.model.Attendant;
 import br.com.atlas.model.Librarian;
 import br.com.atlas.model.Person;
-
 
 public class AdminView extends EmployeeView {
 
@@ -25,7 +25,9 @@ public class AdminView extends EmployeeView {
         System.out.println("6 - Deslogar");
         System.out.println("0 - Fechar o sistema");
         
-        return op = super.getSc().nextInt(); 
+        op = super.getSc().nextInt();
+        super.getSc().nextLine(); // limpa buffer
+        return op; 
     }
 
     public int selectKindOfEmployee() {
@@ -42,86 +44,123 @@ public class AdminView extends EmployeeView {
             System.out.println("0 - Voltar");
 
             op = super.getSc().nextInt();
-            super.getSc().nextLine(); //limpa o buffer
+            super.getSc().nextLine(); // limpa buffer
         } while ((op != 0) && (op != 1) && (op != 2) && (op != 3));
+
         return op;
     }
 
     @Override
-    public Person registerP() {
-        int op = selectKindOfEmployee();
-        if (op == 0) {
-            System.out.println("Voltando para menu principal.");
-            return null;
-        }
-        return doRegister(op);
-    }
-
-    public Person doRegister(int op) {
+    public PersonDTO doRegister() {
         clearScreen();
-        String cpf, name, email, birthDate; 
-        char gender;
-        int password, validatePassword;
-        LocalDate bDate;
-
         System.out.println("====== REGISTRAR FUNCIONÁRIO ======");
-
-        System.out.print("CPF: ");
-        cpf = super.getSc().nextLine();
         
-        System.out.print("\nNome: ");
-        name = super.getSc().nextLine();
-        
-        System.out.print("\nEmail: ");
-        email = super.getSc().nextLine();
-        
-        System.out.print("\nSexo (caractere único): ");
-        gender = super.getSc().next().charAt(0);
-        super.getSc().nextLine();
+        EmployeeDTO e = new EmployeeDTO();
 
-        System.out.print("\nData de nascimento: (dd/mm/aaaa): ");
-        birthDate = super.getSc().nextLine();
-        //conversao de string para tipo data no formato EUA:
-        bDate = LocalDate.parse(birthDate, super.getDateFormatter());
+        e.setCpf(readCpf());
+        e.setName(readName());
+        e.setEmail(readEmail());
+        e.setGender(readGender());
+        e.setBirthDate(readDate());
+        e.setPassword(readPassword());
 
-        do {
-            System.out.print("\nSenha numérica: ");
-            password = super.getSc().nextInt();
-            super.getSc().nextLine(); // limpar buffer
-
-            System.out.print("\nConfirme a senha numérica: ");
-            validatePassword = super.getSc().nextInt();
-            super.getSc().nextLine(); // limpar buffer
-
-            if (password != validatePassword) {
-                System.out.println("A senha numérica precisa ser igual ao confirmar! Digite novamente.");
-            }
-        } while (password != validatePassword);
-
-        if (op == 1) {
-            return new Attendant(cpf, name, email, gender, bDate, password);
-        } else if (op == 2) {
-            return new Librarian (cpf, name, email, gender, bDate, password);
-        } else {
-            return new Administrator(cpf, name, email, gender, bDate, password);
-        }
+        return e;
     }
 
     @Override
     public String passCpf() {
         String cpf;
+
         System.out.println("====== PESQUISAR FUNCIONÁRIO POR CPF =======");
         System.out.print("Digite o CPF a ser buscado: ");
-
         cpf = super.getSc().nextLine();
-        System.out.println("");
 
         return cpf;
+    }
+
+    // =========================
+    // 🔥 MÉTODO QUE FALTAVA
+    // =========================
+    @Override
+    public PersonDTO doEdit(Person p) {
+        clearScreen();
+        System.out.println("====== EDITAR FUNCIONÁRIO ======");
+
+        EmployeeDTO dto = new EmployeeDTO();
+
+        // mantém CPF original (não pode alterar)
+        dto.setCpf(p.getCpf());
+
+        System.out.println("Pressione ENTER para manter o valor atual.\n");
+
+        // NOME
+        System.out.print("Nome atual: " + p.getName() + "\nNovo nome: ");
+        String name = getSc().nextLine();
+        dto.setName(name.isEmpty() ? p.getName() : name);
+
+        // EMAIL
+        System.out.print("\nEmail atual: " + p.getEmail() + "\nNovo email: ");
+        String email = getSc().nextLine();
+        dto.setEmail(email.isEmpty() ? p.getEmail() : email);
+
+        // SEXO
+        System.out.print("\nSexo atual: " + p.getGender() + "\nNovo sexo: ");
+        String genderInput = getSc().nextLine();
+        if (genderInput.isEmpty()) {
+            dto.setGender(p.getGender());
+        } else {
+            dto.setGender(genderInput.charAt(0));
+        }
+
+        // DATA
+        System.out.print("\nData atual: " + p.getBirthDate() + "\nNova data (dd/mm/aaaa): ");
+        String date = getSc().nextLine();
+        if (date.isEmpty()) {
+            dto.setBirthDate(p.getBirthDate());
+        } else {
+            dto.setBirthDate(java.time.LocalDate.parse(date, getDateFormatter()));
+        }
+
+        // SENHA (parte específica de funcionário)
+        System.out.print("\nDeseja alterar a senha? (s/n): ");
+        String op = getSc().nextLine();
+
+        if (op.equalsIgnoreCase("s")) {
+            dto.setPassword(readPassword());
+        } else {
+            // mantém senha antiga (cast seguro pois é funcionário)
+            dto.setPassword(((br.com.atlas.model.Employee) p).getPassword());
+        }
+
+        return dto;
+    }
+
+    // confirmação antes de editar
+    public boolean confirmEmployee(Person p) {
+        clearScreen();
+
+        System.out.println("====== CONFIRMAR FUNCIONÁRIO ======");
+
+        System.out.printf("%-15s %-15s %-25s %-5s %-15s\n",
+                "CPF", "NOME", "EMAIL", "SEXO", "NASCIMENTO");
+
+        System.out.printf("%-15s %-15s %-25s %-5c %-15s\n",
+                p.getCpf(),
+                p.getName(),
+                p.getEmail(),
+                p.getGender(),
+                p.getBirthDate());
+
+        System.out.print("\nÉ este funcionário? (s/n): ");
+        String op = getSc().nextLine();
+
+        return op.equalsIgnoreCase("s");
     }
 
     public void showAllEmployees(List<Attendant> attendants, List<Librarian> librarians, List<Administrator> admins) {
         clearScreen();
         System.out.println("====== FUNCIONÁRIOS =======");
+
         // ATENDENTES
         if (attendants == null || attendants.isEmpty()) {
             System.out.println("Não há atendentes cadastrados no sistema.");
@@ -140,8 +179,8 @@ public class AdminView extends EmployeeView {
             System.out.println("\nNão há bibliotecários cadastrados no sistema.");
         } else {
             int i = 0;
-                System.out.println("\n====== BIBLIOTECÁRIOS ======");
-                System.out.printf("%-5s %-15s %-15s %-25s %-5s %-15s %-10s\n","IDX", "CPF", "NOME", "EMAIL", "SEXO", "NASCIMENTO", "SENHA");
+            System.out.println("\n====== BIBLIOTECÁRIOS ======");
+            System.out.printf("%-5s %-15s %-15s %-25s %-5s %-15s %-10s\n","IDX", "CPF", "NOME", "EMAIL", "SEXO", "NASCIMENTO", "SENHA");
             for (Librarian l : librarians) {
                 i++;
                 System.out.printf("%-5d %-15s %-15s %-25s %-5c %-15s %-10d\n", i, l.getCpf(), l.getName(), l.getEmail(), l.getGender(), l.getBirthDate(), l.getPassword());

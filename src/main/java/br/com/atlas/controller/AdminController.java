@@ -1,5 +1,6 @@
 package br.com.atlas.controller;
 
+import br.com.atlas.dto.EmployeeDTO;
 import br.com.atlas.model.Administrator;
 import br.com.atlas.model.Attendant;
 import br.com.atlas.model.Librarian;
@@ -27,7 +28,7 @@ public class AdminController {
 
             case 2:
                 int num = register();
-                if (num == 1) return -1;
+                if (num == 1) return op = -1;
                 return op;
 
             case 3:
@@ -52,9 +53,24 @@ public class AdminController {
     }
 
     private int register() {
-        Person p = admv.registerP();
+        
+        int kind = admv.selectKindOfEmployee();
+        
+        if (kind == 0) {
+            return 1;
+        }
 
-        if (p == null) return 1;
+        EmployeeDTO emp = (EmployeeDTO) admv.doRegister();
+
+        Person p;
+
+        if (kind == 1) {
+            p = new Attendant(emp.getCpf(), emp.getName(), emp.getEmail(), emp.getGender(), emp.getBirthDate(), emp.getPassword());
+        } else if (kind == 2) {
+            p = new Librarian(emp.getCpf(), emp.getName(), emp.getEmail(), emp.getGender(), emp.getBirthDate(), emp.getPassword());
+        } else {
+            p = new Administrator(emp.getCpf(), emp.getName(), emp.getEmail(), emp.getGender(), emp.getBirthDate(), emp.getPassword());
+        }
 
         try {
             adm.register(p);
@@ -66,25 +82,44 @@ public class AdminController {
             return 2;
 
         } catch (Exception e) {
-            System.out.println("Erro inesperado ao cadastrar funcionário.");
+            System.out.println(e.getMessage());
             return 2;
         }
     }
 
     private void edit() {
         String cpf = admv.passCpf();
-
         try {
-            Person p = adm.findPersonByCpf(cpf);
+            Person p = adm.findPersonByCpf(cpf); //tenta achar por cpf e imprime o nome do funcionario encontrado
 
-            // aqui você continua o fluxo depois
-            System.out.println("Funcionário encontrado: " + p.getName());
+            // confirmar antes de editar
+            boolean confirm = admv.confirmEmployee(p);
+            if (!confirm) {
+                System.out.println("Operação cancelada.");
+            return;
+            }
+
+            EmployeeDTO dto = (EmployeeDTO) admv.doEdit(p);
+
+            Person atualizado;
+
+            // reconstrói o objeto com os novos dados
+            if (p instanceof Attendant) {
+                atualizado = new Attendant(dto.getCpf(), dto.getName(), dto.getEmail(), dto.getGender(), dto.getBirthDate(), dto.getPassword());
+            } else if (p instanceof Librarian) {
+                atualizado = new Librarian(dto.getCpf(), dto.getName(), dto.getEmail(), dto.getGender(), dto.getBirthDate(), dto.getPassword());
+            } else {
+                atualizado = new Administrator(dto.getCpf(), dto.getName(), dto.getEmail(), dto.getGender(), dto.getBirthDate(), dto.getPassword());
+            }
+
+            adm.update(atualizado);
+
+            System.out.println("Funcionário atualizado com sucesso.");
 
         } catch (IllegalArgumentException e) {
-            System.out.println(e.getMessage()); // CPF não existe
-
+            System.out.println(e.getMessage());
         } catch (Exception e) {
-            System.out.println("Erro inesperado ao buscar funcionário.");
+            System.out.println("Erro ao atualizar funcionário.");
         }
     }
 }
