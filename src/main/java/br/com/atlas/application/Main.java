@@ -3,11 +3,9 @@ package br.com.atlas.application;
 // import java.time.LocalDate;
 
 import br.com.atlas.controller.AdminController;
+import br.com.atlas.controller.LibrarianController;
 import br.com.atlas.controller.LoginController;
-import br.com.atlas.model.Administrator;
-import br.com.atlas.model.Attendant;
-import br.com.atlas.model.Employee;
-import br.com.atlas.model.Librarian;
+import br.com.atlas.model.*;
 import br.com.atlas.view.AdminView;
 
 public class Main {
@@ -29,8 +27,9 @@ public class Main {
             } while (op != 0);
 
         } else if (funcionario instanceof Librarian lib) {
-            // quando o menu do bibliotecário estiver pronto, vai aqui
-            System.out.println("Menu do bibliotecário em construção...");
+                br.com.atlas.view.LibrarianView libv = new br.com.atlas.view.LibrarianView();
+                LibrarianController libc = new LibrarianController(lib, libv);
+                libc.start();
 
         } else if (funcionario instanceof Attendant att) {
             // quando o menu do atendente estiver pronto, vai aqui

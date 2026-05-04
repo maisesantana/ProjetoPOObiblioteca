@@ -47,4 +47,5 @@ public class LoginController {
         if (emp instanceof Attendant)     return "Atendente";
         return "Funcionário";
     }
+
 }
