@@ -35,6 +35,14 @@ public class AdminController {
                 edit();
                 return op;
 
+            case 4:
+                remove();
+                return op;
+
+            case 5:
+                search();
+                return op;
+
             case 0:
                 return op;
 
@@ -120,6 +128,42 @@ public class AdminController {
             System.out.println(e.getMessage());
         } catch (Exception e) {
             System.out.println("Erro ao atualizar funcionário.");
+        }
+    } //
+
+    private void remove() {
+    String cpf = admv.passCpf();
+
+        try {
+            Person p = adm.findPersonByCpf(cpf);
+
+            boolean confirm = admv.confirmRemove(p);
+            if (!confirm) {
+                System.out.println("Operação cancelada.");
+                return;
+            }
+
+            adm.remove(cpf);
+            System.out.println("Funcionário removido com sucesso.");
+
+        } catch (IllegalArgumentException e) {
+            System.out.println(e.getMessage());
+        } catch (Exception e) {
+            System.out.println("Erro ao remover funcionário.");
+        }
+    }
+
+    private void search() {
+        String cpf = admv.passCpf();
+
+        try {
+            Person p = adm.findPersonByCpf(cpf);
+            admv.showSearchResult(p);
+
+        } catch (IllegalArgumentException e) {
+            System.out.println(e.getMessage());
+        } catch (Exception e) {
+            System.out.println("Erro ao buscar funcionário.");
         }
     }
 }
