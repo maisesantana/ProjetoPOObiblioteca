@@ -42,11 +42,12 @@ public class AdministratorController extends HttpServlet {
 
             // 3. Cria o Employee (O novo Atendente ou Bibliotecário)
             String role = request.getParameter("role");
+            char genderChar = gender.charAt(0); // mudando para pegar o primeiro char de gender
             Employee newEmployee;
             if ("bibliotecario".equals(role)) {
-                newEmployee = new Librarian(cpf, name, email, gender, birthDate, password);
+                newEmployee = new Librarian(cpf, name, email, genderChar, birthDate, password);
             } else {
-                newEmployee = new Attendant(cpf, name, email, gender, birthDate, password);
+                newEmployee = new Attendant(cpf, name, email, genderChar, birthDate, password);
             }
 
             // 4. O Administrador (Service) executa a ação de registro
