@@ -200,4 +200,48 @@ public class AdminView extends EmployeeView {
             }
         }
     }
+
+        // Confirmação antes de remover
+    public boolean confirmRemove(Person p) {
+        clearScreen();
+
+        System.out.println("====== REMOVER FUNCIONÁRIO ======");
+
+        System.out.printf("%-15s %-15s %-25s %-5s %-15s\n",
+                "CPF", "NOME", "EMAIL", "SEXO", "NASCIMENTO");
+
+        System.out.printf("%-15s %-15s %-25s %-5c %-15s\n",
+                p.getCpf(),
+                p.getName(),
+                p.getEmail(),
+                p.getGender(),
+                p.getBirthDate());
+
+        System.out.print("\nTem certeza que deseja remover este funcionário? (s/n): ");
+        String op = getSc().nextLine();
+
+        return op.equalsIgnoreCase("s");
+    }
+
+    // Exibir resultado da busca por CPF
+    public void showSearchResult(Person p) {
+        clearScreen();
+
+        System.out.println("====== RESULTADO DA BUSCA ======");
+
+        if (p == null) {
+            System.out.println("Funcionário não encontrado.");
+            return;
+        }
+
+        System.out.printf("%-15s %-15s %-25s %-5s %-15s\n",
+                "CPF", "NOME", "EMAIL", "SEXO", "NASCIMENTO");
+
+        System.out.printf("%-15s %-15s %-25s %-5c %-15s\n",
+                p.getCpf(),
+                p.getName(),
+                p.getEmail(),
+                p.getGender(),
+                p.getBirthDate());
+    }
 }
