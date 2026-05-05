@@ -7,6 +7,8 @@ import br.com.atlas.controller.LibrarianController;
 import br.com.atlas.controller.LoginController;
 import br.com.atlas.model.*;
 import br.com.atlas.view.AdminView;
+import br.com.atlas.controller.AttendantController;
+import br.com.atlas.view.AttendantView;
 
 public class Main {
     public static void main(String[] args) {
@@ -32,8 +34,14 @@ public class Main {
                 libc.start();
 
         } else if (funcionario instanceof Attendant att) {
-            // quando o menu do atendente estiver pronto, vai aqui
-            System.out.println("Menu do atendente em construção...");
+            // 1. Criamos a View para ler as entradas do teclado
+            br.com.atlas.view.AttendantView attv = new br.com.atlas.view.AttendantView();
+            // 2. Criamos o Controller passando o atendente logado e a view
+            br.com.atlas.controller.AttendantController attc = new br.com.atlas.controller.AttendantController(att, attv);
+            // 3. Chamamos o método start() que contém o "do-while" do menu
+            attc.start();
+
         }
     }
 }
+        

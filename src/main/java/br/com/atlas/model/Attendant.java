@@ -130,13 +130,12 @@ public class Attendant extends Employee {
     }
 
     public void registerReturn(int loanId) {
-
         try {
+            // Agora só precisamos do LoanDAO para buscar e do ReturnBookDAO para salvar
             LoanDAO loanDAO = new LoanDAO();
             ReturnBookDAO returnDAO = new ReturnBookDAO();
-            BookCopyDAO copyDAO = new BookCopyDAO();
-            ClientDAO clientDAO = new ClientDAO();
 
+            // 1. Busca o empréstimo para validar
             Loan l = loanDAO.findById(loanId);
 
             if (l == null) {
@@ -147,34 +146,13 @@ public class Attendant extends Employee {
                 throw new RuntimeException("Empréstimo já finalizado");
             }
 
-            l.setActive(false);
-
+            // 2. Cria o objeto de devolução (a inteligência de cálculo de atraso está aqui)
             ReturnBook r = new ReturnBook(LocalDateTime.now(), l);
             l.setReturnBook(r);
 
-            // SALVA DEVOLUÇÃO
+            // 3. O DAO executa a transação completa no banco de dados
+            // (Insert Return, Update Loan, Update Copy e Update Client)
             returnDAO.insert(r);
-
-            if (r.isLate()) {
-                int dias = r.calculateSuspensionDays();
-                Client c = l.getClient();
-                if (c.isSuspended()) {
-                    c.setEndSuspensionDate(c.getEndSuspensionDate().plusDays(dias));
-                } else {
-                    c.setStartSuspensionDate(LocalDate.now());
-                    c.setEndSuspensionDate(c.getStartSuspensionDate().plusDays(dias));
-                }
-
-                // salva atualização do cliente
-                clientDAO.update(c);
-            }
-
-            // libera exemplar
-            l.getBookCopy().setAvailable(true);
-            copyDAO.update(l.getBookCopy());
-
-            // salva atualização do empréstimo
-            loanDAO.update(l);
 
         } catch (Exception e) {
             throw new RuntimeException("Erro ao registrar devolução", e);
@@ -197,6 +175,15 @@ public class Attendant extends Employee {
             return clientDAO.findByCpf(cpf);
         } catch (Exception e) {
             throw new RuntimeException("Erro ao buscar cliente por CPF", e);
+        }
+    }
+
+    // Dentro de Attendant.java
+    public List<Client> listAllClients() {
+        try {
+            return new br.com.atlas.dao.ClientDAO().findAll();
+        } catch (Exception e) {
+            throw new RuntimeException("Erro ao buscar lista de clientes.");
         }
     }
 }
