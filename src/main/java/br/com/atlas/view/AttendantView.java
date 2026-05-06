@@ -8,10 +8,10 @@ import java.util.Scanner;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 
-public class AttendantView {
+public class AttendantView extends EmployeeView {
     private Scanner scanner = new Scanner(System.in);
 
-    public int showMenu() {
+    @override public int showMenu() {
         System.out.println("\n=== PAINEL DO ATENDENTE ===");
         System.out.println("1. Gerenciar Clientes (Listar/Cadastrar/Editar)");
         System.out.println("2. Registrar Empréstimo");

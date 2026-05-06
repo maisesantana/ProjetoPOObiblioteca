@@ -5,11 +5,11 @@ import br.com.atlas.model.Book;
 import java.util.List;
 import java.util.Scanner;
 
-public class LibrarianView {
+public class LibrarianView extends EmployeeView {
 
     private Scanner sc = new Scanner(System.in);
 
-    public int showMenu() {
+    @Override public int showMenu() {
         System.out.println("\n====== MENU BIBLIOTECÁRIO ======");
         System.out.println("1 - Cadastrar livro");
         System.out.println("2 - Remover livro");
