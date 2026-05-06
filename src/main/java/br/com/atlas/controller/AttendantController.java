@@ -98,21 +98,35 @@ public class AttendantController {
         }
     }
 
+    // Localize o método registerRenewal no seu AttendantController.java
+    private void registerRenewal() {
+        // BLINDAGEM: Só pede o ID se houver algum empréstimo ativo no banco
+        if (!new br.com.atlas.dao.LoanDAO().hasActiveLoans()) {
+            System.out.println("\n⚠️ [AVISO] Não existem empréstimos ativos no sistema para renovação.");
+            return; 
+        }
+
+        try {
+            int loanId = view.askLoanId();
+            attendant.registerRenewal(loanId);
+            System.out.println("✅ Renovação concluída!");
+        } catch (Exception e) {
+            System.out.println("❌ Erro: " + e.getMessage());
+        }
+    }
+
+    // Aproveite e faça o mesmo para o registerReturn!
     private void registerReturn() {
+        if (!new br.com.atlas.dao.LoanDAO().hasActiveLoans()) {
+            System.out.println("\n⚠️ [AVISO] Não existem empréstimos ativos para devolução.");
+            return;
+        }
+
         try {
             attendant.registerReturn(view.askLoanId());
             System.out.println("✅ Devolução concluída!");
         } catch (Exception e) {
-            System.out.println("❌ " + e.getMessage());
-        }
-    }
-
-    private void registerRenewal() {
-        try {
-            attendant.registerRenewal(view.askLoanId());
-            System.out.println("✅ Renovação concluída!");
-        } catch (Exception e) {
-            System.out.println("❌ " + e.getMessage());
+            System.out.println("❌ Erro: " + e.getMessage());
         }
     }
 

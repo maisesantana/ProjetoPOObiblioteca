@@ -7,9 +7,6 @@ import br.com.atlas.controller.LibrarianController;
 import br.com.atlas.controller.LoginController;
 import br.com.atlas.model.*;
 import br.com.atlas.view.AdminView;
-import br.com.atlas.controller.AttendantController;
-import br.com.atlas.view.AttendantView;
-
 public class Main {
     public static void main(String[] args) {
 

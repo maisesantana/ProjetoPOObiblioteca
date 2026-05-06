@@ -107,6 +107,10 @@ public class Attendant extends Employee {
             throw new RuntimeException("Empréstimo não encontrado");
         }
 
+        if (!l.isActive()) {
+            throw new RuntimeException("Este empréstimo já foi finalizado (inativo).");
+        }
+
         if (!l.canRenew()) {
             throw new RuntimeException("Limite de renovações atingido");
         }

@@ -154,4 +154,22 @@ public class LoanDAO {
 
         return loan;
     }
+
+    public boolean hasActiveLoans() {
+        // Busca se existe pelo menos um empréstimo com status ativo no banco
+        String sql = "SELECT COUNT(*) FROM loan WHERE active = TRUE";
+        
+        try (Connection conn = br.com.atlas.util.ConnectionDb.getConexao();
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            ResultSet rs = stmt.executeQuery()) {
+            
+            if (rs.next()) {
+                // Se o contador for maior que 0, significa que há empréstimos para tratar
+                return rs.getInt(1) > 0;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false; // Por segurança, se der erro ou estiver vazio, retorna false
+    }
 }
