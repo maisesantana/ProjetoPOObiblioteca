@@ -1,7 +1,6 @@
 package br.com.atlas.view;
 
 import br.com.atlas.dto.ClientDTO;
-import br.com.atlas.model.Client;
 import br.com.atlas.model.Book;
 import java.time.LocalDate;
 import java.util.List;
@@ -39,6 +38,7 @@ public class AttendantView {
 
     // Método para exibir a lista (precisaremos buscar os dados no Controller)
     public void showClients(List<br.com.atlas.model.Client> clients) {
+        br.com.atlas.view.EmployeeView.clearScreen();
         if (clients.isEmpty()) {
             System.out.println("Nenhum cliente cadastrado.");
         } else {
@@ -48,7 +48,7 @@ public class AttendantView {
     }
 
     public ClientDTO readClientData() {
-        scanner.nextLine(); // limpar buffer
+        br.com.atlas.view.EmployeeView.clearScreen();
         ClientDTO dto = new ClientDTO();
         System.out.print("CPF: "); dto.setCpf(scanner.nextLine());
         System.out.print("Nome: "); dto.setName(scanner.nextLine());

@@ -20,6 +20,7 @@ public class LibrarianController {
         int op;
 
         do {
+            br.com.atlas.view.EmployeeView.clearScreen();
             op = view.showMenu();
 
             switch (op) {
@@ -38,12 +39,14 @@ public class LibrarianController {
         Book b = view.readBookData();
         librarian.registerBook(b);
         System.out.println("Livro cadastrado com sucesso!");
+        pressEnterToContinue();
     }
 
     private void removeBook() {
         int id = view.askBookId();
         librarian.removeBook(id);
         System.out.println("Livro removido!");
+        pressEnterToContinue();
     }
 
     private void addCopies() {
@@ -51,11 +54,19 @@ public class LibrarianController {
         int qnt = view.askQuantity();
         librarian.addCopies(id, qnt);
         System.out.println("Exemplares adicionados!");
+        pressEnterToContinue();
     }
 
     private void searchBooks() {
         String name = view.askBookName();
         List<Book> books = librarian.searchBooks(name);
         view.showBooks(books);
+        pressEnterToContinue();
+    }
+
+    // MÉTODO AUXILIAR PARA NÃO REPETIR CÓDIGO
+    private void pressEnterToContinue() {
+        System.out.println("\nPressione Enter para continuar...");
+        new java.util.Scanner(System.in).nextLine();
     }
 }

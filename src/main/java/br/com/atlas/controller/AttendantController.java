@@ -6,6 +6,7 @@ import br.com.atlas.model.Client;
 import br.com.atlas.model.Book;
 import br.com.atlas.view.AttendantView;
 import java.util.List;
+import java.util.Scanner;
 
 public class AttendantController {
     private Attendant attendant;
@@ -19,6 +20,7 @@ public class AttendantController {
     public void start() {
         int op;
         do {
+            br.com.atlas.view.EmployeeView.clearScreen();
             op = view.showMenu();
             switch (op) {
                 case 1 -> manageClients();
@@ -27,7 +29,10 @@ public class AttendantController {
                 case 4 -> registerRenewal();
                 case 5 -> searchBooks();
                 case 0 -> System.out.println("Deslogando Atendente...");
-                default -> System.out.println("Opção inválida!");
+                default -> 
+                    {System.out.println("Opção inválida!");
+                    pressEnterToContinue();
+                }
             }
         } while (op != 0);
     }
@@ -35,6 +40,7 @@ public class AttendantController {
     private void manageClients() {
         int choice;
         do {
+            br.com.atlas.view.EmployeeView.clearScreen();
             choice = view.showClientMenu();
             switch (choice) {
                 case 1 -> listClients();
@@ -52,6 +58,7 @@ public class AttendantController {
         } catch (Exception e) {
             System.out.println("❌ " + e.getMessage());
         }
+        pressEnterToContinue();
     }
 
     private void registerNewClient() {
@@ -64,6 +71,7 @@ public class AttendantController {
         } catch (Exception e) {
             System.out.println("❌ " + e.getMessage());
         }
+        pressEnterToContinue();
     }
 
     private void editClient() {
@@ -87,6 +95,7 @@ public class AttendantController {
         } catch (Exception e) {
             System.out.println("⚠️ " + e.getMessage());
         }
+        pressEnterToContinue();
     }
 
     private void registerLoan() {
@@ -96,6 +105,7 @@ public class AttendantController {
         } catch (Exception e) {
             System.out.println("❌ " + e.getMessage());
         }
+        pressEnterToContinue();
     }
 
     // Localize o método registerRenewal no seu AttendantController.java
@@ -103,6 +113,7 @@ public class AttendantController {
         // BLINDAGEM: Só pede o ID se houver algum empréstimo ativo no banco
         if (!new br.com.atlas.dao.LoanDAO().hasActiveLoans()) {
             System.out.println("\n⚠️ [AVISO] Não existem empréstimos ativos no sistema para renovação.");
+            pressEnterToContinue();
             return; 
         }
 
@@ -113,12 +124,14 @@ public class AttendantController {
         } catch (Exception e) {
             System.out.println("❌ Erro: " + e.getMessage());
         }
+        pressEnterToContinue();
     }
 
     // Aproveite e faça o mesmo para o registerReturn!
     private void registerReturn() {
         if (!new br.com.atlas.dao.LoanDAO().hasActiveLoans()) {
             System.out.println("\n⚠️ [AVISO] Não existem empréstimos ativos para devolução.");
+            pressEnterToContinue();
             return;
         }
 
@@ -128,10 +141,18 @@ public class AttendantController {
         } catch (Exception e) {
             System.out.println("❌ Erro: " + e.getMessage());
         }
+        pressEnterToContinue();
     }
 
     private void searchBooks() {
         List<Book> books = attendant.searchBooks(view.askBookName());
         view.showBooks(books);
+        pressEnterToContinue();
+    }
+    
+    // MÉTODO AUXILIAR PARA PAUSA
+    private void pressEnterToContinue() {
+        System.out.println("\nPressione Enter para continuar...");
+        new Scanner(System.in).nextLine();
     }
 }
