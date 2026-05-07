@@ -56,6 +56,20 @@ public class LibrarianView extends EmployeeView {
         return sc.nextLine();
     }
 
+    // Dentro da classe LibrarianView.java
+
+    public String askAuthorName() {
+        System.out.print("Nome do Autor: ");
+        // Usamos nextLine() para aceitar nomes com espaços
+        return getSc().nextLine();
+    }
+
+    public String askCategoryName() {
+        System.out.print("Nome da Categoria: ");
+        // Usamos nextLine() para aceitar nomes como "Terror Psicológico"
+        return getSc().nextLine();
+    }
+
     public void showBooks(List<Book> books) {
         System.out.println("\n====== RESULTADO ======");
 

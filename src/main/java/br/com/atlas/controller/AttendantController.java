@@ -28,6 +28,7 @@ public class AttendantController {
                 case 3 -> registerReturn();
                 case 4 -> registerRenewal();
                 case 5 -> searchBooks();
+                case 6 -> listActiveLoans();
                 case 0 -> System.out.println("Deslogando Atendente...");
                 default -> 
                     {System.out.println("Opção inválida!");
@@ -150,6 +151,22 @@ public class AttendantController {
         pressEnterToContinue();
     }
     
+    // O método que executa a listagem
+    private void listActiveLoans() {
+        br.com.atlas.view.EmployeeView.clearScreen();
+        System.out.println("=== LISTAGEM DE EMPRÉSTIMOS ATIVOS ===");
+        
+        // O Controller pede os dados para o DAO/Model
+        List<String> loans = new br.com.atlas.dao.LoanDAO().listActiveLoansInfo();
+        
+        if (loans.isEmpty()) {
+            System.out.println("Nenhum empréstimo ativo no momento.");
+        } else {
+            loans.forEach(System.out::println);
+        }
+        pressEnterToContinue();
+    }
+
     // MÉTODO AUXILIAR PARA PAUSA
     private void pressEnterToContinue() {
         System.out.println("\nPressione Enter para continuar...");

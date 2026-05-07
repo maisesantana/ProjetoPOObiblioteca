@@ -76,6 +76,29 @@ public class Librarian extends Employee {
         }
     }
 
+    public void completeBookRegistration(Book b) {
+        try (Connection conn = br.com.atlas.util.ConnectionDb.getConexao()) {
+
+            conn.setAutoCommit(false);
+
+            try {
+                BookDAO dao = new BookDAO(conn);
+                dao.insert(b);
+                conn.commit();
+
+            } catch (Exception e) {
+                conn.rollback();
+                throw e;
+            }
+
+        } catch (Exception e) {
+            throw new RuntimeException(
+                "Erro ao cadastrar livro: " + e.getMessage(),
+                e
+            );
+        }
+    }
+
     public List<Book> searchBooks(String name) {
         try (Connection conn = ConnectionDb.getConexao()) {
             BookDAO dao = new BookDAO(conn);

@@ -14,30 +14,31 @@ public class BookDAO {
     }
 
     public void insert(Book book) throws SQLException {
-        String sqlBook = "INSERT INTO Book (bookName, bookLocation, numberOfPages, publisher) VALUES (?, ?, ?, ?)";
-        conn.setAutoCommit(false);
 
-        try (PreparedStatement stmt = conn.prepareStatement(sqlBook, Statement.RETURN_GENERATED_KEYS)) {
+        String sqlBook =
+            "INSERT INTO Book (bookName, bookLocation, numberOfPages, publisher) VALUES (?, ?, ?, ?)";
+
+        try (PreparedStatement stmt =
+                conn.prepareStatement(sqlBook, Statement.RETURN_GENERATED_KEYS)) {
+
             stmt.setString(1, book.getBookName());
             stmt.setString(2, book.getBookLocation());
             stmt.setInt(3, book.getNumberOfPages());
             stmt.setString(4, book.getPublisher());
+
             stmt.executeUpdate();
 
             try (ResultSet rs = stmt.getGeneratedKeys()) {
+
                 if (rs.next()) {
+
                     book.setBookId(rs.getInt(1));
                 }
             }
 
             saveAuthors(book);
+
             saveCategories(book);
-            conn.commit();
-        } catch (SQLException e) {
-            conn.rollback();
-            throw e;
-        } finally {
-            conn.setAutoCommit(true);
         }
     }
 

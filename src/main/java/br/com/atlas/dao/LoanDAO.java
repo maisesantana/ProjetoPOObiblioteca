@@ -172,4 +172,33 @@ public class LoanDAO {
         }
         return false; // Por segurança, se der erro ou estiver vazio, retorna false
     }
+
+        public List<String> listActiveLoansInfo() {
+        List<String> report = new ArrayList<>();
+        String sql = """
+            SELECT p.name AS clientName, b.bookName, l.loanDate, l.expectedReturnDate, l.renewals
+            FROM Loan l
+            JOIN Person p ON l.cpf = p.cpf
+            JOIN BookCopy bc ON l.bookCopyId = bc.bookCopyId
+            JOIN Book b ON bc.bookId = b.bookId
+            WHERE l.active = TRUE
+        """;
+
+        try (Connection conn = ConnectionDb.getConexao();
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            ResultSet rs = stmt.executeQuery()) {
+
+            while (rs.next()) {
+                String info = String.format(
+                    "📖 Livro: %-15s | 👤 Cliente: %-15s | 📅 Devolução: %s | 🔄 Renov: %d",
+                    rs.getString("bookName"),
+                    rs.getString("clientName"),
+                    rs.getTimestamp("expectedReturnDate").toLocalDateTime().toLocalDate(),
+                    rs.getInt("renewals")
+                );
+                report.add(info);
+            }
+        } catch (SQLException e) { e.printStackTrace(); }
+        return report;
+    }
 }

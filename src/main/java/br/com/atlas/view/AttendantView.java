@@ -18,6 +18,7 @@ public class AttendantView extends EmployeeView {
         System.out.println("3. Registrar Devolução");
         System.out.println("4. Registrar Renovação");
         System.out.println("5. Pesquisar Livros");
+        System.out.println("6. Listar Empréstimos Ativos");
         System.out.println("0. Sair");
         System.out.print("Opção: ");
         return scanner.nextInt();

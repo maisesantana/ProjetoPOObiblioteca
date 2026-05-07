@@ -1,7 +1,5 @@
 package br.com.atlas.application;
 
-// import java.time.LocalDate;
-
 import br.com.atlas.controller.AdminController;
 import br.com.atlas.controller.LibrarianController;
 import br.com.atlas.controller.LoginController;

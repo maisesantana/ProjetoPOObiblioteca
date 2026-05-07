@@ -1,62 +1,40 @@
 package br.com.atlas.dao;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
+import br.com.atlas.model.Author;
+import java.sql.*;
 
 public class AuthorDAO {
-    
     private final Connection connection;
 
     public AuthorDAO(Connection connection) {
         this.connection = connection;
     }
 
-    // CREATE
-    public void insert(String author) throws SQLException {
+    public void insert(Author author) throws SQLException {
         String sql = "INSERT INTO author (authorName) VALUES (?)";
-
-        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-            stmt.setString(1, author);
+        // Statement.RETURN_GENERATED_KEYS pega o ID que o MySQL criou na hora
+        try (PreparedStatement stmt = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+            stmt.setString(1, author.getAuthorName());
             stmt.executeUpdate();
-        }
-    }
-
-    // UPDATE
-    public void update(String author) throws SQLException {
-        String sql = "UPDATE author SET authorName = ?";
-
-        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-            stmt.setString(1, author);
-            stmt.executeUpdate();
-        }
-    }
-
-    // DELETE
-    public void delete(String author) throws SQLException {
-        String sql = "DELETE FROM author WHERE authorName = ?";
-
-        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-            stmt.setString(1, author);
-            stmt.executeUpdate();
-        }
-    }
-
-    // READ ALL
-    public List<String> findAll() throws SQLException {
-        String sql = "SELECT authorName FROM author";
-        List<String> authors = new ArrayList<>();
-
-        try (PreparedStatement stmt = connection.prepareStatement(sql);
-             ResultSet rs = stmt.executeQuery()) {
-
-            while (rs.next()) {
-                authors.add(rs.getString("authorName"));
+            
+            try (ResultSet generatedKeys = stmt.getGeneratedKeys()) {
+                if (generatedKeys.next()) {
+                    author.setAuthorId(generatedKeys.getInt(1));
+                }
             }
         }
-        return authors;
+    }
+
+    public Author findByName(String name) throws SQLException {
+        String sql = "SELECT * FROM author WHERE authorName = ?";
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setString(1, name);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return new Author(rs.getInt("authorId"), rs.getString("authorName"));
+                }
+            }
+        }
+        return null;
     }
 }
