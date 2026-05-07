@@ -23,13 +23,17 @@ public class AdministratorController extends HttpServlet {
         // 1. VERIFICAÇÃO DE SEGURANÇA: O cara está logado como Admin?
         HttpSession session = request.getSession();
         // Supondo que no seu LoginController você guardou o objeto admin na sessão
-        Administrator adminLogado = (Administrator) session.getAttribute("userLogged");
+        
+        Object user = session.getAttribute("userLogged");
 
-        if (adminLogado == null) {
-            // Se não tem ninguém na sessão, manda pro login
-            response.sendRedirect("login.jsp?msg=unauthorized");
-            return; 
-        }
+            if(user == null || !(user instanceof Administrator)){
+
+                response.sendRedirect(request.getContextPath() + "/view/login.jsp?msg=unauthorized");
+
+                return;
+            }
+
+            Administrator adminLogado = (Administrator) user;
 
         try {
             // 2. Captura os dados do NOVO FUNCIONÁRIO que o Admin quer cadastrar
@@ -54,11 +58,11 @@ public class AdministratorController extends HttpServlet {
             // Usamos o objeto que já está na sessão, pois ele é o "executor" real
             adminLogado.register(newEmployee);
 
-            response.sendRedirect("views/admin/team_management.jsp?status=success");
+            response.sendRedirect(request.getContextPath() + "/view/admin/registerEmployee.jsp?status=success");
 
         } catch (Exception e) {
             e.printStackTrace();
-            response.sendRedirect("views/admin/error.jsp?msg=erro_ao_cadastrar_funcionario");
+            response.sendRedirect(request.getContextPath() + "/view/admin/registerEmployee.jsp?msg=erro_ao_cadastrar_funcionario");
         }
     }
 }

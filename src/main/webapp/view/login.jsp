@@ -1,4 +1,5 @@
-<%@ page contentType="text/html; charset=UTF-8" %>
+
+<%@ page contentType="text/html; charset=UTF-8" isELIgnored="false" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -13,13 +14,14 @@
     <h2>Login</h2>
     <p>Digite seu CPF e senha</p>
 
-    <form action="/login" method="post">
+    <form action="${pageContext.request.contextPath}/login"
+        method="post">
         
         <label for="cpf">CPF:</label><br>
         <input type="text" id="cpf" name="cpf" placeholder="Digite seu CPF"><br><br>
 
         <label for="senha">Senha:</label><br>
-        <input type="password" id="senha" name="senha" placeholder="Digite sua senha"><br><br>
+        <input type="password" id="senha" name="password" placeholder="Digite sua senha"><br><br>
 
         <button type="submit">Entrar</button>
     </form>

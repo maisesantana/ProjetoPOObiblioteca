@@ -20,7 +20,7 @@ public class LibrarianController extends HttpServlet {
         Employee user = (Employee) session.getAttribute("userLogged");
 
         if (!(user instanceof Librarian)) {
-            response.sendRedirect("../login.jsp?msg=access_denied");
+            response.sendRedirect(request.getContextPath() + "/view/login.jsp?msg=access_denied");
             return;
         }
 

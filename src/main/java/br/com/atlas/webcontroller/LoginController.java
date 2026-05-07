@@ -28,7 +28,7 @@ public class LoginController extends HttpServlet {
 
         // Validação básica de campos vazios
         if (cpf == null || cpf.trim().isEmpty() || senhaTexto == null || senhaTexto.trim().isEmpty()) {
-            response.sendRedirect("login.jsp?msg=empty_fields");
+            response.sendRedirect(request.getContextPath() + "/view/login.jsp?msg=empty_fields");
             return;
         }
 
@@ -51,27 +51,66 @@ public class LoginController extends HttpServlet {
                 // 5. Redirecionamento baseado no cargo (Polimorfismo em ação!)
                 // O Java descobre o tipo real do objeto aqui
                 if (funcionario instanceof Administrator) {
-                    response.sendRedirect("views/admin/dashboard.jsp");
+
+                    // LOGS para diagnosticar (apenas UM if aqui!)
+                    System.out.println("========== DIAGNÓSTICO ==========");
+                    System.out.println("1. ContextPath: '" + request.getContextPath() + "'");
                     
+                    String caminhoRedirecionamento = request.getContextPath() + "/view/admin/registerEmployee.jsp";
+                    System.out.println("2. Tentando redirecionar para: " + caminhoRedirecionamento);
+                    
+                    // Tenta encontrar o arquivo fisicamente
+                    String caminhoFisico = getServletContext().getRealPath("/view/admin/registerEmployee.jsp");
+                    System.out.println("3. Caminho físico no servidor: " + caminhoFisico);
+                    
+                    // Verifica se o arquivo existe
+                    java.io.File arquivo = new java.io.File(caminhoFisico);
+                    System.out.println("4. O arquivo existe? " + arquivo.exists());
+                    
+                    // Lista o que tem na pasta /view
+                    String pastaView = getServletContext().getRealPath("/view");
+                    if(pastaView != null) {
+                        java.io.File dirView = new java.io.File(pastaView);
+                        if(dirView.exists() && dirView.isDirectory()) {
+                            System.out.println("5. Conteúdo da pasta /view:");
+                            for(String item : dirView.list()) {
+                                System.out.println("   - " + item);
+                            }
+                        } else {
+                            System.out.println("5. Pasta /view NÃO EXISTE!");
+                        }
+                    } else {
+                        System.out.println("5. pastaView é NULL - o diretório /view não existe no contexto!");
+                    }
+                    
+                    response.sendRedirect(caminhoRedirecionamento);
+
                 } else if (funcionario instanceof Librarian) {
-                    response.sendRedirect("views/librarian/inventory.jsp");
-                    
+
+                    response.sendRedirect(
+                        request.getContextPath()
+                        + "/view/librarian/inventory.jsp"
+                    );
+
                 } else {
-                    // Se não for nenhum dos dois, por exclusão é Atendente
-                    response.sendRedirect("views/attendant/loan_panel.jsp");
+
+                    response.sendRedirect(
+                        request.getContextPath()
+                        + "/view/attendant/loan_panel.jsp"
+                    );
                 }
 
             } else {
                 // Senha errada ou CPF não encontrado em nenhuma tabela
-                response.sendRedirect("login.jsp?msg=invalid_credentials");
+                response.sendRedirect(request.getContextPath() + "/view/login.jsp?msg=invalid_credentials");
             }
 
         } catch (NumberFormatException e) {
             // Caso o usuário digite letras onde deveria ser senha numérica
-            response.sendRedirect("login.jsp?msg=password_must_be_number");
+            response.sendRedirect(request.getContextPath() + "/view/login.jsp?msg=password_must_be_number");
         } catch (Exception e) {
             e.printStackTrace();
-            response.sendRedirect("login.jsp?msg=internal_error");
+            response.sendRedirect(request.getContextPath() + "/view/login.jsp?msg=internal_error");
         }
     }
 
@@ -83,6 +122,6 @@ public class LoginController extends HttpServlet {
             throws ServletException, IOException {
         HttpSession session = request.getSession();
         session.invalidate(); // Mata a sessão (destrói o crachá)
-        response.sendRedirect("login.jsp?msg=logged_out");
+        response.sendRedirect(request.getContextPath() + "/view/login.jsp?msg=logged_out");
     }
 }

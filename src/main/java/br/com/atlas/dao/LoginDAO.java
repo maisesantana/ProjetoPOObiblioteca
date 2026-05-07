@@ -16,44 +16,33 @@ public class LoginDAO {
      * Tenta autenticar o usurio e retorna o objeto com o cargo correto.
      */
     public Optional<Employee> authenticate(String cpf, int password) {
-        // 1. Primeiro validamos o bsico: CPF e Senha existem na tabela Employee?
-        String sql = "SELECT 1 FROM Employee WHERE cpf = ? AND password = ?";
+    String sql = "SELECT 1 FROM Employee WHERE cpf = ? AND password = ?";
 
-        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-            stmt.setString(1, cpf);
-            stmt.setInt(2, password);
+    try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+        stmt.setString(1, cpf);
+        stmt.setInt(2, password);
 
-            try (ResultSet rs = stmt.executeQuery()) {
-                if (rs.next()) {
-                    // 2. Credenciais vlidas! Agora vamos descobrir o cargo por "eliminao"
+        try (ResultSet rs = stmt.executeQuery()) {
+            if (rs.next()) {
 
-                    // Verificamos se  Administrador
-                    AdministratorDAO adminDAO = new AdministratorDAO(connection);
-                    if (adminDAO.exists(cpf)) {
-                        Administrator admin = adminDAO.findByCpf(cpf);
-                        return Optional.ofNullable(admin);
-                    }
+                AdministratorDAO adminDAO = new AdministratorDAO(connection);
+                if (adminDAO.exists(cpf)) return Optional.ofNullable(adminDAO.findByCpf(cpf));
 
-                    // Verificamos se  Bibliotecrio
-                    LibrarianDAO libDAO = new LibrarianDAO(connection);
-                    if (libDAO.exists(cpf)) {
-                        Librarian lib = libDAO.findByCpf(cpf);
-                        return Optional.ofNullable(lib);
-                    }
+                LibrarianDAO libDAO = new LibrarianDAO(connection);
+                if (libDAO.exists(cpf)) return Optional.ofNullable(libDAO.findByCpf(cpf));
 
-                    // Verificamos se  Atendente
-                    AttendantDAO attDAO = new AttendantDAO(connection);
-                    if (attDAO.exists(cpf)) {
-                        Attendant att = attDAO.findByCpf(cpf);
-                        return Optional.ofNullable(att);
-                    }
-                }
+                AttendantDAO attDAO = new AttendantDAO(connection);
+                if (attDAO.exists(cpf)) return Optional.ofNullable(attDAO.findByCpf(cpf));
+
+                // fallback: CPF autenticado mas sem cargo definido
+                System.err.println("AVISO: CPF " + cpf + " sem cargo definido.");
             }
-            
-        } catch (SQLException e) {
-            e.printStackTrace();
         }
 
-        return Optional.empty(); // Retorna vazio se a senha estiver errada ou o CPF no existir
+    } catch (SQLException e) { // ← agora captura os SQLException de todos os DAOs também
+        e.printStackTrace();
     }
+
+    return Optional.empty();
+}
 }

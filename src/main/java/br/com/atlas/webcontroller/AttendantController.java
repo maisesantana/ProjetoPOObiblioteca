@@ -21,7 +21,7 @@ public class AttendantController extends HttpServlet {
 
         // SEGURANÇA: Verifica se quem está logado é um Atendente
         if (!(user instanceof Attendant)) {
-            response.sendRedirect("../login.jsp?msg=access_denied");
+            response.sendRedirect(request.getContextPath() + "/view/login.jsp?msg=access_denied");
             return;
         }
 
