@@ -41,12 +41,56 @@ public class AdministratorController extends HttpServlet {
             String name = request.getParameter("name");
             String email = request.getParameter("email");
             String gender = request.getParameter("gender");
-            LocalDate birthDate = LocalDate.parse(request.getParameter("birthDate"));
-            int password = Integer.parseInt(request.getParameter("password"));
-
-            // 3. Cria o Employee (O novo Atendente ou Bibliotecário)
+            String birthDateText = request.getParameter("birthDate");
+            String passwordText = request.getParameter("password");
+            String confirmPassword = request.getParameter("confirmPassword");
             String role = request.getParameter("role");
-            char genderChar = gender.charAt(0); // mudando para pegar o primeiro char de gender
+
+            // Validação básica de presença de dados
+            if (cpf == null || cpf.isBlank()
+                    || name == null || name.isBlank()
+                    || email == null || email.isBlank()
+                    || gender == null || gender.isBlank()
+                    || birthDateText == null || birthDateText.isBlank()
+                    || passwordText == null || passwordText.isBlank()
+                    || confirmPassword == null || confirmPassword.isBlank()
+                    || role == null || role.isBlank()) {
+                response.sendRedirect(request.getContextPath() + "/view/admin/registerEmployee.jsp?msg=empty_fields");
+                return;
+            }
+
+            if (!passwordText.equals(confirmPassword)) {
+                response.sendRedirect(request.getContextPath() + "/view/admin/registerEmployee.jsp?msg=password_mismatch");
+                return;
+            }
+
+            LocalDate birthDate;
+            try {
+                birthDate = LocalDate.parse(birthDateText);
+            } catch (Exception ex) {
+                response.sendRedirect(request.getContextPath() + "/view/admin/registerEmployee.jsp?msg=birthdate_format_error");
+                return;
+            }
+
+            int password;
+            try {
+                password = Integer.parseInt(passwordText);
+            } catch (NumberFormatException ex) {
+                response.sendRedirect(request.getContextPath() + "/view/admin/registerEmployee.jsp?msg=password_format_error");
+                return;
+            }
+
+            if (!"masculino".equals(gender) && !"feminino".equals(gender) && !"outro".equals(gender)) {
+                response.sendRedirect(request.getContextPath() + "/view/admin/registerEmployee.jsp?msg=invalid_gender");
+                return;
+            }
+
+            if (!"bibliotecario".equals(role) && !"atendente".equals(role)) {
+                response.sendRedirect(request.getContextPath() + "/view/admin/registerEmployee.jsp?msg=invalid_role");
+                return;
+            }
+
+            char genderChar = gender.charAt(0); // pega o primeiro char de gender
             Employee newEmployee;
             if ("bibliotecario".equals(role)) {
                 newEmployee = new Librarian(cpf, name, email, genderChar, birthDate, password);

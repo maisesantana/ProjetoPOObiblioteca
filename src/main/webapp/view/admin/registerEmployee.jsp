@@ -38,27 +38,55 @@
     <h1>Cadastrar Funcionário</h1>
     <p>Cadastra-se para acessar.</p>
 
+    <%
+        String status = request.getParameter("status");
+        String msg = request.getParameter("msg");
+        if ("success".equals(status)) {
+    %>
+        <div style="color: green;">Funcionário cadastrado com sucesso.</div>
+    <% } else if (msg != null) { %>
+        <div style="color: red;">
+            <% if ("erro_ao_cadastrar_funcionario".equals(msg)) { %>
+                Erro ao cadastrar funcionário. Verifique os dados e tente novamente.
+            <% } else if ("empty_fields".equals(msg)) { %>
+                Preencha todos os campos antes de enviar.
+            <% } else if ("password_mismatch".equals(msg)) { %>
+                As senhas não conferem.
+            <% } else if ("password_format_error".equals(msg)) { %>
+                A senha deve ser numérica.
+            <% } else if ("birthdate_format_error".equals(msg)) { %>
+                A data de nascimento deve estar no formato correto.
+            <% } else if ("invalid_gender".equals(msg)) { %>
+                Sexo inválido selecionado.
+            <% } else if ("invalid_role".equals(msg)) { %>
+                Cargo inválido selecionado.
+            <% } else { %>
+                Erro: <%= msg %>
+            <% } %>
+        </div>
+    <% } %>
+
     <%-- action bate com @WebServlet("/manageEmployee") --%>
-    <form action="${pageContext.request.contextPath}/manageEmployee" method="post">
+    <form action="<%= request.getContextPath() %>/manageEmployee" method="post">
 
       <div>
         <label for="nome">Nome completo</label>
-        <input type="text" id="nome" name="name" placeholder="insira o nome" />
+        <input type="text" id="nome" name="name" placeholder="insira o nome" required />
       </div>
 
       <div>
         <label for="cpf">CPF</label>
-        <input type="text" id="cpf" name="cpf" placeholder="*** *** ***-**" maxlength="14" />
+        <input type="text" id="cpf" name="cpf" placeholder="*** *** ***-**" maxlength="14" required />
       </div>
 
       <div>
         <label for="email">Email</label>
-        <input type="email" id="email" name="email" placeholder="insira o e-mail" />
+        <input type="email" id="email" name="email" placeholder="insira o e-mail" required />
       </div>
 
       <div>
         <label for="dataNascimento">Data de nascimento</label>
-        <input type="date" id="dataNascimento" name="birthDate" />
+        <input type="date" id="dataNascimento" name="birthDate" required />
       </div>
 
       <fieldset>
@@ -78,13 +106,13 @@
       <div>
         <label for="senha">Criar senha</label>
         <%-- senha numérica pois o Servlet faz Integer.parseInt() --%>
-        <input type="password" id="senha" name="password" placeholder="senha numérica" />
+        <input type="password" id="senha" name="password" placeholder="senha numérica" pattern="\d*" required />
       </div>
 
       <div>
         <label for="confirmarSenha">Confirmar senha</label>
         <%-- name="confirmPassword" bate com getParameter("confirmPassword") --%>
-        <input type="password" id="confirmarSenha" name="confirmPassword" placeholder="repita a senha numérica" />
+        <input type="password" id="confirmarSenha" name="confirmPassword" placeholder="repita a senha numérica" pattern="\d*" required />
       </div>
 
       <fieldset>
