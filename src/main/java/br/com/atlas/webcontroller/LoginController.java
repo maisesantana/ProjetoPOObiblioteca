@@ -56,11 +56,11 @@ public class LoginController extends HttpServlet {
                     System.out.println("========== DIAGNÓSTICO ==========");
                     System.out.println("1. ContextPath: '" + request.getContextPath() + "'");
                     
-                    String caminhoRedirecionamento = request.getContextPath() + "/view/admin/registerEmployee.jsp";
+                    String caminhoRedirecionamento = request.getContextPath() + "/view/admin/adminPanel.jsp";
                     System.out.println("2. Tentando redirecionar para: " + caminhoRedirecionamento);
                     
                     // Tenta encontrar o arquivo fisicamente
-                    String caminhoFisico = getServletContext().getRealPath("/view/admin/registerEmployee.jsp");
+                    String caminhoFisico = getServletContext().getRealPath("/view/admin/adminPanel.jsp");
                     System.out.println("3. Caminho físico no servidor: " + caminhoFisico);
                     
                     // Verifica se o arquivo existe
