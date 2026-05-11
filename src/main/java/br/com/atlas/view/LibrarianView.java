@@ -1,5 +1,6 @@
 package br.com.atlas.view;
 
+import br.com.atlas.model.Author;
 import br.com.atlas.model.Book;
 
 import java.util.List;
@@ -15,9 +16,35 @@ public class LibrarianView extends EmployeeView {
         System.out.println("2 - Remover livro");
         System.out.println("3 - Adicionar exemplares");
         System.out.println("4 - Buscar livros");
+        System.out.println("5 - Gerenciar autores");
+        System.out.println("6 - Gerenciar categorias");
         System.out.println("0 - Sair");
 
         return sc.nextInt();
+    }
+
+    public int showAuthorMenu() {
+        System.out.println("\n--- GERENCIAR AUTORES ---");
+        System.out.println("1 - Listar Autores");
+        System.out.println("2 - Adicionar Autor");
+        System.out.println("3 - Editar Autor");
+        System.out.println("4 - Remover Autor");
+        System.out.println("5 - Ver livros de um Autor");
+        System.out.println("0 - Voltar");
+        System.out.print("Opção: ");
+        return sc.nextInt();
+    }
+
+    public int showCategoryMenu() {
+        System.out.println("\n--- GERENCIAR CATEGORIAS ---");
+        System.out.println("1 - Listar Categorias");
+        System.out.println("2 - Adicionar Categoria");
+        System.out.println("3 - Editar Categoria");
+        System.out.println("4 - Remover Categoria");
+        System.out.println("5 - Ver livros desta Categoria");
+        System.out.println("0 - Voltar");
+        System.out.print("Opção: ");
+        return getSc().nextInt();
     }
 
     public Book readBookData() {
@@ -84,5 +111,39 @@ public class LibrarianView extends EmployeeView {
             System.out.println("Local: " + b.getBookLocation());
             System.out.println("--------------------------");
         }
+    }
+
+    public void showAuthors(List<Author> authors) {
+        System.out.println("\nID | NOME DO AUTOR");
+        System.out.println("-------------------");
+        authors.forEach(a -> System.out.printf("%-3d| %s\n", a.getAuthorId(), a.getAuthorName()));
+    }
+
+    public int askAuthorId() {
+        System.out.print("Digite o ID do Autor: ");
+        return sc.nextInt();
+    }
+
+    public String readAuthorName() {
+        sc.nextLine(); // limpar buffer
+        System.out.print("Novo Nome do Autor: ");
+        return sc.nextLine();
+    }
+
+    public void showCategories(List<br.com.atlas.model.Category> categories) {
+        System.out.println("\nID | NOME DA CATEGORIA");
+        System.out.println("-----------------------");
+        categories.forEach(c -> System.out.printf("%-3d| %s\n", c.getCategoryId(), c.getCategoryName()));
+    }
+
+    public int askCategoryId() {
+        System.out.print("Digite o ID da Categoria: ");
+        return getSc().nextInt();
+    }
+
+    public String readCategoryName() {
+        getSc().nextLine(); // limpar buffer
+        System.out.print("Novo Nome da Categoria: ");
+        return getSc().nextLine();
     }
 }

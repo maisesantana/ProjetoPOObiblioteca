@@ -1,0 +1,152 @@
+/* login.css */
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Poppins", sans-serif;
+  background-color: #f8f9fa;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  margin: 0;
+}
+
+.login-page {
+  text-align: center;
+  width: 100%;
+  max-width: 450px;
+  padding: 20px;
+}
+
+.logo-header img {
+  width: 180px;
+  margin-bottom: 30px;
+}
+
+.login-card {
+  background: #ffffff;
+  padding: 40px;
+  border-radius: 12px;
+  box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.05);
+  text-align: left;
+}
+
+.breadcrumb {
+  font-size: 14px;
+  margin-bottom: 25px;
+  color: #5e6282;
+}
+
+.link-inicio {
+  color: #4737ff;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.login-title {
+  color: #181e4b;
+  font-size: 28px;
+  margin: 0 0 10px 0;
+  font-weight: 700;
+}
+
+.login-subtitle {
+  color: #5e6282;
+  margin-bottom: 25px;
+  font-size: 16px;
+}
+
+/* Estilo do Alerta de Erro */
+.alert-error {
+  background-color: #ffeef0;
+  color: #d93025;
+  padding: 12px;
+  border-radius: 8px;
+  font-size: 13px;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border: 1px solid #fad2d2;
+}
+
+.input-group {
+  margin-bottom: 20px;
+}
+
+.input-group label {
+  display: block;
+  font-weight: 600;
+  color: #181e4b;
+  margin-bottom: 8px;
+  font-size: 14px;
+  text-transform: uppercase;
+}
+
+.input-group input {
+  width: 100%;
+  padding: 14px 15px;
+  border: 1px solid #dedede;
+  border-radius: 8px;
+  font-size: 14px;
+  transition: border-color 0.3s;
+}
+
+.input-group input:focus {
+  outline: none;
+  border-color: #80a4ed;
+}
+
+.password-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.password-wrapper i {
+  position: absolute;
+  right: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  color: #5e6282;
+  font-size: 18px;
+}
+
+.btn-login {
+  width: 100%;
+  padding: 16px;
+  background-color: #80a4ed;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 10px;
+  transition: all 0.3s ease;
+}
+
+.btn-login:hover {
+  background-color: #6a8dda;
+  transform: translateY(-2px);
+  box-shadow: 0px 4px 15px rgba(128, 164, 237, 0.4);
+}
+
+.login-footer {
+  margin-top: 30px;
+}
+
+.link-create {
+  color: #b0a492;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.copyright {
+  display: block;
+  margin-top: 40px;
+  color: #999;
+  font-size: 12px;
+}
