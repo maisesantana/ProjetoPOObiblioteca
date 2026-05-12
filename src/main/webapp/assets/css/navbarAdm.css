@@ -21,6 +21,8 @@
   padding-right: 3rem;
   box-shadow: none;
   border-bottom: 1px solid rgba(255, 255, 255, 0.18);
+  font-family: 'Work Sans', sans-serif;
+  font-size: 32px;
 }
 
 /* ── Ajuste do container para manter espaçamento visual consistente */
