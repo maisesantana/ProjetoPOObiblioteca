@@ -1,0 +1,154 @@
+/*Atlas — navbar.css
+  Paleta:
+  Primária:   #6B1A2B  (bordô)
+  Secundária: #D3C4AE  (bege)
+  Terciária:  #80A4ED  (azul)*/
+
+:root {
+  --atlas-primary:        #6B1A2B;
+  --atlas-secondary:      #D3C4AE;
+  --atlas-tertiary:       #80A4ED;
+  --atlas-tertiary-hover: #6690d8;
+}
+
+/* ── Barra ─────────────────────────────── */
+.navbar.atlas-navbar {
+  /* background transparente para manter o Bootstrap e exibir o conteúdo atrás do menu */
+  background: rgba(255, 255, 255, 0.08) !important;
+  backdrop-filter: blur(12px);
+  min-height: 70px;
+  padding-left: 3rem;
+  padding-right: 3rem;
+  box-shadow: none;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.18);
+}
+
+/* ── Ajuste do container para manter espaçamento visual consistente */
+.navbar.atlas-navbar .container-fluid {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-left: 0;
+  padding-right: 0;
+}
+
+.navbar.atlas-navbar .navbar-collapse {
+  flex: 1;
+}
+
+.navbar.atlas-navbar .navbar-brand {
+  display: inline-flex;
+  align-items: center;
+}
+
+/* ── Logo ───────────────────────────────── */
+.navbar.atlas-navbar .navbar-brand img {
+  height: 52px;
+  width: auto;
+  object-fit: contain;
+}
+
+/* ── Links ──────────────────────────────── */
+.navbar.atlas-navbar .navbar-nav {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.2rem; /* espaçamento maior entre links */
+  margin: 0 auto; /* centraliza os links na barra mantendo logo à esquerda e botão à direita */
+}
+
+.navbar.atlas-navbar .navbar-nav.me-auto {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.navbar.atlas-navbar .nav-link {
+  color: #333 !important;
+  font-weight: 400;
+  font-size: 0.95rem;
+  padding: 0.6rem 1.2rem !important;
+  border-radius: 8px;
+  position: relative;
+  transition: color 0.2s, background 0.2s;
+}
+
+.navbar.atlas-navbar .nav-link:hover {
+  color: var(--atlas-primary) !important;
+  background: rgba(107, 26, 43, 0.08);
+}
+
+/* Link ativo */
+.navbar.atlas-navbar .nav-link.active {
+  color: var(--atlas-primary) !important;
+  font-weight: 600;
+}
+
+.navbar.atlas-navbar .nav-link.active::after {
+  content: '';
+  position: absolute;
+  bottom: 2px;
+  left: 1rem;
+  right: 1rem;
+  height: 2px;
+  background: var(--atlas-primary);
+  border-radius: 2px;
+}
+
+/* ── Botão Sair ─────────────────────────── */
+.navbar.atlas-navbar .btn-sair {
+  background-color: var(--atlas-tertiary);
+  color: #fff !important;
+  font-weight: 600;
+  font-size: 0.9rem;
+  padding: 0.45rem 1.3rem;
+  border-radius: 8px;
+  border: none;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
+}
+
+.navbar.atlas-navbar .btn-sair:hover {
+  background-color: var(--atlas-tertiary-hover);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(128, 164, 237, 0.4);
+  color: #fff !important;
+  text-decoration: none;
+}
+
+.navbar.atlas-navbar .btn-sair:active {
+  transform: translateY(0);
+  box-shadow: none;
+}
+
+/* ── Toggler (mobile) ───────────────────── */
+.navbar.atlas-navbar .navbar-toggler {
+  border-color: var(--atlas-primary);
+}
+
+.navbar.atlas-navbar .navbar-toggler-icon {
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='%236B1A2B' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+}
+
+@media (max-width: 991.98px) {
+  .navbar.atlas-navbar {
+    background: rgba(255, 255, 255, 0.95) !important;
+  }
+
+  .navbar.atlas-navbar .navbar-collapse {
+    padding-top: 0.75rem;
+    padding-bottom: 0.75rem;
+  }
+
+  .navbar.atlas-navbar .navbar-nav {
+    gap: 0.75rem;
+  }
+
+  .navbar.atlas-navbar .btn-sair {
+    margin-top: 0.5rem;
+    width: fit-content;
+  }
+}

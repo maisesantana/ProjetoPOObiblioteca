@@ -1,88 +1,81 @@
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" isELIgnored="false" %>
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Atlas — Painel do Administrador</title>
+
+  <!-- 1) Bootstrap CSS -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <!-- 2) Bootstrap Icons -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet"/>
+  <!-- 3) Navbar Atlas — APÓS o Bootstrap para sobrescrever corretamente -->
+  <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/navbar.css"/>
 </head>
 <body>
 
-  <!-- NAVBAR -->
-  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <div class="container-fluid">
-      <a class="navbar-brand" href="#">ATLAS</a>
-      <span class="navbar-text text-white-50 ms-2">Sistema de Biblioteca</span>
-      <div class="ms-auto d-flex align-items-center gap-3">
-        <span class="navbar-text text-white-50">Administrador</span>
-        <a href="login.jsp" class="btn btn-outline-light btn-sm">
-          <i class="bi bi-box-arrow-right"></i> Sair
+  <!-- NAVBAR — usa Bootstrap + classe atlas-navbar
+       O CSS em navbar.css sobrescreve apenas
+       o necessário via .navbar.atlas-navbar -->
+  <header>
+    <nav class="navbar navbar-expand-lg atlas-navbar">
+      <div class="container-fluid">
+        <!-- Logo -->
+        <a class="navbar-brand" href="#">
+          <img
+            src="${pageContext.request.contextPath}/assets/images/logo.png"
+            alt="Atlas — Gestão de Biblioteca"
+          />
         </a>
+        <!-- Toggler mobile -->
+        <button class="navbar-toggler" type="button"
+                data-bs-toggle="collapse" data-bs-target="#navbarAtlas"
+                aria-controls="navbarAtlas" aria-expanded="false"
+                aria-label="Alternar navegação">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <!-- Links + botão -->
+        <div class="collapse navbar-collapse" id="navbarAtlas">
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="#">Início</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">Clientes</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">Empréstimos</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">Acervo</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">Localização</a>
+            </li>
+          </ul>
+
+          <!-- Botão Sair (terciária #80A4ED) -->
+          <a href="${pageContext.request.contextPath}/logout" class="btn-sair">
+            <i class="bi bi-box-arrow-right"></i>
+            Sair
+          </a>
+        </div>
+
       </div>
-    </div>
-  </nav>
+    </nav>
+  </header>
+  <!-- ═══════════════════════════════════════ -->
 
   <div class="container-fluid">
     <div class="row">
-
-      <!-- SIDEBAR -->
-      <nav class="col-md-2 bg-dark min-vh-100 pt-3">
-        <ul class="nav flex-column">
-
-          <li class="nav-item">
-            <span class="nav-link text-white-50 text-uppercase small">Principal</span>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link text-white active" href="adminPanel.jsp">
-              <i class="bi bi-grid-1x2-fill"></i> Dashboard
-            </a>
-          </li>
-
-          <li class="nav-item mt-2">
-            <span class="nav-link text-white-50 text-uppercase small">Funcionários</span>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link text-white-50" href="registerEmployee.jsp">
-              <i class="bi bi-person-plus-fill"></i> Cadastrar
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link text-white-50" href="listEmployees.jsp">
-              <i class="bi bi-people-fill"></i> Listar
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link text-white-50" href="editEmployee.jsp">
-              <i class="bi bi-pencil-square"></i> Editar
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link text-white-50" href="removeEmployee.jsp">
-              <i class="bi bi-person-dash-fill"></i> Remover
-            </a>
-          </li>
-
-          <li class="nav-item mt-2">
-            <span class="nav-link text-white-50 text-uppercase small">Sistema</span>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link text-white-50" href="../logout">
-              <i class="bi bi-box-arrow-right"></i> Sair
-            </a>
-          </li>
-
-        </ul>
-      </nav>
-
-      <!-- CONTEÚDO PRINCIPAL -->
       <main class="col-md-10 pt-4 px-4">
 
         <h4 class="mb-1">Bem-vindo, Administrador!</h4>
         <p class="text-muted mb-4">Selecione uma ação abaixo para gerenciar o sistema.</p>
 
-        <!-- SEÇÃO: GESTÃO DE FUNCIONÁRIOS -->
+        <!-- GESTÃO DE FUNCIONÁRIOS -->
         <h5 class="mb-3">Gestão de Funcionários</h5>
         <div class="row g-3 mb-4">
 
@@ -128,7 +121,7 @@
 
         </div>
 
-        <!-- SEÇÃO: BUSCA -->
+        <!-- BUSCA -->
         <h5 class="mb-3">Buscar Funcionário</h5>
         <div class="row g-3 mb-4">
           <div class="col-md-6">
@@ -142,7 +135,7 @@
           </div>
         </div>
 
-        <!-- SEÇÃO: LISTAGENS ESPECÍFICAS -->
+        <!-- LISTAGENS POR CARGO -->
         <h5 class="mb-3">Listagens por Cargo</h5>
         <div class="row g-3 mb-4">
 
@@ -179,7 +172,6 @@
         </div>
 
       </main>
-
     </div>
   </div>
 

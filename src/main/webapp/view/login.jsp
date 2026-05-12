@@ -6,7 +6,7 @@
     <title>Login - Atlas</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/login.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/login.css">
 </head>
 <body>
 
@@ -50,7 +50,6 @@
     </main>
 
     <footer class="login-footer">
-        <p>Não tem uma conta? <a href="#" class="link-create">Crie uma!</a></p>
         <span class="copyright">© 2026 Atlas. Todos os direitos reservados.</span>
     </footer>
 </div>
