@@ -85,7 +85,7 @@ public class AdministratorController extends HttpServlet {
                 return;
             }
 
-            if (!"bibliotecario".equals(role) && !"atendente".equals(role)) {
+            if (!"bibliotecario".equals(role) && !"atendente".equals(role) && !"administrador".equals(role)) {
                 response.sendRedirect(request.getContextPath() + "/view/admin/registerEmployee.jsp?msg=invalid_role");
                 return;
             }
@@ -94,8 +94,10 @@ public class AdministratorController extends HttpServlet {
             Employee newEmployee;
             if ("bibliotecario".equals(role)) {
                 newEmployee = new Librarian(cpf, name, email, genderChar, birthDate, password);
-            } else {
+            } else if ("atendente".equals(role)) {
                 newEmployee = new Attendant(cpf, name, email, genderChar, birthDate, password);
+            } else {
+                newEmployee = new Administrator(cpf, name, email, genderChar, birthDate, password);
             }
 
             // 4. O Administrador (Service) executa a ação de registro

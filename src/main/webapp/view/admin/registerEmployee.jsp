@@ -340,6 +340,17 @@
             Bibliotecário
           </label>
         </div>
+
+        <div class="form-check form-check-inline">
+          <input class="form-check-input"
+                 type="radio"
+                 name="role"
+                 value="administrador">
+
+          <label class="form-check-label">
+            Administrador
+          </label>
+        </div>
       </div>
 
       <div class="col-12">
