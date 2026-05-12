@@ -9,7 +9,7 @@
     }
 %>
 
-<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" isELIgnored="false" %>
 
 <!DOCTYPE html>
 <html lang="pt-BR">
@@ -57,9 +57,7 @@
                 aria-controls="navbarAtlas"
                 aria-expanded="false"
                 aria-label="Alternar navegação">
-
           <span class="navbar-toggler-icon"></span>
-
         </button>
 
         <!-- Menu -->
@@ -68,7 +66,7 @@
 
             <li class="nav-item">
               <a class="nav-link"
-                 href="${pageContext.request.contextPath}/view/admin/adminHome.jsp">
+                 href="${pageContext.request.contextPath}/view/admin/adminPanel.jsp">
                 Início
               </a>
             </li>
@@ -114,7 +112,7 @@
 
     <!-- Breadcrumb -->
     <nav class="mb-4">
-      <a href="${pageContext.request.contextPath}/view/admin/adminHome.jsp">
+      <a href="${pageContext.request.contextPath}/view/admin/adminPanel.jsp">
         Início
       </a>
 
