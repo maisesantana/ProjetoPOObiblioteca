@@ -22,6 +22,16 @@
   </servlet>
   <servlet-mapping>
     <servlet-name>AdministratorController</servlet-name>
+    <url-pattern>/registerEmployee</url-pattern>
+  </servlet-mapping>
+
+  <!-- Manage Employee Controller -->
+  <servlet>
+    <servlet-name>ManageEmployeeController</servlet-name>
+    <servlet-class>br.com.atlas.webcontroller.ManageEmployeeController</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>ManageEmployeeController</servlet-name>
     <url-pattern>/manageEmployee</url-pattern>
   </servlet-mapping>
   

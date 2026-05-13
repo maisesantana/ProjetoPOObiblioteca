@@ -181,7 +181,7 @@
     <% } %>
 
     <!-- Form -->
-    <form action="<%= request.getContextPath() %>/manageEmployee"
+    <form action="<%= request.getContextPath() %>/registerEmployee"
           method="post"
           class="row g-4">
 

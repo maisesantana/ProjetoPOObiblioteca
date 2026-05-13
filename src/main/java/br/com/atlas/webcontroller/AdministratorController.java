@@ -6,7 +6,6 @@ import br.com.atlas.model.Employee;
 import br.com.atlas.model.Librarian;
 import br.com.atlas.service.EmployeeService;
 import jakarta.servlet.ServletException;
-import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -14,7 +13,6 @@ import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
 import java.time.LocalDate;
 
-@WebServlet("/manageEmployee")
 public class AdministratorController extends HttpServlet {
 
     private final EmployeeService employeeService = new EmployeeService();
