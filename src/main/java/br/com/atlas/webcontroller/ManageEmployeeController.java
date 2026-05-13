@@ -3,10 +3,12 @@ package br.com.atlas.webcontroller;
 import br.com.atlas.model.*;
 import br.com.atlas.service.EmployeeService;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
 import java.io.IOException;
 import java.time.LocalDate;
 
+@WebServlet("/manageEmployee")
 public class ManageEmployeeController extends HttpServlet {
 
     private final EmployeeService employeeService = new EmployeeService();
@@ -15,13 +17,11 @@ public class ManageEmployeeController extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        // Segurança: apenas Administrador
         Administrator admin = getAdminOrRedirect(request, response);
         if (admin == null) return;
 
         String action = request.getParameter("action");
 
-        // --- Busca por CPF (manageEmployee.jsp) ---
         if ("search".equals(action)) {
             String cpf = request.getParameter("cpf");
 
@@ -38,7 +38,6 @@ public class ManageEmployeeController extends HttpServlet {
                        .forward(request, response);
 
             } catch (IllegalArgumentException e) {
-                // CPF não encontrado
                 response.sendRedirect(request.getContextPath()
                         + "/view/admin/manageEmployee.jsp?msg=not_found");
             } catch (Exception e) {
@@ -47,7 +46,6 @@ public class ManageEmployeeController extends HttpServlet {
                         + "/view/admin/manageEmployee.jsp?msg=error");
             }
 
-        // --- Carregar tela de edição (editEmployee.jsp) ---
         } else if ("edit".equals(action)) {
             String cpf = request.getParameter("cpf");
 
@@ -70,13 +68,11 @@ public class ManageEmployeeController extends HttpServlet {
             }
 
         } else {
-            // Nenhuma action: apenas exibe a tela de busca limpa
             request.getRequestDispatcher("/view/admin/manageEmployee.jsp")
                    .forward(request, response);
         }
     }
 
-    // POST: remover ou atualizar funcionário
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -86,7 +82,6 @@ public class ManageEmployeeController extends HttpServlet {
 
         String action = request.getParameter("action");
 
-        // ── REMOVER 
         if ("remove".equals(action)) {
             String cpf = request.getParameter("cpf");
 
@@ -97,7 +92,7 @@ public class ManageEmployeeController extends HttpServlet {
             }
 
             try {
-                admin.remove(cpf.trim());
+                employeeService.delete(cpf.trim()); // era admin.remove()
                 response.sendRedirect(request.getContextPath()
                         + "/view/admin/manageEmployee.jsp?msg=removed");
             } catch (Exception e) {
@@ -106,7 +101,6 @@ public class ManageEmployeeController extends HttpServlet {
                         + "/view/admin/manageEmployee.jsp?msg=error");
             }
 
-        // ── ATUALIZAR ─
         } else if ("update".equals(action)) {
             String cpf           = request.getParameter("cpf");
             String name          = request.getParameter("name");
@@ -117,21 +111,18 @@ public class ManageEmployeeController extends HttpServlet {
             String confirmPw     = request.getParameter("confirmPassword");
             String role          = request.getParameter("role");
 
-            // Validação de campos obrigatórios
             if (isBlank(cpf, name, email, gender, birthDateText, passwordText, confirmPw, role)) {
                 response.sendRedirect(request.getContextPath()
                         + "/view/admin/editEmployee.jsp?msg=empty_fields&cpf=" + cpf);
                 return;
             }
 
-            // Senhas coincidem?
             if (!passwordText.equals(confirmPw)) {
                 response.sendRedirect(request.getContextPath()
                         + "/view/admin/editEmployee.jsp?msg=password_mismatch&cpf=" + cpf);
                 return;
             }
 
-            // Parse de data
             LocalDate birthDate;
             try {
                 birthDate = LocalDate.parse(birthDateText);
@@ -141,7 +132,6 @@ public class ManageEmployeeController extends HttpServlet {
                 return;
             }
 
-            // Parse de senha
             int password;
             try {
                 password = Integer.parseInt(passwordText);
@@ -153,7 +143,6 @@ public class ManageEmployeeController extends HttpServlet {
 
             char genderChar = gender.charAt(0);
 
-            // Monta o objeto Employee atualizado conforme o cargo
             Employee updated;
             if ("bibliotecario".equals(role)) {
                 updated = new Librarian(cpf, name, email, genderChar, birthDate, password);
@@ -162,7 +151,7 @@ public class ManageEmployeeController extends HttpServlet {
             }
 
             try {
-                admin.update(updated);
+                employeeService.update(updated); // era admin.update()
                 response.sendRedirect(request.getContextPath()
                         + "/view/admin/editEmployee.jsp?msg=success&cpf=" + cpf);
             } catch (Exception e) {
@@ -176,8 +165,6 @@ public class ManageEmployeeController extends HttpServlet {
         }
     }
 
-
-    /** Verifica autenticação; retorna o Admin ou null (já redirecionou). */
     private Administrator getAdminOrRedirect(HttpServletRequest req, HttpServletResponse res)
             throws IOException {
         HttpSession session = req.getSession(false);
@@ -191,7 +178,6 @@ public class ManageEmployeeController extends HttpServlet {
         return null;
     }
 
-    /** Retorna true se qualquer String for nula ou em branco. */
     private boolean isBlank(String... values) {
         for (String v : values) {
             if (v == null || v.isBlank()) return true;
