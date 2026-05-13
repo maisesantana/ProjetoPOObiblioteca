@@ -1,6 +1,6 @@
 package br.com.atlas.view;
 
-import java.io.IOException; // pacote para detectar se é linux ou windows
+// import java.io.IOException removido — não estava sendo usado
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Scanner;
@@ -21,14 +21,12 @@ public class EmployeeView {
     public Scanner getSc() {
         return sc;
     }
+
     public DateTimeFormatter getDateFormatter() {
         return dateFormatter;
     }
 
     public int showMenu() {
-
-        int op;
-
         System.out.println("====== MENU ======");
         System.out.println("1 - Visualizar pessoas");
         System.out.println("2 - Cadastrar pessoas");
@@ -38,72 +36,56 @@ public class EmployeeView {
         System.out.println("6 - Deslogar");
         System.out.println("0 - Fechar o sistema");
 
-        return op = sc.nextInt();
+        return sc.nextInt(); // variável op desnecessária — retorna direto
     }
 
     public static void clearScreen() {
         try {
             String sistema = System.getProperty("os.name");
 
-            if (sistema.toLowerCase().contains("windows")) { 
-                //lowercase deixa em minusculo, contains verifica se a string esta la
-            
+            if (sistema.toLowerCase().contains("windows")) {
                 new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
-                // process builder executa comandos externos,  inherit usa o mesmo terminal do programa,
-                // start inicia e wait for espera o processo terminar
             } else {
-                Runtime.getRuntime().exec("clear");
-                //executa no macIOS ou Linux
+                // ProcessBuilder no lugar de Runtime.exec() — não é deprecated
+                new ProcessBuilder("clear").inheritIO().start().waitFor();
             }
         } catch (Exception e) {
-            throw new RuntimeException ("Erro ao limpar tela" + e);
+            throw new RuntimeException("Erro ao limpar tela" + e);
         }
     }
 
     public String passCpf() {
-        String cpf;
         System.out.println("====== PESQUISAR PESSOA POR CPF =======");
         System.out.print("Digite o CPF a ser buscado: ");
-        cpf = sc.nextLine();
-        return cpf;
+        return sc.nextLine();
     }
 
     public String readCpf() {
-        String cpf;
         System.out.print("CPF: ");
-        cpf = sc.nextLine();
-        return cpf;
+        return sc.nextLine();
     }
-    
+
     public String readName() {
-        String name;
         System.out.print("Nome: ");
-        name = sc.nextLine();
-        return name;
+        return sc.nextLine();
     }
 
     public String readEmail() {
-        String email;
         System.out.print("Email: ");
-        email = sc.nextLine();
-        return email;
+        return sc.nextLine();
     }
 
     public char readGender() {
-        char gender;
         System.out.print("Sexo: ");
-        gender = sc.next().charAt(0);
+        char gender = sc.next().charAt(0);
         sc.nextLine();
         return gender;
     }
 
     public LocalDate readDate() {
-        String birthDate;
         System.out.print("Data de nascimento: (dd/mm/aaaa): ");
-        birthDate = sc.nextLine();
-        //conversao de string para tipo data no formato EUA:
-        LocalDate bDate = LocalDate.parse(birthDate, dateFormatter);
-        return bDate;
+        String birthDate = sc.nextLine();
+        return LocalDate.parse(birthDate, dateFormatter);
     }
 
     public int readPassword() {
@@ -111,34 +93,34 @@ public class EmployeeView {
 
         do {
             System.out.print("\nSenha numérica: ");
-            while (!sc.hasNextInt()) { // valida se é número
+            while (!sc.hasNextInt()) {
                 System.out.println("Digite apenas números!");
-                sc.next(); // descarta entrada inválida
+                sc.next();
             }
             password = sc.nextInt();
-            sc.nextLine(); // limpar buffer
+            sc.nextLine();
 
             System.out.print("\nConfirme a senha numérica: ");
-            while (!sc.hasNextInt()) { 
+            while (!sc.hasNextInt()) {
                 System.out.println("Digite apenas números!");
                 sc.next();
             }
             validate = sc.nextInt();
-            sc.nextLine(); // limpar buffer
+            sc.nextLine();
 
             if (password != validate) {
                 System.out.println("A senha numérica precisa ser igual ao confirmar! Digite novamente.");
             }
         } while (password != validate);
+
         return password;
     }
 
     public PersonDTO doRegister() {
         clearScreen();
         System.out.println("====== REGISTRAR PESSOA ======");
-        
-        PersonDTO p = new PersonDTO();
 
+        PersonDTO p = new PersonDTO();
         p.setCpf(readCpf());
         p.setName(readName());
         p.setEmail(readEmail());
@@ -151,16 +133,10 @@ public class EmployeeView {
     public boolean confirmEmployee(Person p) {
         clearScreen();
         System.out.println("====== CONFIRMAR FUNCIONÁRIO ======");
-
-        // tabela de 1 único funcionário
         System.out.printf("%-15s %-15s %-25s %-5s %-15s\n", "CPF", "NOME", "EMAIL", "SEXO", "NASCIMENTO");
-
         System.out.printf("%-15s %-15s %-25s %-5c %-15s\n", p.getCpf(), p.getName(), p.getEmail(), p.getGender(), p.getBirthDate());
-
         System.out.print("\nÉ este funcionário? (s/n): ");
-        String op = getSc().nextLine();
-
-        return op.equalsIgnoreCase("s");
+        return getSc().nextLine().equalsIgnoreCase("s");
     }
 
     public PersonDTO doEdit(Person p) {
@@ -168,8 +144,6 @@ public class EmployeeView {
         System.out.println("====== EDITAR PESSOA ======");
 
         PersonDTO dto = new PersonDTO();
-
-        // CPF não muda
         dto.setCpf(p.getCpf());
 
         System.out.println("Deixe vazio para não alterar.");
@@ -188,12 +162,8 @@ public class EmployeeView {
 
         System.out.print("Data atual: " + p.getBirthDate() + " | Nova (dd/mm/aaaa): ");
         String d = sc.nextLine();
+        dto.setBirthDate(d.isEmpty() ? p.getBirthDate() : LocalDate.parse(d, dateFormatter));
 
-        if (d.isEmpty()) {
-            dto.setBirthDate(p.getBirthDate());
-        } else {
-            dto.setBirthDate(LocalDate.parse(d, dateFormatter));
-        }
         return dto;
     }
 }

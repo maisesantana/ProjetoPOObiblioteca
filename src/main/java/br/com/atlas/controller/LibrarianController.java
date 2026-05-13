@@ -160,6 +160,6 @@ public class LibrarianController {
 
     private void pressEnterToContinue() {
         System.out.println("\nPressione Enter para continuar...");
-        new java.util.Scanner(System.in).nextLine();
+        view.getSc().nextLine();
     }
 }

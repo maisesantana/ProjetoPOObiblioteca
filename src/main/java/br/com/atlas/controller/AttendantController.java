@@ -11,7 +11,6 @@ import br.com.atlas.service.BookService;
 import br.com.atlas.view.AttendantView;
 
 import java.util.List;
-import java.util.Scanner;
 
 public class AttendantController {
 
@@ -172,6 +171,6 @@ public class AttendantController {
 
     private void pressEnterToContinue() {
         System.out.println("\nPressione Enter para continuar...");
-        new Scanner(System.in).nextLine();
+        view.getSc().nextLine();
     }
 }
