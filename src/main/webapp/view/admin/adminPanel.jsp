@@ -1,3 +1,14 @@
+<%@ page import="br.com.atlas.model.Administrator" %>
+
+<%
+    Object user = session.getAttribute("userLogged");
+
+    if(user == null || !(user instanceof Administrator)){
+        response.sendRedirect(request.getContextPath() + "/view/login.jsp");
+        return;
+    }
+%>
+
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" isELIgnored="false" %>
 <!DOCTYPE html>
 <html lang="pt-BR">
@@ -27,7 +38,7 @@
   <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/navbarAdm.css"/>
 
   <!-- Ferramentas -->
-  <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/ferramentasAdmin.css"/>
+  <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/admin/admTools.css"/>
 </head>
 
 <body>
