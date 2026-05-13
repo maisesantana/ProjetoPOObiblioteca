@@ -29,82 +29,19 @@
   <!-- Bootstrap Icons -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet"/>
 
-  <!-- Navbar -->
-  <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/navbarAdm.css"/>
-
   <!-- CSS -->
-  <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/registerEmployee.css"/>
+  <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/admin/registerEmployee.css"/>
 </head>
 
 <body>
 
   <!-- NAVBAR -->
-  <header>
-    <nav class="navbar navbar-expand-lg atlas-navbar">
-      <div class="container-fluid">
-
-        <!-- Logo -->
-        <a class="navbar-brand" href="#">
-          <img src="${pageContext.request.contextPath}/assets/images/logo.png"
-               alt="Atlas — Gestão de Biblioteca"/>
-        </a>
-
-        <!-- Toggler mobile -->
-        <button class="navbar-toggler"
-                type="button"
-                data-bs-toggle="collapse"
-                data-bs-target="#navbarAtlas"
-                aria-controls="navbarAtlas"
-                aria-expanded="false"
-                aria-label="Alternar navegação">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-
-        <!-- Menu -->
-        <div class="collapse navbar-collapse" id="navbarAtlas">
-          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-
-            <li class="nav-item">
-              <a class="nav-link"
-                 href="${pageContext.request.contextPath}/view/admin/adminPanel.jsp">
-                Início
-              </a>
-            </li>
-
-            <li class="nav-item">
-              <a class="nav-link active"
-                 aria-current="page"
-                 href="${pageContext.request.contextPath}/view/admin/registerEmployee.jsp">
-                Cadastrar
-              </a>
-            </li>
-
-            <li class="nav-item">
-              <a class="nav-link"
-                 href="${pageContext.request.contextPath}/view/admin/editEmployee.jsp">
-                Gerenciar
-              </a>
-            </li>
-
-            <li class="nav-item">
-              <a class="nav-link"
-                 href="${pageContext.request.contextPath}/view/admin/listEmployees.jsp">
-                Listar
-              </a>
-            </li>
-
-          </ul>
-
-          <!-- Botão sair -->
-          <a href="${pageContext.request.contextPath}/logout"
-             class="btn-sair">
-            <i class="bi bi-box-arrow-right"></i>
-            Sair
-          </a>
-
-        </div>
-      </div>
-    </nav>
+  <header class="logo-header">
+    <a href="${pageContext.request.contextPath}/view/admin/adminPanel.jsp">
+      <img src="${pageContext.request.contextPath}/assets/images/logo.png"
+         alt="Atlas - Gestão de Biblioteca"
+         class="logo-atlas"/>
+    </a>  
   </header>
 
   <!-- CONTEÚDO -->
@@ -241,45 +178,31 @@
                required/>
       </div>
 
-      <div class="col-12">
-        <label class="form-label d-block">
-          Sexo
+    <div class="col-12">
+      <label class="form-label d-block">
+        Sexo
+      </label>
+
+      <div class="form-check form-check-inline">
+        <input class="form-check-input"
+           type="radio"
+           name="gender"
+           value="masculino"
+           checked>
+        <label class="form-check-label">
+          Masculino
         </label>
-
-        <div class="form-check form-check-inline">
-          <input class="form-check-input"
-                 type="radio"
-                 name="gender"
-                 value="masculino"
-                 checked>
-
-          <label class="form-check-label">
-            Masculino
-          </label>
-        </div>
-
-        <div class="form-check form-check-inline">
-          <input class="form-check-input"
-                 type="radio"
-                 name="gender"
-                 value="feminino">
-
-          <label class="form-check-label">
-            Feminino
-          </label>
-        </div>
-
-        <div class="form-check form-check-inline">
-          <input class="form-check-input"
-                 type="radio"
-                 name="gender"
-                 value="outro">
-
-          <label class="form-check-label">
-            Outro
-          </label>
-        </div>
       </div>
+      <div class="form-check form-check-inline">
+        <input class="form-check-input"
+           type="radio"
+           name="gender"
+           value="feminino">
+        <label class="form-check-label">
+          Feminino
+        </label>
+      </div>
+    </div>
 
       <div class="col-md-6">
         <label for="senha"
