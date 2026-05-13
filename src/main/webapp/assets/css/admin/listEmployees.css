@@ -1,0 +1,175 @@
+/* listEmployees.css */
+
+:root {
+  --atlas-primary: #6B1A2B;
+  --atlas-secondary: #D3C4AE;
+  --atlas-gray: #F3F3F3;
+  --atlas-text: #1B1B1B;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background: #FAFAFA;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  color: var(--atlas-text);
+}
+
+.header-logo {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  padding-top: 2.5rem;
+}
+
+.header-logo img {
+  width: 210px;
+}
+
+.employees-container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding-top: 2rem;
+  padding-bottom: 4rem;
+}
+
+.breadcrumb-custom {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1.4rem;
+  font-size: 0.92rem;
+}
+
+.breadcrumb-custom a {
+  text-decoration: none;
+  color: #6E7BF2;
+}
+
+.breadcrumb-custom span {
+  color: #7C7C7C;
+}
+
+.titulo-section {
+  margin-bottom: 3rem;
+}
+
+.titulo-section h1 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #222;
+  margin-bottom: 0.4rem;
+}
+
+.titulo-section p {
+  color: #8C8C8C;
+  font-size: 0.96rem;
+}
+
+.employees-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.8rem;
+}
+
+.employee-card {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.employee-photo {
+  width: 88px;
+  height: 88px;
+  border-radius: 22px;
+  background: #ECECEC;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.employee-photo i {
+  font-size: 3.5rem;
+  color: #111;
+}
+
+.employee-info {
+  width: 100%;
+  background: #F1F1F1;
+  border-radius: 18px;
+  padding: 1.4rem 1.8rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.employee-name {
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.employee-role {
+  font-size: 1.02rem;
+  color: #444;
+}
+
+.employee-view {
+  text-decoration: none;
+  color: var(--atlas-primary);
+  font-weight: 700;
+  transition: 0.2s;
+}
+
+.employee-view:hover {
+  opacity: 0.7;
+}
+
+.pagination-custom {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1.2rem;
+  margin-top: 3rem;
+}
+
+.pagination-custom button {
+  border: none;
+  background: transparent;
+  font-size: 1.2rem;
+  cursor: pointer;
+}
+
+.pagination-custom span {
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.footer-custom {
+  width: 100%;
+  text-align: center;
+  padding-bottom: 2rem;
+}
+
+.footer-custom p {
+  color: #8B8B8B;
+  font-size: 0.82rem;
+}
+
+@media (max-width: 768px) {
+
+  .employee-info {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.7rem;
+  }
+
+  .employee-card {
+    align-items: flex-start;
+  }
+
+}
