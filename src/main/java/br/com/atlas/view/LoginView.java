@@ -14,7 +14,6 @@ public class LoginView {
         return sc;
     }
 
-
     // Exibe a tela de login e retorna o CPF digitado
     public String askCpf() {
         System.out.println("========================================");
@@ -31,7 +30,7 @@ public class LoginView {
         try {
             return Integer.parseInt(sc.nextLine().trim());
         } catch (NumberFormatException e) {
-            return -1; // sinaliza senha inválida para o controller tratar
+            return -1;
         }
     }
 
@@ -44,22 +43,26 @@ public class LoginView {
         System.out.println("========================================");
     }
 
-    //Exibe mensagem de erro de login
+    // Exibe mensagem de logout
+    public void showLogout(String name) {
+        EmployeeView.clearScreen();
+        System.out.println("========================================");
+        System.out.println("  Até logo, " + name + "! Sessão encerrada.");
+        System.out.println("========================================");
+    }
+
     public void showLoginError() {
         System.out.println("\n CPF ou senha inválidos. Tente novamente.\n");
     }
 
-    // Exibe mensagem de senha inválida (não numérica)
     public void showInvalidPassword() {
         System.out.println("\n A senha deve conter apenas números. Tente novamente.\n");
     }
 
-    // Exibe mensagem de campos vazios
     public void showEmptyFields() {
         System.out.println("\n CPF e senha não podem estar vazios. Tente novamente.\n");
     }
 
-    // Exibe mensagem de erro de conexão com o banco
     public void showConnectionError() {
         System.out.println("\n Erro ao conectar com o banco de dados. Contate o administrador.\n");
     }

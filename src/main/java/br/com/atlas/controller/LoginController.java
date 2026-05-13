@@ -19,6 +19,7 @@ public class LoginController {
         this.view = new LoginView();
     }
 
+    // Tenta autenticar — retorna o Employee logado ou null se o usuário cancelar
     public Employee login() {
         while (true) {
             String cpf = view.askCpf();
@@ -41,11 +42,16 @@ public class LoginController {
         }
     }
 
+    // Encerra a sessão do funcionário — retorna true para indicar logout efetuado
+    public boolean logout(Employee funcionario) {
+        view.showLogout(funcionario.getName());
+        return true;
+    }
+
     private String resolveRole(Employee emp) {
         if (emp instanceof Administrator) return "Administrador";
         if (emp instanceof Librarian)     return "Bibliotecário";
         if (emp instanceof Attendant)     return "Atendente";
         return "Funcionário";
     }
-
 }

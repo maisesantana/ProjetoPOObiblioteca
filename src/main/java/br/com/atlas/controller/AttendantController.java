@@ -1,19 +1,35 @@
 package br.com.atlas.controller;
 
 import br.com.atlas.dto.ClientDTO;
-import br.com.atlas.model.Attendant;
 import br.com.atlas.model.Client;
 import br.com.atlas.model.Book;
+import br.com.atlas.service.ClientService;
+import br.com.atlas.service.LoanService;
+import br.com.atlas.service.RenewalService;
+import br.com.atlas.service.ReturnBookService;
+import br.com.atlas.service.BookService;
 import br.com.atlas.view.AttendantView;
+
 import java.util.List;
 import java.util.Scanner;
 
 public class AttendantController {
-    private Attendant attendant;
-    private AttendantView view;
 
-    public AttendantController(Attendant attendant, AttendantView view) {
-        this.attendant = attendant;
+    private final ClientService clientService;
+    private final LoanService loanService;
+    private final RenewalService renewalService;
+    private final ReturnBookService returnBookService;
+    private final BookService bookService;
+    private final AttendantView view;
+
+    public AttendantController(ClientService clientService, LoanService loanService,
+                               RenewalService renewalService, ReturnBookService returnBookService,
+                               BookService bookService, AttendantView view) {
+        this.clientService = clientService;
+        this.loanService = loanService;
+        this.renewalService = renewalService;
+        this.returnBookService = returnBookService;
+        this.bookService = bookService;
         this.view = view;
     }
 
@@ -30,10 +46,7 @@ public class AttendantController {
                 case 5 -> searchBooks();
                 case 6 -> listActiveLoans();
                 case 0 -> System.out.println("Deslogando Atendente...");
-                default -> 
-                    {System.out.println("Opção inválida!");
-                    pressEnterToContinue();
-                }
+                default -> { System.out.println("Opção inválida!"); pressEnterToContinue(); }
             }
         } while (op != 0);
     }
@@ -54,8 +67,7 @@ public class AttendantController {
 
     private void listClients() {
         try {
-            // O Controller pede a lista para o Model
-            view.showClients(attendant.listAllClients());
+            view.showClients(clientService.findAll());
         } catch (Exception e) {
             System.out.println("❌ " + e.getMessage());
         }
@@ -65,9 +77,9 @@ public class AttendantController {
     private void registerNewClient() {
         try {
             ClientDTO dto = view.readClientData();
-            Client c = new Client(dto.getCpf(), dto.getName(), dto.getEmail(), 
-                                 dto.getGender(), dto.getBirthDate(), dto.getAddress());
-            attendant.register(c);
+            Client c = new Client(dto.getCpf(), dto.getName(), dto.getEmail(),
+                                  dto.getGender(), dto.getBirthDate(), dto.getAddress());
+            clientService.insert(c);
             System.out.println("✅ Cliente cadastrado!");
         } catch (Exception e) {
             System.out.println("❌ " + e.getMessage());
@@ -78,20 +90,19 @@ public class AttendantController {
     private void editClient() {
         try {
             String cpf = view.askCpf();
-            // findPersonByCpf já existe no seu Model Attendant
-            Client c = (Client) attendant.findPersonByCpf(cpf);
-            if (c == null) throw new RuntimeException("Cliente não encontrado.");
+            Client c = clientService.findByCpf(cpf)
+                .orElseThrow(() -> new RuntimeException("Cliente não encontrado."));
 
             System.out.println("Editando: " + c.getName());
             ClientDTO dto = view.readClientData();
-            
+
             c.setName(dto.getName());
             c.setEmail(dto.getEmail());
             c.setGender(dto.getGender());
             c.setBirthDate(dto.getBirthDate());
             c.setAddress(dto.getAddress());
-            
-            attendant.update(c);
+
+            clientService.update(c);
             System.out.println("✅ Cliente atualizado!");
         } catch (Exception e) {
             System.out.println("⚠️ " + e.getMessage());
@@ -101,7 +112,7 @@ public class AttendantController {
 
     private void registerLoan() {
         try {
-            attendant.registerLoan(view.askCpf(), view.askCopyId());
+            loanService.registerLoan(view.askCpf(), view.askCopyId());
             System.out.println("✅ Empréstimo realizado!");
         } catch (Exception e) {
             System.out.println("❌ " + e.getMessage());
@@ -109,56 +120,48 @@ public class AttendantController {
         pressEnterToContinue();
     }
 
-    // Localize o método registerRenewal no seu AttendantController.java
     private void registerRenewal() {
-        // BLINDAGEM: Só pede o ID se houver algum empréstimo ativo no banco
-        if (!new br.com.atlas.dao.LoanDAO().hasActiveLoans()) {
-            System.out.println("\n⚠️ [AVISO] Não existem empréstimos ativos no sistema para renovação.");
+        if (!loanService.hasActiveLoans()) {
+            System.out.println("\n⚠️ Não existem empréstimos ativos no sistema para renovação.");
             pressEnterToContinue();
-            return; 
+            return;
         }
-
         try {
-            int loanId = view.askLoanId();
-            attendant.registerRenewal(loanId);
+            renewalService.registerRenewal(view.askLoanId());
             System.out.println("✅ Renovação concluída!");
         } catch (Exception e) {
-            System.out.println("❌ Erro: " + e.getMessage());
+            System.out.println("❌ " + e.getMessage());
         }
         pressEnterToContinue();
     }
 
-    // Aproveite e faça o mesmo para o registerReturn!
     private void registerReturn() {
-        if (!new br.com.atlas.dao.LoanDAO().hasActiveLoans()) {
-            System.out.println("\n⚠️ [AVISO] Não existem empréstimos ativos para devolução.");
+        if (!loanService.hasActiveLoans()) {
+            System.out.println("\n⚠️ Não existem empréstimos ativos para devolução.");
             pressEnterToContinue();
             return;
         }
-
         try {
-            attendant.registerReturn(view.askLoanId());
+            returnBookService.registerReturn(view.askLoanId());
             System.out.println("✅ Devolução concluída!");
         } catch (Exception e) {
-            System.out.println("❌ Erro: " + e.getMessage());
+            System.out.println("❌ " + e.getMessage());
         }
         pressEnterToContinue();
     }
 
     private void searchBooks() {
-        List<Book> books = attendant.searchBooks(view.askBookName());
+        List<Book> books = bookService.findByName(view.askBookName());
         view.showBooks(books);
         pressEnterToContinue();
     }
-    
-    // O método que executa a listagem
+
     private void listActiveLoans() {
         br.com.atlas.view.EmployeeView.clearScreen();
         System.out.println("=== LISTAGEM DE EMPRÉSTIMOS ATIVOS ===");
-        
-        // O Controller pede os dados para o DAO/Model
-        List<String> loans = new br.com.atlas.dao.LoanDAO().listActiveLoansInfo();
-        
+
+        List<String> loans = loanService.listActiveLoansInfo();
+
         if (loans.isEmpty()) {
             System.out.println("Nenhum empréstimo ativo no momento.");
         } else {
@@ -167,7 +170,6 @@ public class AttendantController {
         pressEnterToContinue();
     }
 
-    // MÉTODO AUXILIAR PARA PAUSA
     private void pressEnterToContinue() {
         System.out.println("\nPressione Enter para continuar...");
         new Scanner(System.in).nextLine();

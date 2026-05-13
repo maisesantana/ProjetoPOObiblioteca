@@ -4,34 +4,34 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-
 public class Client extends Person {
 
     private String address;
     private LocalDate startSuspensionDate;
     private LocalDate endSuspensionDate;
-    private List<Loan> loans; 
+    private List<Loan> loans;
 
     public Client() {}
 
-    public Client(String cpf, String name, String email, char gender, 
+    public Client(String cpf, String name, String email, char gender,
         LocalDate birthDate, String address) {
-        
+
         super(cpf, name, email, gender, birthDate);
         this.address = address;
-        startSuspensionDate = null;
-        endSuspensionDate = null;
-        loans = new ArrayList<>();
+        this.startSuspensionDate = null;
+        this.endSuspensionDate = null;
+        this.loans = new ArrayList<>();
     }
 
-    public Client(String cpf, String name, String email, char gender, 
-        LocalDate birthDate, String address, LocalDate startSuspensionDate, LocalDate endSuspensionDate) {
-        
+    public Client(String cpf, String name, String email, char gender,
+        LocalDate birthDate, String address,
+        LocalDate startSuspensionDate, LocalDate endSuspensionDate) {
+
         super(cpf, name, email, gender, birthDate);
         this.address = address;
         this.startSuspensionDate = startSuspensionDate;
         this.endSuspensionDate = endSuspensionDate;
-        loans = new ArrayList<>();
+        this.loans = new ArrayList<>();
     }
 
     public String getAddress() {
@@ -61,37 +61,29 @@ public class Client extends Person {
     public List<Loan> getLoans() {
         return loans;
     }
+
     public void setLoans(List<Loan> loans) {
         this.loans = loans;
     }
 
-    public boolean isSuspended() { //metodo OK
+    // Verifica se o cliente está suspenso com base na data atual
+    public boolean isSuspended() {
         if (endSuspensionDate == null) return false;
         return LocalDate.now().isBefore(endSuspensionDate);
     }
 
-    public void applySuspension(int days) { // OK
+    // Aplica suspensão a partir de hoje por X dias
+    public void applySuspension(int days) {
         this.startSuspensionDate = LocalDate.now();
         this.endSuspensionDate = LocalDate.now().plusDays(days);
     }
 
-    public boolean canBorrow() { //OK
+    // Cliente pode pegar emprestado se não estiver suspenso
+    public boolean canBorrow() {
         return !isSuspended();
     }
 
     public void addLoan(Loan loan) {
         this.loans.add(loan);
     }
-
-    public boolean checkClientStatus() {
-        if (isSuspended()) return false;
-
-        for (Loan loan : loans) {
-            if (loan.getReturnBook().isLate()) {
-                return false;
-            }
-        }
-        return true;
-    }
-
 }

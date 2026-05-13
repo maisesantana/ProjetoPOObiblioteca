@@ -3,125 +3,94 @@ package br.com.atlas.controller;
 import br.com.atlas.dto.EmployeeDTO;
 import br.com.atlas.model.Administrator;
 import br.com.atlas.model.Attendant;
+import br.com.atlas.model.Employee;
 import br.com.atlas.model.Librarian;
 import br.com.atlas.model.Person;
+import br.com.atlas.service.EmployeeService;
 import br.com.atlas.view.AdminView;
 
 import java.util.List;
 
 public class AdminController {
 
-    private Administrator adm;
-    private AdminView admv;
+    private final EmployeeService employeeService;
+    private final AdminView admv;
 
-    public AdminController (Administrator adm, AdminView admv) {
-        this.adm = adm;
+    public AdminController(EmployeeService employeeService, AdminView admv) {
+        this.employeeService = employeeService;
         this.admv = admv;
     }
 
     public int menu(int op) {
-
         switch (op) {
-            case 1:
-                viewEmployees();
-                return op;
-
-            case 2:
-                int num = register();
-                if (num == 1) return op = -1;
-                return op;
-
-            case 3:
-                edit();
-                return op;
-
-            case 4:
-                remove();
-                return op;
-
-            case 5:
-                search();
-                return op;
-
-            case 0:
-                return op;
-
-            default:
-                System.out.println("Digite uma opção válida!");
-                return op;
+            case 1 -> viewEmployees();
+            case 2 -> { int num = register(); if (num == 1) return -1; }
+            case 3 -> edit();
+            case 4 -> remove();
+            case 5 -> search();
+            case 0 -> { return op; }
+            default -> System.out.println("Digite uma opção válida!");
         }
+        return op;
     }
 
     private void viewEmployees() {
-        List<Attendant> atts = adm.getAllAttendants();
-        List<Librarian> libs = adm.getAllLibrarians();
-        List<Administrator> ads = adm.getAllAdmins();
-
+        List<Attendant> atts = employeeService.getAllAttendants();
+        List<Librarian> libs = employeeService.getAllLibrarians();
+        List<Administrator> ads = employeeService.getAllAdmins();
         admv.showAllEmployees(atts, libs, ads);
     }
 
     private int register() {
-        
         int kind = admv.selectKindOfEmployee();
-        
-        if (kind == 0) {
-            return 1;
-        }
+        if (kind == 0) return 1;
 
         EmployeeDTO emp = (EmployeeDTO) admv.doRegister();
 
-        Person p;
-
+        Employee e;
         if (kind == 1) {
-            p = new Attendant(emp.getCpf(), emp.getName(), emp.getEmail(), emp.getGender(), emp.getBirthDate(), emp.getPassword());
+            e = new Attendant(emp.getCpf(), emp.getName(), emp.getEmail(), emp.getGender(), emp.getBirthDate(), emp.getPassword());
         } else if (kind == 2) {
-            p = new Librarian(emp.getCpf(), emp.getName(), emp.getEmail(), emp.getGender(), emp.getBirthDate(), emp.getPassword());
+            e = new Librarian(emp.getCpf(), emp.getName(), emp.getEmail(), emp.getGender(), emp.getBirthDate(), emp.getPassword());
         } else {
-            p = new Administrator(emp.getCpf(), emp.getName(), emp.getEmail(), emp.getGender(), emp.getBirthDate(), emp.getPassword());
+            e = new Administrator(emp.getCpf(), emp.getName(), emp.getEmail(), emp.getGender(), emp.getBirthDate(), emp.getPassword());
         }
 
         try {
-            adm.register(p);
+            employeeService.insert(e);
             System.out.println("Funcionário cadastrado com sucesso.");
             return 0;
-
-        } catch (IllegalArgumentException e) {
-            System.out.println(e.getMessage()); // regra de negócio
+        } catch (IllegalArgumentException ex) {
+            System.out.println(ex.getMessage());
             return 2;
-
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
+        } catch (Exception ex) {
+            System.out.println(ex.getMessage());
             return 2;
         }
     }
 
     private void edit() {
         String cpf = admv.passCpf();
+
         try {
-            Person p = adm.findPersonByCpf(cpf); //tenta achar por cpf e imprime o nome do funcionario encontrado
+            Employee found = employeeService.findByCpf(cpf)
+                .orElseThrow(() -> new IllegalArgumentException("Funcionário não encontrado."));
 
-            // confirmar antes de editar
-            boolean confirm = admv.confirmEmployee(p);
-            if (!confirm) {
-                System.out.println("Operação cancelada.");
-            return;
-            }
+            boolean confirm = admv.confirmEmployee(found);
+            if (!confirm) { System.out.println("Operação cancelada."); return; }
 
-            EmployeeDTO dto = (EmployeeDTO) admv.doEdit(p);
+            EmployeeDTO dto = (EmployeeDTO) admv.doEdit(found);
 
-            Person atualizado;
-
-            // reconstrói o objeto com os novos dados
-            if (p instanceof Attendant) {
+            Employee atualizado;
+            if (found instanceof Attendant) {
                 atualizado = new Attendant(dto.getCpf(), dto.getName(), dto.getEmail(), dto.getGender(), dto.getBirthDate(), dto.getPassword());
-            } else if (p instanceof Librarian) {
+            } else if (found instanceof Librarian) {
                 atualizado = new Librarian(dto.getCpf(), dto.getName(), dto.getEmail(), dto.getGender(), dto.getBirthDate(), dto.getPassword());
             } else {
                 atualizado = new Administrator(dto.getCpf(), dto.getName(), dto.getEmail(), dto.getGender(), dto.getBirthDate(), dto.getPassword());
             }
 
-            adm.update(atualizado);
-
+            employeeService.update(atualizado);
             System.out.println("Funcionário atualizado com sucesso.");
 
         } catch (IllegalArgumentException e) {
@@ -129,21 +98,19 @@ public class AdminController {
         } catch (Exception e) {
             System.out.println("Erro ao atualizar funcionário.");
         }
-    } //
+    }
 
     private void remove() {
-    String cpf = admv.passCpf();
+        String cpf = admv.passCpf();
 
         try {
-            Person p = adm.findPersonByCpf(cpf);
+            Employee found = employeeService.findByCpf(cpf)
+                .orElseThrow(() -> new IllegalArgumentException("Funcionário não encontrado."));
 
-            boolean confirm = admv.confirmRemove(p);
-            if (!confirm) {
-                System.out.println("Operação cancelada.");
-                return;
-            }
+            boolean confirm = admv.confirmRemove(found);
+            if (!confirm) { System.out.println("Operação cancelada."); return; }
 
-            adm.remove(cpf);
+            employeeService.delete(cpf);
             System.out.println("Funcionário removido com sucesso.");
 
         } catch (IllegalArgumentException e) {
@@ -157,8 +124,10 @@ public class AdminController {
         String cpf = admv.passCpf();
 
         try {
-            Person p = adm.findPersonByCpf(cpf);
-            admv.showSearchResult(p);
+            Person found = employeeService.findByCpf(cpf)
+                .orElseThrow(() -> new IllegalArgumentException("Funcionário não encontrado."));
+
+            admv.showSearchResult(found);
 
         } catch (IllegalArgumentException e) {
             System.out.println(e.getMessage());

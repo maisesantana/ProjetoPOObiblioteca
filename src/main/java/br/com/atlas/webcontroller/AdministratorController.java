@@ -1,52 +1,46 @@
 package br.com.atlas.webcontroller;
+
 import br.com.atlas.model.Administrator;
 import br.com.atlas.model.Attendant;
 import br.com.atlas.model.Employee;
 import br.com.atlas.model.Librarian;
+import br.com.atlas.service.EmployeeService;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession; // Para gerenciar a sessão
+import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
 import java.time.LocalDate;
-
 
 @WebServlet("/manageEmployee")
 public class AdministratorController extends HttpServlet {
 
+    private final EmployeeService employeeService = new EmployeeService();
+
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) 
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        // 1. VERIFICAÇÃO DE SEGURANÇA: O cara está logado como Admin?
         HttpSession session = request.getSession();
-        // Supondo que no seu LoginController você guardou o objeto admin na sessão
-        
         Object user = session.getAttribute("userLogged");
 
-            if(user == null || !(user instanceof Administrator)){
-
-                response.sendRedirect(request.getContextPath() + "/view/login.jsp?msg=unauthorized");
-
-                return;
-            }
-
-            Administrator adminLogado = (Administrator) user;
+        if (user == null || !(user instanceof Administrator)) {
+            response.sendRedirect(request.getContextPath() + "/view/login.jsp?msg=unauthorized");
+            return;
+        }
 
         try {
-            // 2. Captura os dados do NOVO FUNCIONÁRIO que o Admin quer cadastrar
-            String cpf = request.getParameter("cpf");
-            String name = request.getParameter("name");
-            String email = request.getParameter("email");
-            String gender = request.getParameter("gender");
+            String cpf           = request.getParameter("cpf");
+            String name          = request.getParameter("name");
+            String email         = request.getParameter("email");
+            String gender        = request.getParameter("gender");
             String birthDateText = request.getParameter("birthDate");
-            String passwordText = request.getParameter("password");
+            String passwordText  = request.getParameter("password");
             String confirmPassword = request.getParameter("confirmPassword");
-            String role = request.getParameter("role");
+            String role          = request.getParameter("role");
 
-            // Validação básica de presença de dados
             if (cpf == null || cpf.isBlank()
                     || name == null || name.isBlank()
                     || email == null || email.isBlank()
@@ -90,7 +84,8 @@ public class AdministratorController extends HttpServlet {
                 return;
             }
 
-            char genderChar = gender.charAt(0); // pega o primeiro char de gender
+            char genderChar = gender.charAt(0);
+
             Employee newEmployee;
             if ("bibliotecario".equals(role)) {
                 newEmployee = new Librarian(cpf, name, email, genderChar, birthDate, password);
@@ -100,12 +95,12 @@ public class AdministratorController extends HttpServlet {
                 newEmployee = new Administrator(cpf, name, email, genderChar, birthDate, password);
             }
 
-            // 4. O Administrador (Service) executa a ação de registro
-            // Usamos o objeto que já está na sessão, pois ele é o "executor" real
-            adminLogado.register(newEmployee);
+            employeeService.insert(newEmployee);
 
             response.sendRedirect(request.getContextPath() + "/view/admin/registerEmployee.jsp?status=success");
 
+        } catch (IllegalArgumentException e) {
+            response.sendRedirect(request.getContextPath() + "/view/admin/registerEmployee.jsp?msg=" + e.getMessage());
         } catch (Exception e) {
             e.printStackTrace();
             response.sendRedirect(request.getContextPath() + "/view/admin/registerEmployee.jsp?msg=erro_ao_cadastrar_funcionario");
