@@ -29,13 +29,9 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet"/>
 
   <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/navbarAdm.css"/>
-<<<<<<< HEAD
-  <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/ferramentasAdmin.css"/>
-=======
 
   <!-- Ferramentas -->
   <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/admin/admTools.css"/>
->>>>>>> 19d65581d585d68de104e6cecfc51a22aef97184
 </head>
 
 <body>
