@@ -3,23 +3,18 @@ package br.com.atlas.model;
 import java.sql.Connection;
 import java.time.LocalDate;
 
-<<<<<<< Updated upstream
-=======
 import br.com.atlas.dao.BookCopyDAO;
 import br.com.atlas.dao.BookDAO;
 import br.com.atlas.dao.CategoryDAO;
 import br.com.atlas.dao.AuthorDAO;
 import br.com.atlas.util.ConnectionDb;
 
->>>>>>> Stashed changes
 public class Librarian extends Employee {
 
     public Librarian(String cpf, String name, String email, char gender,
                     LocalDate birthDate, int password) {
         super(cpf, name, email, gender, birthDate, password);
     }
-<<<<<<< Updated upstream
-=======
 
     public void registerBook(Book b) {
         try {
@@ -153,5 +148,4 @@ public class Librarian extends Employee {
     public void remove(String cpf) {}
     @Override
     public void update(Person p) {}
->>>>>>> Stashed changes
 }
