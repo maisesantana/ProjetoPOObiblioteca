@@ -1,0 +1,106 @@
+/* ferramentasLibrarian.css */
+
+:root {
+  --atlas-primary: #6B1A2B;        /* Vinho/Marrom padrão */
+  --atlas-secondary: #D3C4AE;      /* Bege dos ícones */
+  --atlas-tertiary: #80A4ED;
+  --atlas-tertiary-hover: #6690d8;
+  --text-dark: #1d1d1d;
+}
+
+.ferramentas-admin {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  padding-top: 0.5rem;
+}
+
+/* Título da Seção */
+.ferramentas-titulo {
+  margin-bottom: 2.3rem;
+}
+
+.ferramentas-titulo span {
+  display: block;
+  font-size: 1.9rem;
+  font-weight: 800;
+  letter-spacing: 2px;
+  color: var(--atlas-secondary);
+  text-transform: uppercase;
+  line-height: 1;
+  margin-bottom: 0.3rem;
+}
+
+.ferramentas-titulo h2 {
+  font-size: 1.55rem;
+  font-weight: 700;
+  color: #000;
+  margin: 0;
+}
+
+/* Estilização dos Cards */
+.tool-card {
+  text-decoration: none;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  padding: 1rem;
+  border-radius: 15px;
+}
+
+.tool-card:hover {
+  transform: translateY(-5px);
+}
+
+/* Ícone Redondo/Quadrado */
+.tool-icon {
+  width: 74px;
+  height: 74px;
+  background: var(--atlas-secondary);
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 0.9rem;
+  transition: background 0.3s ease;
+}
+
+.tool-card:hover .tool-icon {
+  background: #c5b49a; /* Um tom levemente mais escuro no hover */
+}
+
+.tool-icon .material-symbols-rounded {
+  font-size: 34px;
+  color: #000;
+}
+
+/* Textos dos Cards */
+.tool-card h5 {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #000;
+  margin-bottom: 0.45rem;
+}
+
+.tool-card p {
+  max-width: 220px;
+  font-size: 0.92rem;
+  line-height: 1.45;
+  color: var(--text-dark);
+  margin: 0 auto;
+}
+
+/* Responsividade */
+@media (max-width: 991px) {
+  .ferramentas-titulo {
+    text-align: center;
+  }
+
+  .tool-card {
+    margin-bottom: 1.5rem;
+  }
+
+  .tool-card p {
+    max-width: 100%;
+  }
+}

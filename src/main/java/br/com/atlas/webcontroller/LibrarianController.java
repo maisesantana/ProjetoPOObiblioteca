@@ -43,7 +43,7 @@ public class LibrarianController extends HttpServlet {
                 book.setAuthors(Arrays.asList(authorsRaw.split(",")));
 
                 bookService.insert(book);
-                response.sendRedirect("inventory.jsp?msg=book_added");
+                response.sendRedirect("registerBook.jsp?msg=book_added");
 
             } else if ("registerCopy".equals(action)) {
 
@@ -60,24 +60,6 @@ public class LibrarianController extends HttpServlet {
         } catch (Exception e) {
             e.printStackTrace();
             response.sendRedirect("inventory.jsp?msg=error");
-        }
-    }
-
-    @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-
-        String action = request.getParameter("action");
-
-        if ("report".equals(action)) {
-            response.setContentType("application/pdf");
-            response.setHeader("Content-Disposition", "attachment; filename=relatorio_atlas.pdf");
-
-            try {
-                response.getOutputStream().write("Conteúdo do PDF viria aqui".getBytes());
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
         }
     }
 }

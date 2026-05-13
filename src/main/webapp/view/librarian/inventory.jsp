@@ -1,84 +1,147 @@
-<%@ page contentType="text/html; charset=UTF-8" %>
-<%@ page import="br.com.atlas.model.Librarian" %>
-
-<%
-    Object user = session.getAttribute("userLogged");
-    
-    if(user == null || !(user instanceof Librarian)){
-        response.sendRedirect(request.getContextPath() + "/view/login.jsp");
-        return;
-    }
-    
-    Librarian librarian = (Librarian) user;
-%>
-
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" isELIgnored="false" %>
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Inventário - Atlas</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-            background-color: #f5f5f5;
-        }
-        .container {
-            background-color: white;
-            padding: 20px;
-            border-radius: 8px;
-            max-width: 800px;
-            margin: 0 auto;
-        }
-        h1 {
-            color: #333;
-        }
-        .success-message {
-            background-color: #d4edda;
-            border: 1px solid #c3e6cb;
-            color: #155724;
-            padding: 12px;
-            border-radius: 4px;
-            margin-bottom: 20px;
-        }
-        .user-info {
-            background-color: #e7f3ff;
-            border-left: 4px solid #2196F3;
-            padding: 10px;
-            margin-bottom: 20px;
-        }
-        a {
-            color: #2196F3;
-            text-decoration: none;
-        }
-        a:hover {
-            text-decoration: underline;
-        }
-    </style>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Atlas — Painel do Bibliotecário</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@400;500;600&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,0,0"/>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"/>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet"/>
+
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/navbarAdm.css"/>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/ferramentasAdmin.css"/>
 </head>
+
 <body>
-    <div class="container">
-        <h1>📚 Painel de Inventário - Bibliotecário</h1>
-        
-        <div class="success-message">
-            ✅ Login bem-sucedido para Bibliotecário!
+
+ <header>
+        <nav class="navbar navbar-expand-lg atlas-navbar">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="#">
+                    <img src="${pageContext.request.contextPath}/assets/images/logo.png" alt="Atlas — Gestão de Biblioteca"/>
+                </a>
+
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarAtlas">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div class="collapse navbar-collapse" id="navbarAtlas">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                        <li class="nav-item">
+                            <a class="nav-link active" href="${pageContext.request.contextPath}/view/librarian/librarianHome.jsp">Início</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="${pageContext.request.contextPath}/view/librarian/registerBook.jsp">Cadastrar</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="${pageContext.request.contextPath}/view/librarian/removeBook.jsp">Remover</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="${pageContext.request.contextPath}/view/librarian/addCopies.jsp">Exemplares</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="${pageContext.request.contextPath}/view/librarian/searchBooks.jsp">Buscar</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="${pageContext.request.contextPath}/view/librarian/manageAuthors.jsp">Autores</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="${pageContext.request.contextPath}/view/librarian/manageCategories.jsp">Categorias</a>
+                        </li>
+                    </ul>
+
+                    <a href="${pageContext.request.contextPath}/logout" class="btn-sair">
+                        <i class="bi bi-box-arrow-right"></i> Sair
+                    </a>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <div class="container-fluid">
+        <div class="row">
+            <main class="col-12 pt-4 px-5">
+                <section class="ferramentas-admin">
+                    <div class="ferramentas-titulo">
+                        <span>BIBLIOTECÁRIO</span>
+                        <h2>Gestão de Acervo</h2>
+                    </div>
+
+                    <div class="row justify-content-center text-center g-5">
+
+                        <div class="col-lg-4 col-md-6">
+                            <a href="${pageContext.request.contextPath}/view/librarian/registerBook.jsp" class="tool-card">
+                                <div class="tool-icon">
+                                    <span class="material-symbols-rounded">library_add</span>
+                                </div>
+                                <h5>Cadastrar Livro</h5>
+                                <p>Adicione novas obras literárias ao acervo.</p>
+                            </a>
+                        </div>
+
+                        <div class="col-lg-4 col-md-6">
+                            <a href="${pageContext.request.contextPath}/view/librarian/removeBook.jsp" class="tool-card">
+                                <div class="tool-icon">
+                                    <span class="material-symbols-rounded">delete</span>
+                                </div>
+                                <h5>Remover Livro</h5>
+                                <p>Remova livros do acervo.</p>
+                            </a>
+                        </div>
+
+                        <div class="col-lg-4 col-md-6">
+                            <a href="${pageContext.request.contextPath}/view/librarian/addCopies.jsp" class="tool-card">
+                                <div class="tool-icon">
+                                    <span class="material-symbols-rounded">library_books</span>
+                                </div>
+                                <h5>Adicionar Exemplares</h5>
+                                <p>Aumente a quantidade de cópias disponíveis.</p>
+                            </a>
+                        </div>
+
+                        <div class="col-lg-4 col-md-6">
+                            <a href="${pageContext.request.contextPath}/view/librarian/searchBooks.jsp" class="tool-card">
+                                <div class="tool-icon">
+                                    <span class="material-symbols-rounded">search</span>
+                                </div>
+                                <h5>Buscar Livros</h5>
+                                <p>Consulte por títulos ou autores.</p>
+                            </a>
+                        </div>
+
+                        <div class="col-lg-4 col-md-6">
+                            <a href="${pageContext.request.contextPath}/view/librarian/manageAuthors.jsp" class="tool-card">
+                                <div class="tool-icon">
+                                    <span class="material-symbols-rounded">person_edit</span>
+                                </div>
+                                <h5>Gerenciar Autores</h5>
+                                <p>Cadastre e edite informações sobre os autores das obras.</p>
+                            </a>
+                        </div>
+
+                        <div class="col-lg-4 col-md-6">
+                            <a href="${pageContext.request.contextPath}/view/librarian/manageCategories.jsp" class="tool-card">
+                                <div class="tool-icon">
+                                    <span class="material-symbols-rounded">category</span>
+                                </div>
+                                <h5>Gerenciar Categorias</h5>
+                                <p>Organize o acervo por Categorias.</p>
+                            </a>
+                        </div>
+
+                    </div>
+                </section>
+            </main>
         </div>
-        
-        <div class="user-info">
-            <strong>Usuário:</strong> <%= librarian.getName() %><br>
-            <strong>CPF:</strong> <%= librarian.getCpf() %><br>
-            <strong>Email:</strong> <%= librarian.getEmail() %>
-        </div>
-        
-        <h2>Opções do Bibliotecário:</h2>
-        <ul>
-            <li><a href="#">Gerenciar Acervo</a></li>
-            <li><a href="#">Consultar Livros</a></li>
-            <li><a href="#">Relatórios de Empréstimo</a></li>
-        </ul>
-        
-        <p><a href="<%= request.getContextPath() %>/logout">🚪 Sair</a></p>
     </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
