@@ -10,56 +10,36 @@ import java.util.Optional;
 
 public class EmployeeService {
 
-    // BUSCA FUNCIONÁRIO POR CPF (detecta o tipo automaticamente)
-    public Optional<Employee> findByCpf(String cpf) {
-        if (cpf == null || cpf.trim().isEmpty()) {
-            throw new IllegalArgumentException("CPF é obrigatório para busca!");
-        }
-
-        Connection conn = ConnectionDb.getConexao();
-
-        try {
-            EmployeeDAO eDao = new EmployeeDAO(conn);
-
-            if (!eDao.exists(cpf)) {
-                return Optional.empty();
-            }
-
-            LibrarianDAO lDao = new LibrarianDAO(conn);
-            AttendantDAO aDao = new AttendantDAO(conn);
-            AdministratorDAO adDao = new AdministratorDAO(conn);
-
-            if (lDao.exists(cpf)) return Optional.ofNullable(lDao.findByCpf(cpf));
-            if (aDao.exists(cpf)) return Optional.ofNullable(aDao.findByCpf(cpf));
-            return Optional.ofNullable(adDao.findByCpf(cpf));
-
-        } catch (Exception e) {
-            throw new RuntimeException("Erro ao buscar funcionário por CPF.", e);
-        }
+    // Resolve qual DAO específico usar para o tipo do funcionário
+    // POLIMORFISMO: retorna a interface, não o tipo concreto
+    private EmployeeTypeDAO resolveDao(Employee emp, Connection conn) {
+        if (emp instanceof Attendant)     return new AttendantDAO(conn);
+        if (emp instanceof Librarian)     return new LibrarianDAO(conn);
+        if (emp instanceof Administrator) return new AdministratorDAO(conn);
+        throw new IllegalArgumentException("Tipo de funcionário desconhecido: " + emp.getClass().getSimpleName());
     }
 
-    // CREATE (detecta o tipo e insere nas tabelas corretas)
+    // Resolve qual DAO usar apenas pelo CPF (para delete)
+    private EmployeeTypeDAO resolveDaoByCpf(String cpf, Connection conn) throws Exception {
+        if (new AttendantDAO(conn).exists(cpf))     return new AttendantDAO(conn);
+        if (new LibrarianDAO(conn).exists(cpf))     return new LibrarianDAO(conn);
+        if (new AdministratorDAO(conn).exists(cpf)) return new AdministratorDAO(conn);
+        return null;
+    }
+
+    // CREATE
     public void insert(Employee emp) {
         validateEmployee(emp);
 
         Connection conn = ConnectionDb.getConexao();
-
         try {
             conn.setAutoCommit(false);
 
-            PersonDAO personDAO = new PersonDAO(conn);
-            EmployeeDAO employeeDAO = new EmployeeDAO(conn);
+            new PersonDAO(conn).insert(emp);
+            new EmployeeDAO(conn).insert(emp);
 
-            personDAO.insert(emp);
-            employeeDAO.insert(emp);
-
-            if (emp instanceof Attendant) {
-                new AttendantDAO(conn).insert((Attendant) emp);
-            } else if (emp instanceof Librarian) {
-                new LibrarianDAO(conn).insert((Librarian) emp);
-            } else if (emp instanceof Administrator) {
-                new AdministratorDAO(conn).insert((Administrator) emp);
-            }
+            // POLIMORFISMO: sem instanceof encadeado — resolveDao decide qual DAO usar
+            resolveDao(emp, conn).insert(emp);
 
             conn.commit();
 
@@ -74,7 +54,6 @@ public class EmployeeService {
         validateEmployee(emp);
 
         Connection conn = ConnectionDb.getConexao();
-
         try {
             conn.setAutoCommit(false);
 
@@ -89,82 +68,85 @@ public class EmployeeService {
         }
     }
 
-    // DELETE (detecta o tipo e remove nas tabelas corretas)
+    // DELETE
     public void delete(String cpf) {
-        if (cpf == null || cpf.trim().isEmpty()) {
+        if (cpf == null || cpf.trim().isEmpty())
             throw new IllegalArgumentException("CPF é obrigatório para deletar!");
-        }
 
         Connection conn = ConnectionDb.getConexao();
-
         try {
             conn.setAutoCommit(false);
 
-            AttendantDAO attendantDAO = new AttendantDAO(conn);
-            LibrarianDAO librarianDAO = new LibrarianDAO(conn);
-            AdministratorDAO adminDAO = new AdministratorDAO(conn);
-            EmployeeDAO employeeDAO = new EmployeeDAO(conn);
-            PersonDAO personDAO = new PersonDAO(conn);
+            // POLIMORFISMO: resolveDaoByCpf retorna o DAO certo sem instanceof
+            EmployeeTypeDAO typeDao = resolveDaoByCpf(cpf, conn);
+            if (typeDao == null)
+                throw new IllegalArgumentException("Funcionário não encontrado com CPF: " + cpf);
 
-            if (attendantDAO.exists(cpf))       attendantDAO.delete(cpf);
-            else if (librarianDAO.exists(cpf))  librarianDAO.delete(cpf);
-            else if (adminDAO.exists(cpf))      adminDAO.delete(cpf);
-
-            employeeDAO.delete(cpf);
-            personDAO.delete(cpf);
+            typeDao.delete(cpf);
+            new EmployeeDAO(conn).delete(cpf);
+            new PersonDAO(conn).delete(cpf);
 
             conn.commit();
 
+        } catch (IllegalArgumentException e) {
+            throw e;
         } catch (Exception e) {
             try { conn.rollback(); } catch (Exception ex) { ex.printStackTrace(); }
             throw new RuntimeException("Erro ao remover funcionário.", e);
         }
     }
 
+    // BUSCA POR CPF
+    public Optional<Employee> findByCpf(String cpf) {
+        if (cpf == null || cpf.trim().isEmpty())
+            throw new IllegalArgumentException("CPF é obrigatório para busca!");
+
+        Connection conn = ConnectionDb.getConexao();
+        try {
+            AttendantDAO aDao      = new AttendantDAO(conn);
+            LibrarianDAO lDao      = new LibrarianDAO(conn);
+            AdministratorDAO adDao = new AdministratorDAO(conn);
+
+            if (aDao.exists(cpf))  return Optional.ofNullable(aDao.findByCpf(cpf));
+            if (lDao.exists(cpf))  return Optional.ofNullable(lDao.findByCpf(cpf));
+            if (adDao.exists(cpf)) return Optional.ofNullable(adDao.findByCpf(cpf));
+
+            return Optional.empty();
+
+        } catch (Exception e) {
+            throw new RuntimeException("Erro ao buscar funcionário por CPF.", e);
+        }
+    }
+
     // READ ALL por tipo
     public List<Attendant> getAllAttendants() {
-        try {
-            return new AttendantDAO(ConnectionDb.getConexao()).findAll();
-        } catch (Exception e) {
-            throw new RuntimeException("Erro ao buscar atendentes.", e);
-        }
+        try { return new AttendantDAO(ConnectionDb.getConexao()).findAll(); }
+        catch (Exception e) { throw new RuntimeException("Erro ao buscar atendentes.", e); }
     }
 
     public List<Librarian> getAllLibrarians() {
-        try {
-            return new LibrarianDAO(ConnectionDb.getConexao()).findAll();
-        } catch (Exception e) {
-            throw new RuntimeException("Erro ao buscar bibliotecários.", e);
-        }
+        try { return new LibrarianDAO(ConnectionDb.getConexao()).findAll(); }
+        catch (Exception e) { throw new RuntimeException("Erro ao buscar bibliotecários.", e); }
     }
 
     public List<Administrator> getAllAdmins() {
-        try {
-            return new AdministratorDAO(ConnectionDb.getConexao()).findAll();
-        } catch (Exception e) {
-            throw new RuntimeException("Erro ao buscar administradores.", e);
-        }
+        try { return new AdministratorDAO(ConnectionDb.getConexao()).findAll(); }
+        catch (Exception e) { throw new RuntimeException("Erro ao buscar administradores.", e); }
     }
 
     // VALIDAÇÃO CENTRALIZADA
     private void validateEmployee(Employee emp) {
-        if (emp.getCpf() == null || emp.getCpf().trim().isEmpty()) {
+        if (emp.getCpf() == null || emp.getCpf().trim().isEmpty())
             throw new IllegalArgumentException("CPF é obrigatório!");
-        }
-        if (emp.getName() == null || emp.getName().trim().isEmpty()) {
+        if (emp.getName() == null || emp.getName().trim().isEmpty())
             throw new IllegalArgumentException("Nome é obrigatório!");
-        }
-        if (emp.getEmail() == null || emp.getEmail().trim().isEmpty()) {
+        if (emp.getEmail() == null || emp.getEmail().trim().isEmpty())
             throw new IllegalArgumentException("Email é obrigatório!");
-        }
-        if (emp.getGender() == '\0') {
+        if (emp.getGender() == '\0')
             throw new IllegalArgumentException("Gênero é obrigatório!");
-        }
-        if (emp.getBirthDate() == null) {
+        if (emp.getBirthDate() == null)
             throw new IllegalArgumentException("Data de nascimento é obrigatória!");
-        }
-        if (emp.getPassword() == 0) {
+        if (emp.getPassword() == 0)
             throw new IllegalArgumentException("Senha é obrigatória!");
-        }
     }
 }
