@@ -4,10 +4,10 @@ import br.com.atlas.dao.BookCopyDAO;
 import br.com.atlas.dao.BookDAO;
 import br.com.atlas.dao.CategoryDAO;
 import br.com.atlas.model.Book;
+import br.com.atlas.model.BookCopy;
 import br.com.atlas.model.Category;
 import br.com.atlas.model.Employee;
 import br.com.atlas.model.Librarian;
-import br.com.atlas.service.BookCopyService;
 import br.com.atlas.util.ConnectionDb;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -20,8 +20,6 @@ import java.util.stream.Collectors;
 
 @WebServlet("/librarian/action")
 public class LibrarianController extends HttpServlet {
-
-    private final BookCopyService bookCopyService = new BookCopyService();
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -37,10 +35,24 @@ public class LibrarianController extends HttpServlet {
 
         String action = request.getParameter("action");
 
+        // ===== DEBUG: imprime TUDO que chegou do formulário =====
+        System.out.println("========== DEBUG LibrarianController ==========");
+        System.out.println("action        = " + action);
+        System.out.println("name          = " + request.getParameter("name"));
+        System.out.println("publisher     = " + request.getParameter("publisher"));
+        System.out.println("pages         = " + request.getParameter("pages"));
+        System.out.println("authors       = " + request.getParameter("authors"));
+        System.out.println("categoryId    = " + request.getParameter("categoryId"));
+        System.out.println("newCategory   = " + request.getParameter("newCategoryName"));
+        System.out.println("copies        = " + request.getParameter("copies"));
+        System.out.println("shelf         = " + request.getParameter("shelf"));
+        System.out.println("rack          = " + request.getParameter("rack"));
+        System.out.println("===============================================");
+        // ========================================================
+
         try {
             if ("registerBook".equals(action)) {
 
-                // Lê os parâmetros do formulário
                 String name      = request.getParameter("name");
                 String publisher = request.getParameter("publisher");
                 int pages        = Integer.parseInt(request.getParameter("pages"));
@@ -51,21 +63,11 @@ public class LibrarianController extends HttpServlet {
                 String newCategoryName = request.getParameter("newCategoryName");
                 int copies = Integer.parseInt(request.getParameter("copies"));
 
-                // Validações básicas
-                if (name == null || name.isBlank() || publisher == null || publisher.isBlank()
-                        || authorsRaw == null || authorsRaw.isBlank()
-                        || shelf == null || shelf.isBlank() || rack == null || rack.isBlank()) {
-                    response.sendRedirect(request.getContextPath()
-                        + "/view/librarian/registerBook.jsp?msg=error&detail=Preencha+todos+os+campos");
-                    return;
-                }
-
                 List<String> authors = Arrays.stream(authorsRaw.split(","))
                     .map(String::trim)
                     .filter(s -> !s.isEmpty())
                     .collect(Collectors.toList());
 
-                // Tudo numa única conexão e transação
                 try (Connection conn = ConnectionDb.getConexao()) {
                     conn.setAutoCommit(false);
                     try {
@@ -79,20 +81,19 @@ public class LibrarianController extends HttpServlet {
                         book.setBookLocation(shelf + "-" + rack);
                         book.setAuthors(authors);
 
-                        // Resolve categoria dentro da mesma conexão
+                        System.out.println("bookLocation setado = " + book.getBookLocation());
+                        System.out.println("authors setados     = " + book.getAuthors());
+
+                        // Resolve categoria
                         if ("outra".equals(categoryIdStr)) {
-                            if (newCategoryName == null || newCategoryName.isBlank()) {
-                                response.sendRedirect(request.getContextPath()
-                                    + "/view/librarian/registerBook.jsp?msg=error&detail=Nome+da+nova+categoria+obrigatorio");
-                                return;
-                            }
                             String nomeLimpo = newCategoryName.trim();
                             Category existing = categoryDAO.findByName(nomeLimpo);
                             if (existing != null) {
                                 book.setCategories(List.of(existing.getCategoryName()));
                             } else {
                                 Category nova = new Category(nomeLimpo);
-                                categoryDAO.insert(nova); // salva na mesma transação
+                                categoryDAO.insert(nova);
+                                System.out.println("Nova categoria inserida ID = " + nova.getCategoryId());
                                 book.setCategories(List.of(nova.getCategoryName()));
                             }
                         } else if (categoryIdStr != null && !categoryIdStr.isBlank()) {
@@ -101,24 +102,34 @@ public class LibrarianController extends HttpServlet {
                                 .findFirst().orElse(null);
                             if (category != null) {
                                 book.setCategories(List.of(category.getCategoryName()));
+                                System.out.println("Categoria selecionada = " + category.getCategoryName());
+                            } else {
+                                System.out.println("AVISO: categoria não encontrada pelo ID = " + categoryIdStr);
                             }
                         }
 
-                        // Insere o livro (autores e categorias vinculados dentro do BookDAO)
-                        bookDAO.insert(book);
+                        System.out.println("categories setadas = " + book.getCategories());
 
-                        // Insere exemplares na mesma transação
+                        // Insere livro
+                        bookDAO.insert(book);
+                        System.out.println("bookId gerado = " + book.getBookId());
+
+                        // Insere exemplares
                         if (copies > 0) {
                             BookCopyDAO copyDAO = new BookCopyDAO(conn);
                             for (int i = 0; i < copies; i++) {
-                                copyDAO.insert(new br.com.atlas.model.BookCopy(book));
+                                copyDAO.insert(new BookCopy(book));
                             }
+                            System.out.println("Exemplares inseridos = " + copies);
                         }
 
-                        conn.commit(); // confirma tudo de uma vez
+                        conn.commit();
+                        System.out.println("COMMIT realizado com sucesso!");
 
                     } catch (Exception e) {
                         conn.rollback();
+                        System.out.println("ROLLBACK executado! Erro: " + e.getMessage());
+                        e.printStackTrace();
                         throw e;
                     }
                 }
@@ -127,24 +138,21 @@ public class LibrarianController extends HttpServlet {
                     + "/view/librarian/registerBook.jsp?msg=book_added");
 
             } else if ("registerCopy".equals(action)) {
-
                 int bookId = Integer.parseInt(request.getParameter("bookId"));
-                bookCopyService.addSingleCopy(bookId);
+                try (Connection conn = ConnectionDb.getConexao()) {
+                    new BookCopyDAO(conn).insertByBookId(bookId);
+                }
                 response.sendRedirect(request.getContextPath()
                     + "/view/librarian/inventory.jsp?msg=copy_added");
-
             } else {
                 response.sendRedirect(request.getContextPath()
                     + "/view/librarian/inventory.jsp?msg=invalid_action");
             }
 
-        } catch (IllegalArgumentException e) {
-            response.sendRedirect(request.getContextPath()
-                + "/view/librarian/registerBook.jsp?msg=error&detail=" + e.getMessage());
         } catch (Exception e) {
             e.printStackTrace();
             response.sendRedirect(request.getContextPath()
-                + "/view/librarian/registerBook.jsp?msg=error");
+                + "/view/librarian/registerBook.jsp?msg=error&detail=" + e.getMessage());
         }
     }
 }
