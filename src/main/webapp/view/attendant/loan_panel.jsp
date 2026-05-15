@@ -5,7 +5,7 @@
     Object user = session.getAttribute("userLogged");
     
     if(user == null || !(user instanceof Attendant)){
-        response.sendRedirect(request.getContextPath() + "/view/login.jsp");
+        response.sendRedirect(request.getContextPath() + "/view/index.jsp");
         return;
     }
     

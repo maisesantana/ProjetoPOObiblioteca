@@ -5,6 +5,7 @@ import br.com.atlas.model.*;
 import br.com.atlas.util.ConnectionDb;
 
 import java.sql.Connection;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -132,6 +133,17 @@ public class EmployeeService {
     public List<Administrator> getAllAdmins() {
         try { return new AdministratorDAO(ConnectionDb.getConexao()).findAll(); }
         catch (Exception e) { throw new RuntimeException("Erro ao buscar administradores.", e); }
+    }
+
+    //para criar a lista com todos os funcionarios.
+    public List<Employee> getAllEmployees() {
+        List<Employee> employees = new ArrayList<>();
+
+        employees.addAll(getAllAdmins());
+        employees.addAll(getAllAttendants());
+        employees.addAll(getAllLibrarians());
+
+        return employees;
     }
 
     // VALIDAÇÃO CENTRALIZADA

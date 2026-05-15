@@ -4,7 +4,7 @@
     Object user = session.getAttribute("userLogged");
 
     if(user == null || !(user instanceof Administrator)){
-        response.sendRedirect(request.getContextPath() + "/view/login.jsp");
+        response.sendRedirect(request.getContextPath() + "/view/index.jsp");
         return;
     }
 %>
@@ -30,18 +30,70 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet"/>
 
   <!-- CSS -->
+  <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/admin/navbarAdm.css"/>
   <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/admin/registerEmployee.css"/>
 </head>
 
 <body>
 
   <!-- NAVBAR -->
-  <header class="logo-header">
+  <header>
+          <nav class="navbar navbar-expand-lg atlas-navbar">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="#">
+        <img src="${pageContext.request.contextPath}/assets/images/logo.png" alt="Atlas"/>
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarAtlas">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarAtlas">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+
+          <li class="nav-item">
+            <a class="nav-link"
+               href="${pageContext.request.contextPath}/view/admin/adminPanel.jsp">
+              Início
+            </a>
+          </li>
+
+          <li class="nav-item">
+            <a class="nav-link active"
+               href="${pageContext.request.contextPath}/view/admin/registerEmployee.jsp">
+              Cadastrar
+            </a>
+          </li>
+
+          <!-- GERENCIAR -->
+          <li class="nav-item">
+            <a class="nav-link"
+               href="${pageContext.request.contextPath}/manageEmployee">
+              Gerenciar
+            </a>
+          </li>
+
+          <li class="nav-item">
+            <a class="nav-link"
+              href="${pageContext.request.contextPath}/listEmployees">
+                Listar
+            </a>
+          </li>
+
+        </ul>
+
+        <a href="${pageContext.request.contextPath}/logout" class="btn-sair">
+          <i class="bi bi-box-arrow-right"></i> Sair
+        </a>
+
+      </div>
+    </div>
+  </nav>
+    <div class="logo-header">
     <a href="${pageContext.request.contextPath}/view/admin/adminPanel.jsp">
       <img src="${pageContext.request.contextPath}/assets/images/logo.png"
          alt="Atlas - Gestão de Biblioteca"
          class="logo-atlas"/>
-    </a>  
+    </a> 
+    </div>
   </header>
 
   <!-- CONTEÚDO -->

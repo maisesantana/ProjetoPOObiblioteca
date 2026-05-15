@@ -12,6 +12,9 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+
 
 public class AdministratorController extends HttpServlet {
 
@@ -104,4 +107,34 @@ public class AdministratorController extends HttpServlet {
             response.sendRedirect(request.getContextPath() + "/view/admin/registerEmployee.jsp?msg=erro_ao_cadastrar_funcionario");
         }
     }
+
+    @Override protected void doGet(HttpServletRequest request, HttpServletResponse response)
+    throws ServletException, IOException {
+
+    HttpSession session = request.getSession();
+    Object user = session.getAttribute("userLogged");
+
+    if (user == null || !(user instanceof Administrator)) {
+        response.sendRedirect(request.getContextPath() + "/view/login.jsp");
+        return;
+    }
+
+    try {
+
+        List<Employee> employees = new ArrayList<>();
+
+        employees.addAll(employeeService.getAllAdmins());
+        employees.addAll(employeeService.getAllAttendants());
+        employees.addAll(employeeService.getAllLibrarians());
+
+        request.setAttribute("employees", employees);
+
+        request.getRequestDispatcher("/view/admin/listEmployees.jsp")
+               .forward(request, response);
+
+    } catch (Exception e) {
+        e.printStackTrace();
+        response.sendRedirect(request.getContextPath() + "/view/admin/adminPanel.jsp");
+    }
+}
 }

@@ -17,6 +17,7 @@
 
     <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/admin/navbarAdm.css"/>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/admin/admTools.css"/>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/footer.css"/>
 </head>
 
 <body>

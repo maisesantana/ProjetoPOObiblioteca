@@ -3,7 +3,7 @@
 <%
     Object user = session.getAttribute("userLogged");
     if (user == null || !(user instanceof Administrator)) {
-        response.sendRedirect(request.getContextPath() + "/view/login.jsp?msg=unauthorized");
+        response.sendRedirect(request.getContextPath() + "/view/index.jsp?msg=unauthorized");
         return;
     }
 %>
@@ -22,6 +22,7 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"/>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet"/>
   <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/admin/navbarAdm.css"/>
+  <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/footer.css"/>
 </head>
 <body>
   <header>
@@ -45,7 +46,7 @@
               <a class="nav-link active" aria-current="page" href="${pageContext.request.contextPath}/manageEmployee">Gerenciar</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="${pageContext.request.contextPath}/view/admin/listEmployees.jsp">Listar</a>
+              <a class="nav-link" href="${pageContext.request.contextPath}/listEmployees">Listar</a>
             </li>
           </ul>
           <a href="${pageContext.request.contextPath}/logout" class="btn-sair">
@@ -123,6 +124,7 @@
     %>
   </main>
 
+  <jsp:include page="/view/footer.jsp"/>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

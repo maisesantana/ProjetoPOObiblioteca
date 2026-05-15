@@ -18,6 +18,6 @@ public class LogoutController extends HttpServlet {
         HttpSession session = request.getSession();
         session.invalidate();
         
-        response.sendRedirect(request.getContextPath() + "/view/login.jsp");
+        response.sendRedirect(request.getContextPath() + "/view/index.jsp");
     }
 }

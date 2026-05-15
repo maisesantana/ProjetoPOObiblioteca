@@ -24,6 +24,10 @@
     <servlet-name>AdministratorController</servlet-name>
     <url-pattern>/registerEmployee</url-pattern>
   </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>AdministratorController</servlet-name>
+    <url-pattern>/listEmployees</url-pattern>
+  </servlet-mapping>
 
   <!-- Manage Employee Controller -->
   <servlet>

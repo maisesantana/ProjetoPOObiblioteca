@@ -1,5 +1,4 @@
 /* listEmployees.css */
-
 :root {
   --atlas-primary: #6B1A2B;
   --atlas-secondary: #D3C4AE;
@@ -14,7 +13,7 @@
 }
 
 body {
-  background: #FAFAFA;
+  background: #FFFFFF;
   font-family: 'Plus Jakarta Sans', sans-serif;
   color: var(--atlas-text);
 }
@@ -79,12 +78,12 @@ body {
 .employee-card {
   display: flex;
   align-items: center;
-  gap: 1.5rem;
+  gap: 1.6rem;
 }
 
 .employee-photo {
-  width: 88px;
-  height: 88px;
+  width: 100px;
+  height: 100px;
   border-radius: 22px;
   background: #ECECEC;
   display: flex;
@@ -94,13 +93,13 @@ body {
 }
 
 .employee-photo i {
-  font-size: 3.5rem;
+  font-size: 4.3rem;
   color: #111;
 }
 
 .employee-info {
   width: 100%;
-  background: #F1F1F1;
+  background: #F3F3F3;
   border-radius: 18px;
   padding: 1.4rem 1.8rem;
   display: flex;
@@ -166,10 +165,29 @@ body {
     flex-direction: column;
     align-items: flex-start;
     gap: 0.7rem;
+    font-family: 'Plus Jakarta Sans', sans-serif;
   }
 
   .employee-card {
     align-items: flex-start;
   }
+
+.employee-info h3 {
+  font-size: 1.12rem;
+  font-weight: 700;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  color: #1B1B1B;
+  margin: 0;
+}
+
+.employee-info span {
+  color: #5F5F5F;
+  font-weight: 500;
+}
+
+.employee-view {
+  min-width: 60px;
+  text-align: right;
+}
 
 }
