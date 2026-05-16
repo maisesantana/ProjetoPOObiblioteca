@@ -16,7 +16,7 @@ public class Person {
         this.cpf = cpf;
         this.name = name;
         this.email = email;
-        this.gender = gender;
+        this.gender = Character.toUpperCase(gender);
         this.birthDate = birthDate;
     }
     
@@ -49,7 +49,7 @@ public class Person {
     }
 
     public void setGender(char gender) {
-        this.gender = gender;
+        this.gender = Character.toUpperCase(gender);
     }
 
     public LocalDate getBirthDate() {

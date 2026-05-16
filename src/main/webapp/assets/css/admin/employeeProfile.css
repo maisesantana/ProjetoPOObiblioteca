@@ -1,0 +1,140 @@
+/* employeeProfile.css */
+:root{
+  --atlas-beige:#D3C4AE;
+  --atlas-beige-light:#E8DDCB;
+  --atlas-brown:#8A463A;
+  --atlas-text:#1E1E1E;
+}
+
+body{
+  background:#FFFFFF;
+  font-family:'Inter',sans-serif;
+  min-height:100vh;
+  display:flex;
+  flex-direction:column;
+}
+
+.profile-page{
+  flex:1;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  padding:4rem 1rem;
+}
+
+.profile-card{
+  width:100%;
+  max-width:950px;
+  background:#FFFFFF;
+  border:18px solid var(--atlas-beige-light);
+  border-radius:38px;
+  padding:4rem 4.5rem;
+  position:relative;
+}
+
+.profile-card::before{
+  content:"";
+  position:absolute;
+  inset:14px;
+  border:3px solid var(--atlas-beige);
+  border-radius:26px;
+  pointer-events:none;
+}
+
+.profile-top{
+  display:flex;
+  align-items:center;
+  gap:2rem;
+  margin-bottom:4rem;
+}
+
+.logo-area{
+  width:125px;
+  height:125px;
+  background:var(--atlas-beige-light);
+  border-radius:28px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  flex-shrink:0;
+}
+
+.logo-box img{
+  width:78px;
+}
+
+.title-area h1{
+  margin:0;
+  font-size:3.2rem;
+  font-family:'Merriweather',serif;
+  color:var(--atlas-brown);
+  letter-spacing:2px;
+}
+
+.title-area span{
+  font-size:1rem;
+  letter-spacing:4px;
+  color:#444;
+  font-weight:500;
+}
+
+.profile-info{
+  display:flex;
+  flex-direction:column;
+  gap:2rem;
+}
+
+.info-group label{
+  display:block;
+  font-size:1rem;
+  font-weight:700;
+  color:#2A2A2A;
+  margin-bottom:.6rem;
+}
+
+.info-group p{
+  margin:0;
+  width:100%;
+  background:#F8F8F8;
+  border:2px solid #E6E6E6;
+  border-radius:16px;
+  padding:1rem 1.4rem;
+  font-size:1rem;
+  color:var(--atlas-text);
+  font-weight:500;
+}
+
+@media(max-width:768px){
+  .profile-card{
+    padding:2.5rem 1.5rem;
+    border-width:12px;
+  }
+
+  .profile-card::before{
+    inset:10px;
+  }
+
+  .profile-top{
+    flex-direction:column;
+    text-align:center;
+    gap:1.5rem;
+  }
+
+  .title-area h1{
+    font-size:2.3rem;
+  }
+
+  .title-area span{
+    font-size:.85rem;
+    letter-spacing:2px;
+  }
+
+  .logo-area{
+    width:100px;
+    height:100px;
+  }
+
+  .logo-box img{
+    width:62px;
+  }
+}

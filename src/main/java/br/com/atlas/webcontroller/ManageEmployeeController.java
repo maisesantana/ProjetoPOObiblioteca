@@ -141,7 +141,7 @@ public class ManageEmployeeController extends HttpServlet {
                 return;
             }
 
-            char genderChar = gender.charAt(0);
+            char genderChar = Character.toUpperCase(gender.charAt(0));
 
             Employee updated;
             if ("bibliotecario".equals(role)) {

@@ -11,6 +11,7 @@
 
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" isELIgnored="false" %>
 
+<%@ page import="java.net.URLEncoder" %>
 <%@ page import="java.util.List" %>
 <%@ page import="br.com.atlas.model.Employee" %>
 <%@ page import="br.com.atlas.model.Administrator" %>
@@ -57,42 +58,34 @@
       </button>
       <div class="collapse navbar-collapse" id="navbarAtlas">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-
           <li class="nav-item">
             <a class="nav-link"
                href="${pageContext.request.contextPath}/view/admin/adminPanel.jsp">
               Início
             </a>
           </li>
-
           <li class="nav-item">
             <a class="nav-link"
                href="${pageContext.request.contextPath}/view/admin/registerEmployee.jsp">
               Cadastrar
             </a>
           </li>
-
-          <!-- GERENCIAR -->
           <li class="nav-item">
             <a class="nav-link"
                href="${pageContext.request.contextPath}/manageEmployee">
               Gerenciar
             </a>
           </li>
-
           <li class="nav-item">
             <a class="nav-link active"
               href="${pageContext.request.contextPath}/listEmployees">
                 Listar
             </a>
           </li>
-
         </ul>
-
         <a href="${pageContext.request.contextPath}/logout" class="btn-sair">
           <i class="bi bi-box-arrow-right"></i> Sair
         </a>
-
       </div>
     </div>
   </nav>
@@ -147,9 +140,8 @@
                 <% } %>
                 </span>
             </div>
-            <a href="#"
-                class="employee-view">
-                Ver
+           <a href="${pageContext.request.contextPath}/listEmployees?cpf=<%= URLEncoder.encode(emp.getCpf(), "UTF-8") %>" class="employee-view">
+              Ver
             </a>
             </div>
         <% } %>

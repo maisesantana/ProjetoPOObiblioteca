@@ -77,13 +77,11 @@
               Listar
             </a>
           </li>
-
         </ul>
 
         <a href="${pageContext.request.contextPath}/logout" class="btn-sair">
           <i class="bi bi-box-arrow-right"></i> Sair
         </a>
-
       </div>
     </div>
 
@@ -112,8 +110,6 @@
             <p>Cadastre novos funcionários no sistema Atlas.</p>
           </a>
         </div>
-
-        <!-- ✅ GERENCIAR CORRIGIDO -->
         <div class="col-lg-4 col-md-6">
           <a href="${pageContext.request.contextPath}/manageEmployee"
              class="tool-card">
