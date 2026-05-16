@@ -96,7 +96,7 @@ public class LoginController extends HttpServlet {
 
                     response.sendRedirect(
                         request.getContextPath()
-                        + "/view/attendant/loan_panel.jsp"
+                        + "/view/attendant/panel.jsp"
                     );
                 }
 
