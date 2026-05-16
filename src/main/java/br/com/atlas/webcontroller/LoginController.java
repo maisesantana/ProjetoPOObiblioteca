@@ -89,14 +89,14 @@ public class LoginController extends HttpServlet {
 
                     response.sendRedirect(
                         request.getContextPath()
-                        + "/view/librarian/inventory.jsp"
+                        + "/view/librarian/librarianPanel.jsp"
                     );
 
                 } else {
 
                     response.sendRedirect(
                         request.getContextPath()
-                        + "/view/attendant/panel.jsp"
+                        + "/view/attendant/attendantPanel.jsp"
                     );
                 }
 
