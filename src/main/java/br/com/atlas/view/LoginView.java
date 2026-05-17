@@ -4,7 +4,7 @@ import java.util.Scanner;
 
 public class LoginView {
 
-    private Scanner sc;
+    private final Scanner sc;
 
     public LoginView() {
         this.sc = new Scanner(System.in);

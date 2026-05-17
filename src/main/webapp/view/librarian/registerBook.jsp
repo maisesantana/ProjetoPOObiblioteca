@@ -55,12 +55,12 @@
   <header>
     <nav class="navbar navbar-expand-lg atlas-navbar">
       <div class="container-fluid">
-        <a class="navbar-brand" href="#">
+        <a class="navbar-brand" href="${pageContext.request.contextPath}/view/librarian/librarianPanel.jsp">
           <img src="${pageContext.request.contextPath}/assets/images/logo.png" alt="Atlas — Gestão de Biblioteca"/>
         </a>
         <div class="collapse navbar-collapse" id="navbarAtlas">
           <ul class="navbar-nav me-auto">
-            <li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/view/librarian/inventory.jsp">Início</a></li>
+            <li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/view/librarian/librarianPanel.jsp">Início</a></li>
             <li class="nav-item"><a class="nav-link active" href="${pageContext.request.contextPath}/view/librarian/registerBook.jsp">Cadastrar</a></li>
             <li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/view/librarian/removeBook.jsp">Remover</a></li>
             <li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/view/librarian/addCopies.jsp">Exemplares</a></li>
@@ -77,7 +77,7 @@
   <main class="container py-4">
 
     <nav class="breadcrumb-atlas mb-4">
-      <a href="${pageContext.request.contextPath}/view/librarian/inventory.jsp">Início</a>
+      <a href="${pageContext.request.contextPath}/view/librarian/librarianPanel.jsp">Início</a>
       <span> / </span>
       <span style="color: #6B1A2B;">Cadastrar livro</span>
     </nav>
@@ -126,7 +126,6 @@
             <input type="text" id="publisher" name="publisher" class="form-control" placeholder="Insira a editora" required/>
           </div>
 
-          <%-- Categoria: carregada do banco + opção "Outra" para criar nova --%>
           <div class="col-12">
             <label for="categoryId" class="form-label">Categoria</label>
             <select id="categoryId" name="categoryId" class="form-select" required onchange="toggleNewCategory(this)">
@@ -137,7 +136,6 @@
               <option value="outra">+ Outra (digitar nova)</option>
             </select>
 
-            <%-- Campo que aparece só quando "Outra" é selecionado --%>
             <div id="newCategoryDiv">
               <input type="text" id="newCategoryName" name="newCategoryName"
                      class="form-control mt-2"

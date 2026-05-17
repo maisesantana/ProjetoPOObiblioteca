@@ -1,0 +1,216 @@
+/* searchBooks.css */
+:root {
+  --atlas-primary: #6B1A2B;
+  --atlas-secondary: #D3C4AE;
+  --atlas-gray: #F3F3F3;
+  --atlas-text: #1B1B1B;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background: #FFFFFF;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  color: var(--atlas-text);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+main {
+  flex: 1;
+}
+
+.books-container {
+  max-width: 850px;
+  margin: 0 auto;
+  padding-top: 1.8rem;
+  padding-bottom: 4rem;
+}
+
+.breadcrumb-custom {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1.2rem;
+  font-size: 0.9rem;
+}
+
+.breadcrumb-custom a {
+  text-decoration: none;
+  color: #6E7BF2;
+}
+
+.breadcrumb-custom span {
+  color: #7C7C7C;
+}
+
+.titulo-section {
+  margin-bottom: 2.5rem;
+}
+
+.titulo-section h1 {
+  font-size: 1.42rem;
+  font-weight: 700;
+  color: #222;
+  margin-bottom: 0.35rem;
+}
+
+.titulo-section p {
+  color: #8C8C8C;
+  font-size: 0.94rem;
+}
+
+/* Barra de Busca */
+.search-box {
+  margin-bottom: 2.5rem;
+}
+
+.search-box form {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+.search-box input[type="text"] {
+  flex: 1;
+  background: #F3F3F3;
+  border: none;
+  border-radius: 16px;
+  padding: 0.9rem 1.35rem;
+  font-size: 1rem;
+  color: var(--atlas-text);
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  outline: none;
+  transition: box-shadow 0.2s;
+}
+
+.search-box input[type="text"]:focus {
+  box-shadow: 0 0 0 2px #3B82F6;
+}
+
+.search-box button[type="submit"] {
+  background: #3B82F6;
+  color: #fff;
+  border: none;
+  border-radius: 16px;
+  padding: 0.9rem 2rem;
+  font-size: 1rem;
+  font-weight: 600;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  cursor: pointer;
+  transition: background 0.2s;
+  white-space: nowrap;
+}
+
+.search-box button[type="submit"]:hover {
+  background: #2563EB;
+}
+
+/* Lista de Livros */
+.books-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.35rem;
+}
+
+.book-card {
+  display: flex;
+  align-items: center;
+  gap: 1.15rem;
+}
+
+.book-icon {
+  width: 68px;
+  height: 68px;
+  border-radius: 16px;
+  background: #ECECEC;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.book-icon i {
+  font-size: 1.7rem;
+  color: #111;
+}
+
+.book-info {
+  width: 100%;
+  background: #F3F3F3;
+  border-radius: 16px;
+  padding: 1.1rem 1.35rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.book-details {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.book-info h3 {
+  font-size: 1.08rem;
+  font-weight: 700;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  color: #1B1B1B;
+  margin: 0;
+  letter-spacing: -0.2px;
+}
+
+.book-info .book-author {
+  color: #5F5F5F;
+  font-size: 0.95rem;
+  font-weight: 500;
+}
+
+/* Tag de Exemplares em Verde */
+.book-info .book-copies {
+  color: #065F46;
+  font-size: 0.9rem;
+  font-weight: 600;
+  background: #D1FAE5;
+  border: 1px solid #A7F3D0;
+  padding: 0.3rem 0.75rem;
+  border-radius: 8px;
+}
+
+.book-view {
+  text-decoration: none;
+  color: var(--atlas-primary);
+  font-weight: 700;
+  font-size: 0.96rem;
+  transition: 0.2s;
+  white-space: nowrap;
+}
+
+.book-view:hover {
+  opacity: 0.7;
+}
+
+@media (max-width: 768px) {
+  .search-box form {
+    flex-direction: column;
+  }
+
+  .search-box button[type="submit"] {
+    width: 100%;
+  }
+
+  .book-card {
+    align-items: flex-start;
+  }
+
+  .book-info {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.6rem;
+  }
+}

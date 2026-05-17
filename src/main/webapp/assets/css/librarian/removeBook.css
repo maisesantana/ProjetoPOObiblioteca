@@ -1,0 +1,245 @@
+/* removeBook.css */
+:root {
+  --atlas-primary: #6B1A2B;
+  --atlas-secondary: #D3C4AE;
+  --atlas-gray: #F3F3F3;
+  --atlas-text: #1B1B1B;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background: #FFFFFF;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  color: var(--atlas-text);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+main {
+  flex: 1;
+}
+
+.remove-container {
+  max-width: 850px;
+  margin: 0 auto;
+  padding-top: 1.8rem;
+  padding-bottom: 4rem;
+}
+
+/* Breadcrumb */
+.breadcrumb-custom {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1.2rem;
+  font-size: 0.9rem;
+}
+
+.breadcrumb-custom a {
+  text-decoration: none;
+  color: #6E7BF2;
+}
+
+.breadcrumb-custom span {
+  color: #7C7C7C;
+}
+
+.breadcrumb-custom .current {
+  color: var(--atlas-primary);
+  font-weight: 600;
+}
+
+/* Título */
+.titulo-section {
+  margin-bottom: 2.5rem;
+}
+
+.titulo-section h1 {
+  font-size: 1.42rem;
+  font-weight: 700;
+  color: #222;
+  margin-bottom: 0.35rem;
+}
+
+.titulo-section p {
+  color: #8C8C8C;
+  font-size: 0.94rem;
+}
+
+/* Notificação de sucesso */
+.toast-success {
+  display: none;
+  align-items: center;
+  gap: 0.75rem;
+  background: #D1FAE5;
+  border: 1.5px solid #6EE7B7;
+  color: #065F46;
+  border-radius: 14px;
+  padding: 1rem 1.4rem;
+  font-weight: 600;
+  font-size: 0.97rem;
+  margin-bottom: 2rem;
+  animation: fadeIn 0.3s ease;
+}
+
+.toast-success.show {
+  display: flex;
+}
+
+.toast-success i {
+  font-size: 1.3rem;
+  color: #059669;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Formulário de busca */
+.search-box {
+  margin-bottom: 2rem;
+}
+
+.search-box form {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+.search-box input[type="text"] {
+  flex: 1;
+  background: #F3F3F3;
+  border: none;
+  border-radius: 16px;
+  padding: 0.9rem 1.35rem;
+  font-size: 1rem;
+  color: var(--atlas-text);
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  outline: none;
+  transition: box-shadow 0.2s;
+}
+
+.search-box input[type="text"]:focus {
+  box-shadow: 0 0 0 2px #3B82F6;
+}
+
+.search-box button[type="submit"] {
+  background: #3B82F6;
+  color: #fff;
+  border: none;
+  border-radius: 16px;
+  padding: 0.9rem 2rem;
+  font-size: 1rem;
+  font-weight: 600;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  cursor: pointer;
+  transition: background 0.2s;
+  white-space: nowrap;
+}
+
+.search-box button[type="submit"]:hover {
+  background: #2563EB;
+}
+
+/* Lista de livros encontrados */
+.books-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.35rem;
+}
+
+.book-card {
+  display: flex;
+  align-items: center;
+  gap: 1.15rem;
+}
+
+.book-icon {
+  width: 68px;
+  height: 68px;
+  border-radius: 16px;
+  background: #ECECEC;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.book-icon i {
+  font-size: 1.7rem;
+  color: #111;
+}
+
+.book-info {
+  width: 100%;
+  background: #F3F3F3;
+  border-radius: 16px;
+  padding: 1.1rem 1.35rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.book-details {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.book-info h3 {
+  font-size: 1.08rem;
+  font-weight: 700;
+  color: #1B1B1B;
+  margin: 0;
+}
+
+.book-info .book-author {
+  color: #5F5F5F;
+  font-size: 0.95rem;
+  font-weight: 500;
+}
+
+.btn-remove {
+  background: var(--atlas-primary);
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  padding: 0.5rem 1.2rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  cursor: pointer;
+  transition: opacity 0.2s;
+  white-space: nowrap;
+}
+
+.btn-remove:hover {
+  opacity: 0.8;
+}
+
+@media (max-width: 768px) {
+  .search-box form {
+    flex-direction: column;
+  }
+
+  .search-box button[type="submit"] {
+    width: 100%;
+  }
+
+  .book-card {
+    align-items: flex-start;
+  }
+
+  .book-info {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.6rem;
+  }
+}

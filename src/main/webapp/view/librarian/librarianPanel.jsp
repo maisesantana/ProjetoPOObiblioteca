@@ -22,7 +22,7 @@
 
 <body>
 
- <header>
+    <header>
         <nav class="navbar navbar-expand-lg atlas-navbar">
             <div class="container-fluid">
                 <a class="navbar-brand" href="#">
@@ -42,19 +42,19 @@
                             <a class="nav-link" href="${pageContext.request.contextPath}/view/librarian/registerBook.jsp">Cadastrar</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="${pageContext.request.contextPath}/view/librarian/removeBook.jsp">Remover</a>
+                            <a class="nav-link" href="${pageContext.request.contextPath}/removeBook">Remover</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="${pageContext.request.contextPath}/view/librarian/addCopies.jsp">Exemplares</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="${pageContext.request.contextPath}/view/librarian/searchBooks.jsp">Buscar</a>
+                            <a class="nav-link" href="${pageContext.request.contextPath}/searchBooks">Buscar</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="${pageContext.request.contextPath}/view/librarian/manageAuthors.jsp">Autores</a>
+                            <a class="nav-link" href="${pageContext.request.contextPath}/manageAuthors">Autores</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="${pageContext.request.contextPath}/view/librarian/manageCategories.jsp">Categorias</a>
+                            <a class="nav-link" href="${pageContext.request.contextPath}/manageCategory">Categorias</a>
                         </li>
                     </ul>
 
@@ -88,7 +88,7 @@
                         </div>
 
                         <div class="col-lg-4 col-md-6">
-                            <a href="${pageContext.request.contextPath}/view/librarian/removeBook.jsp" class="tool-card">
+                            <a href="${pageContext.request.contextPath}/removeBook" class="tool-card">
                                 <div class="tool-icon">
                                     <span class="material-symbols-rounded">delete</span>
                                 </div>
@@ -108,7 +108,7 @@
                         </div>
 
                         <div class="col-lg-4 col-md-6">
-                            <a href="${pageContext.request.contextPath}/view/librarian/searchBooks.jsp" class="tool-card">
+                            <a href="${pageContext.request.contextPath}/searchBooks" class="tool-card">
                                 <div class="tool-icon">
                                     <span class="material-symbols-rounded">search</span>
                                 </div>
@@ -118,7 +118,7 @@
                         </div>
 
                         <div class="col-lg-4 col-md-6">
-                            <a href="${pageContext.request.contextPath}/view/librarian/manageAuthors.jsp" class="tool-card">
+                            <a href="${pageContext.request.contextPath}/manageAuthors" class="tool-card">
                                 <div class="tool-icon">
                                     <span class="material-symbols-rounded">person_edit</span>
                                 </div>
@@ -128,7 +128,7 @@
                         </div>
 
                         <div class="col-lg-4 col-md-6">
-                            <a href="${pageContext.request.contextPath}/view/librarian/manageCategories.jsp" class="tool-card">
+                            <a href="${pageContext.request.contextPath}/manageCategory" class="tool-card">
                                 <div class="tool-icon">
                                     <span class="material-symbols-rounded">category</span>
                                 </div>

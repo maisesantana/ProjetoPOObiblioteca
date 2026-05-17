@@ -1,5 +1,9 @@
 package br.com.atlas.webcontroller;
 
+import java.io.IOException;
+import java.sql.Connection;
+import java.util.Optional;
+
 import br.com.atlas.dao.LoginDAO;
 import br.com.atlas.model.Administrator;
 import br.com.atlas.model.Employee;
@@ -11,9 +15,6 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import java.io.IOException;
-import java.sql.Connection;
-import java.util.Optional;
 
 @WebServlet("/login")
 public class LoginController extends HttpServlet {
@@ -28,7 +29,7 @@ public class LoginController extends HttpServlet {
 
         // Validação básica de campos vazios
         if (cpf == null || cpf.trim().isEmpty() || senhaTexto == null || senhaTexto.trim().isEmpty()) {
-            response.sendRedirect(request.getContextPath() + "/view/login.jsp?msg=empty_fields");
+            response.sendRedirect(request.getContextPath() + "/index.jsp?msg=empty_fields");
             return;
         }
 
@@ -102,15 +103,15 @@ public class LoginController extends HttpServlet {
 
             } else {
                 // Senha errada ou CPF não encontrado em nenhuma tabela
-                response.sendRedirect(request.getContextPath() + "/view/login.jsp?msg=invalid_credentials");
+                response.sendRedirect(request.getContextPath() + "/index.jsp?msg=invalid_credentials");
             }
 
         } catch (NumberFormatException e) {
             // Caso o usuário digite letras onde deveria ser senha numérica
-            response.sendRedirect(request.getContextPath() + "/view/login.jsp?msg=password_must_be_number");
+            response.sendRedirect(request.getContextPath() + "/index.jsp?msg=password_must_be_number");
         } catch (Exception e) {
-            e.printStackTrace();
-            response.sendRedirect(request.getContextPath() + "/view/login.jsp?msg=internal_error");
+           // e.printStackTrace();
+            response.sendRedirect(request.getContextPath() + "/index.jsp?msg=internal_error");
         }
     }
 
@@ -122,6 +123,6 @@ public class LoginController extends HttpServlet {
             throws ServletException, IOException {
         HttpSession session = request.getSession();
         session.invalidate(); // Mata a sessão (destrói o crachá)
-        response.sendRedirect(request.getContextPath() + "/view/login.jsp?msg=logged_out");
+        response.sendRedirect(request.getContextPath() + "/index.jsp?msg=logged_out");
     }
 }

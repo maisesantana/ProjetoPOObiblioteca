@@ -12,7 +12,7 @@ public class Book {
     private String publisher;
     private List<String> authors;
     private List<String> categories;
-    private List<BookCopy> copies;
+    private final List<BookCopy> copies;
 
     public Book() {
         this.authors = new ArrayList<>();

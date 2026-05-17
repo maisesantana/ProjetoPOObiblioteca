@@ -1,13 +1,18 @@
 package br.com.atlas.dao;
 
-import br.com.atlas.model.Book;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import br.com.atlas.model.Book;
+
 public class BookDAO {
 
-    private Connection conn;
+    private final Connection conn;
 
     public BookDAO(Connection conn) {
         this.conn = conn;

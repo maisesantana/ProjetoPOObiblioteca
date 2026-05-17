@@ -1,14 +1,14 @@
 package br.com.atlas.view;
 
-import br.com.atlas.model.Author;
-import br.com.atlas.model.Book;
-
 import java.util.List;
 import java.util.Scanner;
 
+import br.com.atlas.model.Author;
+import br.com.atlas.model.Book;
+
 public class LibrarianView extends EmployeeView {
 
-    private Scanner sc = new Scanner(System.in);
+    private final Scanner sc = new Scanner(System.in);
 
     @Override public int showMenu() {
         System.out.println("\n====== MENU BIBLIOTECÁRIO ======");

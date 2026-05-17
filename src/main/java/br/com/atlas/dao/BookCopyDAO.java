@@ -1,11 +1,16 @@
 package br.com.atlas.dao;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
+
 import br.com.atlas.model.Book;
 import br.com.atlas.model.BookCopy;
 import br.com.atlas.util.ConnectionDb;
-import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
 
 public class BookCopyDAO {
 
@@ -49,7 +54,7 @@ public class BookCopyDAO {
             e.printStackTrace();
         } finally {
             // SÓ FECHA se a conexão foi aberta aqui dentro (não é a compartilhada)
-            if (this.connection == null && conn != null) {
+            if (this.connection == null) {
                 try { conn.close(); } catch (SQLException e) { e.printStackTrace(); }
             }
         }
@@ -70,7 +75,7 @@ public class BookCopyDAO {
             return false;
         } finally {
             // REGRA DE OURO: Se a conexão veio de fora (transação), NÃO FECHE!
-            if (this.connection == null && conn != null) {
+            if (this.connection == null) {
                 try { conn.close(); } catch (SQLException e) { e.printStackTrace(); }
             }
         }

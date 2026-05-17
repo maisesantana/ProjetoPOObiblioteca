@@ -1,0 +1,314 @@
+:root {
+  --atlas-primary: #6B1A2B;
+  --atlas-primary-hover: #521320;
+  --atlas-action-blue: #3B82F6;
+  --atlas-action-blue-hover: #2563EB;
+  --atlas-gray: #F3F3F3;
+  --atlas-text: #1B1B1B;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background: #FFFFFF;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  color: var(--atlas-text);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+main {
+  flex: 1;
+}
+
+.copies-container {
+  max-width: 850px;
+  margin: 0 auto;
+  padding-top: 1.8rem;
+  padding-bottom: 4rem;
+}
+
+/* Breadcrumb */
+.breadcrumb-custom {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1.2rem;
+  font-size: 0.9rem;
+}
+
+.breadcrumb-custom a {
+  text-decoration: none;
+  color: #6E7BF2;
+}
+
+.breadcrumb-custom span {
+  color: #7C7C7C;
+}
+
+.breadcrumb-custom .current {
+  color: var(--atlas-primary);
+  font-weight: 600;
+}
+
+/* Título */
+.titulo-section {
+  margin-bottom: 2.5rem;
+}
+
+.titulo-section h1 {
+  font-size: 1.42rem;
+  font-weight: 700;
+  color: #222;
+  margin-bottom: 0.35rem;
+}
+
+.titulo-section p {
+  color: #8C8C8C;
+  font-size: 0.94rem;
+}
+
+/* Notificações (Padrão Toast Avermelhado) */
+.toast-custom {
+  display: none;
+  align-items: center;
+  gap: 0.75rem;
+  border-radius: 14px;
+  padding: 1rem 1.4rem;
+  font-weight: 600;
+  font-size: 0.97rem;
+  margin-bottom: 2rem;
+  animation: fadeIn 0.3s ease;
+}
+
+.toast-custom.show {
+  display: flex;
+}
+
+.toast-success {
+  background: #FEE2E2;
+  border: 1.5px solid #FCA5A5;
+  color: #991B1B;
+}
+
+.toast-success i {
+  color: #DC2626;
+  font-size: 1.3rem;
+}
+
+.toast-error {
+  background: #FEE2E2;
+  border: 1.5px solid #FCA5A5;
+  color: #991B1B;
+}
+
+.toast-error i {
+  color: #DC2626;
+  font-size: 1.3rem;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Barra de Busca (Botão Azul) */
+.search-box {
+  margin-bottom: 2.5rem;
+}
+
+.search-box form {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+.search-box input[type="text"] {
+  flex: 1;
+  background: #F3F3F3;
+  border: none;
+  border-radius: 16px;
+  padding: 1rem 1.35rem;
+  font-size: 1rem;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  color: var(--atlas-text);
+  outline: none;
+  transition: box-shadow 0.2s;
+}
+
+.search-box input[type="text"]:focus {
+  box-shadow: 0 0 0 2px var(--atlas-action-blue);
+}
+
+.search-box button {
+  background: var(--atlas-action-blue);
+  color: #fff;
+  border: none;
+  border-radius: 16px;
+  padding: 0.9rem 2rem;
+  font-size: 1rem;
+  font-weight: 600;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  cursor: pointer;
+  transition: background 0.2s;
+  white-space: nowrap;
+}
+
+.search-box button:hover {
+  background: var(--atlas-action-blue-hover);
+}
+
+/* Cards de Livros (Ícones e Destaques em Vermelho) */
+.books-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.35rem;
+}
+
+.book-card {
+  display: flex;
+  align-items: center;
+  gap: 1.15rem;
+}
+
+.book-icon {
+  width: 68px;
+  height: 68px;
+  border-radius: 16px;
+  background: #ECECEC;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.book-icon i {
+  font-size: 1.7rem;
+  color: var(--atlas-primary);
+}
+
+.book-info {
+  flex: 1;
+  background: #F3F3F3;
+  border-radius: 16px;
+  padding: 1.1rem 1.35rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.book-details {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.book-info h3 {
+  font-size: 1.08rem;
+  font-weight: 700;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  color: #1B1B1B;
+  margin: 0;
+}
+
+.book-info .book-author {
+  color: #5F5F5F;
+  font-size: 0.95rem;
+  font-weight: 500;
+}
+
+/* Formulário e Botão de Inclusão de Cópias (Botão Azul) */
+.add-copies-form {
+  display: flex;
+  align-items: center;
+}
+
+.input-group-custom {
+  display: flex;
+  gap: 0.6rem;
+  align-items: center;
+}
+
+.input-group-custom input[type="number"] {
+  width: 70px;
+  background: #fff;
+  border: none;
+  border-radius: 10px;
+  padding: 0.55rem 0.5rem;
+  font-size: 0.97rem;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  color: var(--atlas-text);
+  font-weight: 600;
+  text-align: center;
+  outline: none;
+  box-shadow: 0 0 0 2px var(--atlas-primary);
+}
+
+.btn-add-action {
+  background: var(--atlas-action-blue);
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  padding: 0.55rem 1.2rem;
+  font-size: 0.93rem;
+  font-weight: 700;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  cursor: pointer;
+  transition: background 0.2s;
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.btn-add-action:hover {
+  background: var(--atlas-action-blue-hover);
+}
+
+@media (max-width: 768px) {
+  .search-box form {
+    flex-direction: column;
+  }
+  
+  .search-box button {
+    width: 100%;
+  }
+
+  .book-card {
+    flex-direction: column;
+    align-items: stretch;
+    background: #FAFAFA;
+    padding: 1rem;
+    border-radius: 20px;
+  }
+
+  .book-info {
+    flex-direction: column;
+    align-items: flex-start;
+    background: transparent;
+    padding: 0.5rem 0;
+  }
+
+  .add-copies-form {
+    width: 100%;
+  }
+
+  .input-group-custom {
+    width: 100%;
+  }
+
+  .input-group-custom input[type="number"] {
+    flex: 1;
+  }
+
+  .btn-add-action {
+    flex: 2;
+    justify-content: center;
+  }
+}
