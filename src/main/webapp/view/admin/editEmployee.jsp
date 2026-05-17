@@ -86,9 +86,34 @@
     <%
       String msg = request.getParameter("msg");
       if (msg != null && !msg.isBlank()) {
+        String alertClass;
+        String alertText;
+
+        switch (msg) {
+          case "success":
+            alertClass = "success";
+            alertText = "Alteração realizada com sucesso.";
+            break;
+          case "password_mismatch":
+            alertClass = "danger";
+            alertText = "As senhas não conferem. Digite a mesma senha nos dois campos.";
+            break;
+          case "password_same":
+            alertClass = "warning";
+            alertText = "A senha nova é igual a atual.";
+            break;
+          case "empty_fields":
+            alertClass = "danger";
+            alertText = "Preencha todos os campos obrigatórios antes de enviar.";
+            break;
+          default:
+            alertClass = "danger";
+            alertText = "Ocorreu um erro. Tente novamente.";
+            break;
+        }
     %>
-      <div class="alert alert-<%= "success".equals(msg) ? "success" : "danger" %>">
-        <%= "success".equals(msg) ? "Alteração realizada com sucesso." : "Ocorreu um erro. Tente novamente." %>
+      <div class="alert alert-<%= alertClass %>">
+        <%= alertText %>
       </div>
     <%
       }

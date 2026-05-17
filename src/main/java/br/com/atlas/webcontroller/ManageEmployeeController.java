@@ -164,7 +164,15 @@ public class ManageEmployeeController extends HttpServlet {
                 }
 
                 try {
-                    password = Integer.parseInt(passwordText);
+                    int newPassword = Integer.parseInt(passwordText);
+                    Employee existing = employeeService.findByCpf(cpf)
+                            .orElseThrow(() -> new IllegalArgumentException("CPF não encontrado"));
+                    if (existing.getPassword() == newPassword) {
+                        response.sendRedirect(request.getContextPath()
+                                + "/manageEmployee?action=edit&cpf=" + cpf + "&msg=password_same");
+                        return;
+                    }
+                    password = newPassword;
                 } catch (NumberFormatException e) {
                     response.sendRedirect(request.getContextPath()
                             + "/manageEmployee?action=edit&cpf=" + cpf + "&msg=empty_fields");
