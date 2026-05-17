@@ -22,6 +22,7 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"/>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet"/>
   <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/admin/navbarAdm.css"/>
+  <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/admin/registerEmployee.css"/>
   <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/footer.css"/>
 </head>
 <body>
@@ -55,19 +56,35 @@
         </div>
       </div>
     </nav>
+    <div class="logo-header">
+      <a href="${pageContext.request.contextPath}/view/admin/adminPanel.jsp">
+        <img src="${pageContext.request.contextPath}/assets/images/logo.png" alt="Atlas - Gestão de Biblioteca" class="logo-atlas"/>
+      </a>
+    </div>
   </header>
 
   <main class="container py-5">
+    <nav class="mb-4">
+      <a href="${pageContext.request.contextPath}/view/admin/adminPanel.jsp">Início</a>
+      <span>/</span>
+      <span>Gerenciar funcionário</span>
+    </nav>
+
     <div class="mb-4">
       <h1>Gerenciar Funcionários</h1>
-      <p>Use o CPF para localizar um funcionário e editar ou remover o cadastro.</p>
+      <p class="text-muted">Use o CPF para localizar um funcionário e editar ou remover o cadastro.</p>
     </div>
 
     <%
       String msg = request.getParameter("msg");
+      String debug = request.getParameter("debug");
       if (msg != null && !msg.isBlank()) {
+        String alertClass = "danger";
+        if ("removed".equals(msg)) {
+          alertClass = "success";
+        }
     %>
-      <div class="alert alert-warning">
+      <div class="alert alert-<%= alertClass %>">
         <%
           switch (msg) {
             case "not_found":
@@ -81,6 +98,9 @@
               break;
             default:
               out.print(msg);
+          }
+          if (debug != null && !debug.isBlank()) {
+              out.print("<br/>Detalhe: " + debug);
           }
         %>
       </div>
@@ -103,6 +123,12 @@
       Object employeeFound = request.getAttribute("employeeFound");
       if (employeeFound != null) {
         br.com.atlas.model.Employee employee = (br.com.atlas.model.Employee) employeeFound;
+        String roleLabel = "Atendente";
+        if (employee instanceof br.com.atlas.model.Administrator) {
+          roleLabel = "Administrador";
+        } else if (employee instanceof br.com.atlas.model.Librarian) {
+          roleLabel = "Bibliotecário";
+        }
     %>
       <div class="card">
         <div class="card-body">
@@ -110,7 +136,7 @@
           <p class="card-text"><strong>CPF:</strong> <%= employee.getCpf() %></p>
           <p class="card-text"><strong>Nome:</strong> <%= employee.getName() %></p>
           <p class="card-text"><strong>Email:</strong> <%= employee.getEmail() %></p>
-          <p class="card-text"><strong>Função:</strong> <%= employee.getClass().getSimpleName() %></p>
+          <p class="card-text"><strong>Função:</strong> <%= roleLabel %></p>
           <a href="<%= request.getContextPath() %>/manageEmployee?action=edit&cpf=<%= employee.getCpf() %>" class="btn btn-warning me-2">Editar</a>
           <form action="<%= request.getContextPath() %>/manageEmployee" method="post" style="display:inline;">
             <input type="hidden" name="action" value="remove"/>

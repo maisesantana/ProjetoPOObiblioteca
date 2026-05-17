@@ -6,12 +6,17 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 
 @WebServlet("/manageEmployee")
 public class ManageEmployeeController extends HttpServlet {
 
     private final EmployeeService employeeService = new EmployeeService();
+
+    private String normalizeCpf(String cpf) {
+        return (cpf == null) ? null : cpf.replaceAll("\\D+", "");
+    }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -23,7 +28,7 @@ public class ManageEmployeeController extends HttpServlet {
         String action = request.getParameter("action");
 
         if ("search".equals(action)) {
-            String cpf = request.getParameter("cpf");
+            String cpf = normalizeCpf(request.getParameter("cpf"));
 
             if (cpf == null || cpf.isBlank()) {
                 response.sendRedirect(request.getContextPath() + "/view/admin/manageEmployee.jsp");
@@ -31,7 +36,7 @@ public class ManageEmployeeController extends HttpServlet {
             }
 
             try {
-                Employee found = employeeService.findByCpf(cpf.trim())
+                Employee found = employeeService.findByCpf(cpf)
                         .orElseThrow(() -> new IllegalArgumentException("CPF não encontrado"));
                 request.setAttribute("employeeFound", found);
                 request.getRequestDispatcher("/view/admin/manageEmployee.jsp")
@@ -47,29 +52,39 @@ public class ManageEmployeeController extends HttpServlet {
             }
 
         } else if ("edit".equals(action)) {
-            String cpf = request.getParameter("cpf");
-
-            if (cpf == null || cpf.isBlank()) {
-                response.sendRedirect(request.getContextPath() + "/view/admin/manageEmployee.jsp");
-                return;
-            }
-
-            try {
-                Employee found = employeeService.findByCpf(cpf.trim())
-                        .orElseThrow(() -> new IllegalArgumentException("CPF não encontrado"));
-                request.setAttribute("employeeFound", found);
-                request.getRequestDispatcher("/view/admin/editEmployee.jsp")
-                       .forward(request, response);
-
-            } catch (Exception e) {
-                e.printStackTrace();
-                response.sendRedirect(request.getContextPath()
-                        + "/view/admin/manageEmployee.jsp?msg=error");
-            }
+            forwardToEditPage(request, response, normalizeCpf(request.getParameter("cpf")));
 
         } else {
             request.getRequestDispatcher("/view/admin/manageEmployee.jsp")
                    .forward(request, response);
+        }
+    }
+
+    private void forwardToEditPage(HttpServletRequest request, HttpServletResponse response, String cpf)
+            throws ServletException, IOException {
+        if (cpf == null || cpf.isBlank()) {
+            response.sendRedirect(request.getContextPath() + "/view/admin/manageEmployee.jsp");
+            return;
+        }
+
+        try {
+            Employee found = employeeService.findByCpf(cpf)
+                    .orElseThrow(() -> new IllegalArgumentException("CPF não encontrado"));
+            request.setAttribute("employeeFound", found);
+            request.setAttribute("isLibrarian",    found instanceof Librarian);
+            request.setAttribute("isAdministrator", found instanceof Administrator);
+            request.getRequestDispatcher("/view/admin/editEmployee.jsp")
+                   .forward(request, response);
+        } catch (IllegalArgumentException e) {
+            response.sendRedirect(request.getContextPath()
+                    + "/view/admin/manageEmployee.jsp?msg=not_found");
+        } catch (Exception e) {
+            e.printStackTrace();
+            String debug = java.net.URLEncoder.encode(
+                    e.getClass().getSimpleName() + ": " + e.getMessage(),
+                    StandardCharsets.UTF_8);
+            response.sendRedirect(request.getContextPath()
+                    + "/view/admin/manageEmployee.jsp?msg=error&debug=" + debug);
         }
     }
 
@@ -83,7 +98,7 @@ public class ManageEmployeeController extends HttpServlet {
         String action = request.getParameter("action");
 
         if ("remove".equals(action)) {
-            String cpf = request.getParameter("cpf");
+            String cpf = normalizeCpf(request.getParameter("cpf"));
 
             if (cpf == null || cpf.isBlank()) {
                 response.sendRedirect(request.getContextPath()
@@ -92,7 +107,7 @@ public class ManageEmployeeController extends HttpServlet {
             }
 
             try {
-                employeeService.delete(cpf.trim()); // era admin.remove()
+                employeeService.delete(cpf.trim());
                 response.sendRedirect(request.getContextPath()
                         + "/view/admin/manageEmployee.jsp?msg=removed");
             } catch (Exception e) {
@@ -101,8 +116,11 @@ public class ManageEmployeeController extends HttpServlet {
                         + "/view/admin/manageEmployee.jsp?msg=error");
             }
 
+        } else if ("edit".equals(action)) {
+            forwardToEditPage(request, response, normalizeCpf(request.getParameter("cpf")));
+
         } else if ("update".equals(action)) {
-            String cpf           = request.getParameter("cpf");
+            String cpf           = normalizeCpf(request.getParameter("cpf"));
             String name          = request.getParameter("name");
             String email         = request.getParameter("email");
             String gender        = request.getParameter("gender");
@@ -111,15 +129,9 @@ public class ManageEmployeeController extends HttpServlet {
             String confirmPw     = request.getParameter("confirmPassword");
             String role          = request.getParameter("role");
 
-            if (isBlank(cpf, name, email, gender, birthDateText, passwordText, confirmPw, role)) {
+            if (isBlank(cpf, name, email, gender, birthDateText, role)) {
                 response.sendRedirect(request.getContextPath()
-                        + "/view/admin/editEmployee.jsp?msg=empty_fields&cpf=" + cpf);
-                return;
-            }
-
-            if (!passwordText.equals(confirmPw)) {
-                response.sendRedirect(request.getContextPath()
-                        + "/view/admin/editEmployee.jsp?msg=password_mismatch&cpf=" + cpf);
+                        + "/manageEmployee?action=edit&cpf=" + cpf + "&msg=empty_fields");
                 return;
             }
 
@@ -128,17 +140,36 @@ public class ManageEmployeeController extends HttpServlet {
                 birthDate = LocalDate.parse(birthDateText);
             } catch (Exception e) {
                 response.sendRedirect(request.getContextPath()
-                        + "/view/admin/editEmployee.jsp?msg=empty_fields&cpf=" + cpf);
+                        + "/manageEmployee?action=edit&cpf=" + cpf + "&msg=empty_fields");
                 return;
             }
 
             int password;
-            try {
-                password = Integer.parseInt(passwordText);
-            } catch (NumberFormatException e) {
-                response.sendRedirect(request.getContextPath()
-                        + "/view/admin/editEmployee.jsp?msg=empty_fields&cpf=" + cpf);
-                return;
+            if (isBlank(passwordText, confirmPw)) {
+                try {
+                    Employee existing = employeeService.findByCpf(cpf)
+                            .orElseThrow(() -> new IllegalArgumentException("CPF não encontrado"));
+                    password = existing.getPassword();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    response.sendRedirect(request.getContextPath()
+                            + "/manageEmployee?action=edit&cpf=" + cpf + "&msg=error");
+                    return;
+                }
+            } else {
+                if (!passwordText.equals(confirmPw)) {
+                    response.sendRedirect(request.getContextPath()
+                            + "/manageEmployee?action=edit&cpf=" + cpf + "&msg=password_mismatch");
+                    return;
+                }
+
+                try {
+                    password = Integer.parseInt(passwordText);
+                } catch (NumberFormatException e) {
+                    response.sendRedirect(request.getContextPath()
+                            + "/manageEmployee?action=edit&cpf=" + cpf + "&msg=empty_fields");
+                    return;
+                }
             }
 
             char genderChar = Character.toUpperCase(gender.charAt(0));
@@ -146,18 +177,20 @@ public class ManageEmployeeController extends HttpServlet {
             Employee updated;
             if ("bibliotecario".equals(role)) {
                 updated = new Librarian(cpf, name, email, genderChar, birthDate, password);
+            } else if ("administrador".equals(role)) {
+                updated = new Administrator(cpf, name, email, genderChar, birthDate, password);
             } else {
                 updated = new Attendant(cpf, name, email, genderChar, birthDate, password);
             }
 
             try {
-                employeeService.update(updated); // era admin.update()
+                employeeService.update(updated);
                 response.sendRedirect(request.getContextPath()
-                        + "/view/admin/editEmployee.jsp?msg=success&cpf=" + cpf);
+                        + "/manageEmployee?action=edit&cpf=" + cpf + "&msg=success");
             } catch (Exception e) {
                 e.printStackTrace();
                 response.sendRedirect(request.getContextPath()
-                        + "/view/admin/editEmployee.jsp?msg=error&cpf=" + cpf);
+                        + "/manageEmployee?action=edit&cpf=" + cpf + "&msg=error");
             }
 
         } else {

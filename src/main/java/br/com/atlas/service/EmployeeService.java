@@ -11,8 +11,6 @@ import java.util.Optional;
 
 public class EmployeeService {
 
-    // Resolve qual DAO específico usar para o tipo do funcionário
-    // POLIMORFISMO: retorna a interface, não o tipo concreto
     private EmployeeTypeDAO resolveDao(Employee emp, Connection conn) {
         if (emp instanceof Attendant)     return new AttendantDAO(conn);
         if (emp instanceof Librarian)     return new LibrarianDAO(conn);
@@ -20,7 +18,6 @@ public class EmployeeService {
         throw new IllegalArgumentException("Tipo de funcionário desconhecido: " + emp.getClass().getSimpleName());
     }
 
-    // Resolve qual DAO usar apenas pelo CPF (para delete)
     private EmployeeTypeDAO resolveDaoByCpf(String cpf, Connection conn) throws Exception {
         if (new AttendantDAO(conn).exists(cpf))     return new AttendantDAO(conn);
         if (new LibrarianDAO(conn).exists(cpf))     return new LibrarianDAO(conn);
@@ -38,8 +35,6 @@ public class EmployeeService {
 
             new PersonDAO(conn).insert(emp);
             new EmployeeDAO(conn).insert(emp);
-
-            // POLIMORFISMO: sem instanceof encadeado — resolveDao decide qual DAO usar
             resolveDao(emp, conn).insert(emp);
 
             conn.commit();
@@ -61,6 +56,15 @@ public class EmployeeService {
             new PersonDAO(conn).update(emp);
             new EmployeeDAO(conn).update(emp);
 
+            // Remove da tabela de tipo antiga (qualquer que seja)
+            EmployeeTypeDAO oldDao = resolveDaoByCpf(emp.getCpf(), conn);
+            if (oldDao != null) {
+                oldDao.delete(emp.getCpf());
+            }
+
+            // Insere na tabela do novo tipo
+            resolveDao(emp, conn).insert(emp);
+
             conn.commit();
 
         } catch (Exception e) {
@@ -78,7 +82,6 @@ public class EmployeeService {
         try {
             conn.setAutoCommit(false);
 
-            // POLIMORFISMO: resolveDaoByCpf retorna o DAO certo sem instanceof
             EmployeeTypeDAO typeDao = resolveDaoByCpf(cpf, conn);
             if (typeDao == null)
                 throw new IllegalArgumentException("Funcionário não encontrado com CPF: " + cpf);
@@ -98,8 +101,13 @@ public class EmployeeService {
     }
 
     // BUSCA POR CPF
+    private String normalizeCpf(String cpf) {
+        return (cpf == null) ? null : cpf.replaceAll("\\D+", "");
+    }
+
     public Optional<Employee> findByCpf(String cpf) {
-        if (cpf == null || cpf.trim().isEmpty())
+        cpf = normalizeCpf(cpf);
+        if (cpf == null || cpf.isBlank())
             throw new IllegalArgumentException("CPF é obrigatório para busca!");
 
         Connection conn = ConnectionDb.getConexao();
@@ -135,14 +143,11 @@ public class EmployeeService {
         catch (Exception e) { throw new RuntimeException("Erro ao buscar administradores.", e); }
     }
 
-    //para criar a lista com todos os funcionarios.
     public List<Employee> getAllEmployees() {
         List<Employee> employees = new ArrayList<>();
-
         employees.addAll(getAllAdmins());
         employees.addAll(getAllAttendants());
         employees.addAll(getAllLibrarians());
-
         return employees;
     }
 

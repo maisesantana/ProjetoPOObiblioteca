@@ -1,21 +1,22 @@
 package br.com.atlas.webcontroller;
-
-import java.io.IOException;
-import java.time.LocalDate;
-import java.util.List;
-import java.util.Optional;
-
 import br.com.atlas.model.Administrator;
 import br.com.atlas.model.Attendant;
 import br.com.atlas.model.Employee;
 import br.com.atlas.model.Librarian;
 import br.com.atlas.service.EmployeeService;
-import jakarta.servlet.ServletException;
+
 import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+
+import java.io.IOException;
+import java.time.LocalDate;
+//import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 @WebServlet(name = "AdministratorController", urlPatterns = {"/registerEmployee", "/listEmployees"})
 public class AdministratorController extends HttpServlet {
