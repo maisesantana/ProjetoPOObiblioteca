@@ -51,7 +51,7 @@
 
           <li class="nav-item">
             <a class="nav-link active"
-               href="${pageContext.request.contextPath}/view/admin/adminHome.jsp">
+               href="${pageContext.request.contextPath}/view/admin/adminPanel.jsp">
               Início
             </a>
           </li>

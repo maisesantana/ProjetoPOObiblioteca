@@ -14,6 +14,10 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
+  <!-- CSS -->
+  <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/admin/navbarAdm.css"/>
+  <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/footer.css"/>
+  <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/admin/registerEmployee.css"/>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Atlas - Cadastrar Funcionário</title>
@@ -337,7 +341,9 @@
 
   </main>
 
-  <!-- Bootstrap JS -->
+  <jsp:include page="/view/footer.jsp"/>
+
+      <!-- Bootstrap JS -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
 </body>
