@@ -8,11 +8,7 @@
   --atlas-action-blue-hover: #2563EB;
 }
 
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
+* { margin: 0; padding: 0; box-sizing: border-box; }
 
 body {
   background: #FFFFFF;
@@ -32,7 +28,6 @@ main { flex: 1; }
   padding-bottom: 4rem;
 }
 
-/* Breadcrumb */
 .breadcrumb-custom {
   display: flex;
   align-items: center;
@@ -41,36 +36,14 @@ main { flex: 1; }
   font-size: 0.9rem;
 }
 
-.breadcrumb-custom a {
-  text-decoration: none;
-  color: #6E7BF2;
-}
-
+.breadcrumb-custom a { text-decoration: none; color: #6E7BF2; }
 .breadcrumb-custom span { color: #7C7C7C; }
+.breadcrumb-custom .current { color: var(--atlas-primary); font-weight: 600; }
 
-.breadcrumb-custom .current {
-  color: var(--atlas-primary);
-  font-weight: 600;
-}
+.titulo-section { margin-bottom: 2.5rem; }
+.titulo-section h1 { font-size: 1.42rem; font-weight: 700; color: #222; margin-bottom: 0.35rem; }
+.titulo-section p { color: #8C8C8C; font-size: 0.94rem; }
 
-/* Título */
-.titulo-section {
-  margin-bottom: 2.5rem;
-}
-
-.titulo-section h1 {
-  font-size: 1.42rem;
-  font-weight: 700;
-  color: #222;
-  margin-bottom: 0.35rem;
-}
-
-.titulo-section p {
-  color: #8C8C8C;
-  font-size: 0.94rem;
-}
-
-/* Notificações */
 .toast-msg {
   display: none;
   align-items: center;
@@ -84,21 +57,9 @@ main { flex: 1; }
 }
 
 .toast-msg.show { display: flex; }
-
-.toast-success {
-  background: #D1FAE5;
-  border: 1.5px solid #6EE7B7;
-  color: #065F46;
-}
-
+.toast-success { background: #D1FAE5; border: 1.5px solid #6EE7B7; color: #065F46; }
 .toast-success i { color: #059669; font-size: 1.3rem; }
-
-.toast-error {
-  background: #FEE2E2;
-  border: 1.5px solid #FCA5A5;
-  color: #991B1B;
-}
-
+.toast-error { background: #FEE2E2; border: 1.5px solid #FCA5A5; color: #991B1B; }
 .toast-error i { color: #DC2626; font-size: 1.3rem; }
 
 @keyframes fadeIn {
@@ -106,7 +67,6 @@ main { flex: 1; }
   to   { opacity: 1; transform: translateY(0); }
 }
 
-/* Painel de abas */
 .tabs {
   display: flex;
   gap: 0.5rem;
@@ -129,17 +89,11 @@ main { flex: 1; }
   transition: color 0.2s, border-color 0.2s;
 }
 
-.tab-btn.active {
-  color: var(--atlas-primary);
-  border-bottom-color: var(--atlas-primary);
-}
-
+.tab-btn.active { color: var(--atlas-primary); border-bottom-color: var(--atlas-primary); }
 .tab-btn:hover { color: var(--atlas-primary); }
-
 .tab-panel { display: none; }
 .tab-panel.active { display: block; }
 
-/* Formulário de cadastro */
 .form-card {
   background: #F3F3F3;
   border-radius: 20px;
@@ -170,11 +124,8 @@ main { flex: 1; }
   transition: box-shadow 0.2s;
 }
 
-.form-card input[type="text"]:focus {
-  box-shadow: 0 0 0 2px var(--atlas-action-blue);
-}
+.form-card input[type="text"]:focus { box-shadow: 0 0 0 2px var(--atlas-action-blue); }
 
-/* Botão Cadastrar em Azul */
 .btn-primary-atlas {
   margin-top: 1.2rem;
   background: var(--atlas-action-blue);
@@ -191,10 +142,7 @@ main { flex: 1; }
 
 .btn-primary-atlas:hover { background: var(--atlas-action-blue-hover); }
 
-/* Barra de busca para edição */
-.search-box {
-  margin-bottom: 1.5rem;
-}
+.search-box { margin-bottom: 1.5rem; }
 
 .search-box form {
   display: flex;
@@ -215,9 +163,7 @@ main { flex: 1; }
   transition: box-shadow 0.2s;
 }
 
-.search-box input[type="text"]:focus {
-  box-shadow: 0 0 0 2px var(--atlas-action-blue);
-}
+.search-box input[type="text"]:focus { box-shadow: 0 0 0 2px var(--atlas-action-blue); }
 
 .search-box button[type="submit"] {
   background: var(--atlas-action-blue);
@@ -235,12 +181,7 @@ main { flex: 1; }
 
 .search-box button[type="submit"]:hover { background: var(--atlas-action-blue-hover); }
 
-/* Lista de autores */
-.authors-list {
-  display: flex;
-  flex-direction: column;
-  gap: 1.1rem;
-}
+.authors-list { display: flex; flex-direction: column; gap: 1.1rem; }
 
 .author-card {
   display: flex;
@@ -259,10 +200,7 @@ main { flex: 1; }
   flex-shrink: 0;
 }
 
-.author-icon i {
-  font-size: 1.5rem;
-  color: #111;
-}
+.author-icon i { font-size: 1.5rem; color: #111; }
 
 .author-info {
   flex: 1;
@@ -275,13 +213,24 @@ main { flex: 1; }
   gap: 1rem;
 }
 
-.author-name {
-  font-size: 1.05rem;
-  font-weight: 700;
-  color: #1B1B1B;
+.author-display {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  gap: 1rem;
 }
 
-/* Inline edit */
+.author-name { font-size: 1.05rem; font-weight: 700; color: #1B1B1B; }
+
+/* Agrupa os botões Editar e Remover lado a lado */
+.author-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-shrink: 0;
+}
+
 .edit-form {
   display: none;
   align-items: center;
@@ -318,6 +267,38 @@ main { flex: 1; }
 
 .btn-edit:hover { opacity: 0.7; }
 
+/* Botão Remover — Limpo e idêntico ao de editar, mudando apenas a cor */
+.btn-delete {
+  background: none;
+  border: none;
+  outline: none;
+  box-shadow: none;
+  color: #DC2626; /* Cor vermelha */
+  font-weight: 700;
+  font-size: 0.93rem;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  cursor: pointer;
+  transition: opacity 0.2s;
+  white-space: nowrap;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem; /* Pequeno espaço entre o ícone e o texto */
+}
+
+.btn-delete:hover {
+  opacity: 0.7;
+}
+
+/* Garante que o form inline não quebre o layout do Flexbox */
+.form-delete {
+  display: flex !important;
+  align-items: center;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: none !important;
+}
+
 .btn-save {
   background: #059669;
   color: #fff;
@@ -350,4 +331,5 @@ main { flex: 1; }
   .search-box form { flex-direction: column; }
   .search-box button[type="submit"] { width: 100%; }
   .author-info { flex-direction: column; align-items: flex-start; }
+  .author-display { flex-direction: column; align-items: flex-start; }
 }

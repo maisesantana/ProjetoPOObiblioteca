@@ -18,7 +18,6 @@ import jakarta.servlet.http.HttpSession;
 public class ManageAuthorsController extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
-    // GET: exibe a página, com busca opcional na aba de edição
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -34,10 +33,10 @@ public class ManageAuthorsController extends HttpServlet {
 
         List<Author> authors = null;
 
-        // Só busca autores se estiver na aba de edição
         if ("edit".equals(tab)) {
             try (Connection conn = ConnectionDb.getConexao()) {
                 AuthorDAO dao = new AuthorDAO(conn);
+                // Se tiver query busca por nome, senão lista todos
                 if (query != null && !query.trim().isEmpty()) {
                     authors = dao.findByName(query.trim());
                 } else {
@@ -52,7 +51,6 @@ public class ManageAuthorsController extends HttpServlet {
         request.getRequestDispatcher("/view/librarian/manageAuthors.jsp").forward(request, response);
     }
 
-    // POST: cadastrar ou atualizar autor
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -85,7 +83,7 @@ public class ManageAuthorsController extends HttpServlet {
                 String idParam = request.getParameter("authorId");
                 String name    = request.getParameter("authorName");
                 String query   = request.getParameter("query");
-                
+
                 if (name == null || name.trim().isEmpty()) {
                     response.sendRedirect(request.getContextPath() + "/manageAuthors?msg=name_empty&tab=edit");
                     return;
@@ -98,6 +96,36 @@ public class ManageAuthorsController extends HttpServlet {
                 }
 
                 String redirect = request.getContextPath() + "/manageAuthors?msg=author_updated&tab=edit";
+                if (query != null && !query.trim().isEmpty()) {
+                    redirect += "&query=" + java.net.URLEncoder.encode(query, "UTF-8");
+                }
+                response.sendRedirect(redirect);
+
+            } else if ("delete".equals(action)) {
+
+                String idParam = request.getParameter("authorId");
+                String query   = request.getParameter("query");
+                int authorId   = Integer.parseInt(idParam);
+
+                try (Connection conn = ConnectionDb.getConexao()) {
+                    AuthorDAO dao = new AuthorDAO(conn);
+
+                    // Verifica se há livros vinculados antes de remover
+                    List<String> books = dao.findBooksByAuthor(authorId);
+                    if (!books.isEmpty()) {
+                        // Bloqueia a remoção e avisa
+                        String redirect = request.getContextPath() + "/manageAuthors?msg=author_has_books&tab=edit";
+                        if (query != null && !query.trim().isEmpty()) {
+                            redirect += "&query=" + java.net.URLEncoder.encode(query, "UTF-8");
+                        }
+                        response.sendRedirect(redirect);
+                        return;
+                    }
+
+                    dao.delete(authorId);
+                }
+
+                String redirect = request.getContextPath() + "/manageAuthors?msg=author_deleted&tab=edit";
                 if (query != null && !query.trim().isEmpty()) {
                     redirect += "&query=" + java.net.URLEncoder.encode(query, "UTF-8");
                 }
