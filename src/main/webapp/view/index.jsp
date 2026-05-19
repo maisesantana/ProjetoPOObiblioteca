@@ -27,7 +27,8 @@
            if(msg != null) { %>
             <div class="alert-error">
                 <i class="fa-solid fa-circle-exclamation"></i>
-                <% if(msg.equals("invalid_credentials")) { %> Usuário ou senha incorretos.
+                <% if(msg.equals("cpf_not_found")) { %> CPF não cadastrado no sistema.
+                <% } else if(msg.equals("invalid_credentials")) { %> Senha incorreta.
                 <% } else if(msg.equals("empty_fields")) { %> Preencha todos os campos.
                 <% } else if(msg.equals("password_must_be_number")) { %> A senha deve ser numérica.
                 <% } else { %> Erro ao realizar login. <% } %>

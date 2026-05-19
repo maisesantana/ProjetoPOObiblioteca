@@ -45,4 +45,18 @@ public class LoginDAO {
 
     return Optional.empty();
 }
+
+public boolean cpfLoginExists(String cpf) {
+    String sql = "SELECT 1 FROM Employee WHERE cpf = ?";
+    try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+        stmt.setString(1, cpf);
+        try (ResultSet rs = stmt.executeQuery()) {
+            return rs.next();
+        }
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+    return false;
+}
+
 }
