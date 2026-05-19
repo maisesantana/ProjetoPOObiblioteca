@@ -84,6 +84,8 @@ main {
   font-size: 0.97rem;
   margin-bottom: 2rem;
   animation: fadeIn 0.3s ease;
+
+  border: none;
 }
 
 .toast-custom.show {
@@ -112,6 +114,8 @@ main {
   font-size: 1.3rem;
 }
 
+=======
+>>>>>>> Stashed changes
 @keyframes fadeIn {
   from {
     opacity: 0;

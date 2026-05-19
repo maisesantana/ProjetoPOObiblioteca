@@ -83,7 +83,7 @@ public class AddCopiesController extends HttpServlet {
                 throw e;
             }
         } catch (Exception e) {
-           // e.printStackTrace();
+            e.printStackTrace();
             response.sendRedirect(request.getContextPath() + "/addCopies?query=" + query + "&msg=error");
             return;
         }

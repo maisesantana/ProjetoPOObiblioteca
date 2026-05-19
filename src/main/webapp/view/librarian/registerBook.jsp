@@ -66,7 +66,7 @@
             <li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/view/librarian/addCopies.jsp">Exemplares</a></li>
             <li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/view/librarian/searchBooks.jsp">Buscar</a></li>
             <li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/view/librarian/manageAuthors.jsp">Autores</a></li>
-            <li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/view/librarian/manageCategories.jsp">Categorias</a></li>
+            <li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/view/librarian/manageCategory.jsp">Categorias</a></li>
           </ul>
           <a href="${pageContext.request.contextPath}/logout" class="btn-sair"><i class="bi bi-box-arrow-right"></i> Sair</a>
         </div>
