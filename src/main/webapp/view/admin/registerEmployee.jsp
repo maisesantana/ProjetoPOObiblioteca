@@ -16,8 +16,8 @@
 <head>
   <!-- CSS -->
   <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/admin/navbarAdm.css"/>
-  <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/footer.css"/>
   <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/admin/registerEmployee.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Atlas - Cadastrar Funcionário</title>
@@ -342,7 +342,10 @@
 
   </main>
 
-  <jsp:include page="/view/footer.jsp"/>
+
+  <footer class="text-center py-4 mt-5 text-muted" style="font-size: 0.8rem; border-top: 1px solid #eee; font-family: 'Plus Jakarta Sans', sans-serif;">
+    © 2026 Atlas. Todos os direitos reservados.
+  </footer>
 
       <!-- Bootstrap JS -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
