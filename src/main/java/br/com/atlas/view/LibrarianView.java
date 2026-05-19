@@ -18,6 +18,7 @@ public class LibrarianView extends EmployeeView {
         System.out.println("4 - Buscar livros");
         System.out.println("5 - Gerenciar autores");
         System.out.println("6 - Gerenciar categorias");
+        System.out.println("7 - Listar todos os livros");
         System.out.println("0 - Sair");
 
         return sc.nextInt();
@@ -48,7 +49,7 @@ public class LibrarianView extends EmployeeView {
     }
 
     public Book readBookData() {
-        sc.nextLine(); // limpar buffer
+        sc.nextLine();
 
         System.out.println("\n====== CADASTRAR LIVRO ======");
         System.out.print("Nome: ");
@@ -83,17 +84,13 @@ public class LibrarianView extends EmployeeView {
         return sc.nextLine();
     }
 
-    // Dentro da classe LibrarianView.java
-
     public String askAuthorName() {
         System.out.print("Nome do Autor: ");
-        // Usamos nextLine() para aceitar nomes com espaços
         return getSc().nextLine();
     }
 
     public String askCategoryName() {
         System.out.print("Nome da Categoria: ");
-        // Usamos nextLine() para aceitar nomes como "Terror Psicológico"
         return getSc().nextLine();
     }
 
@@ -105,11 +102,14 @@ public class LibrarianView extends EmployeeView {
             return;
         }
 
+        System.out.printf("%-5s %-30s %-15s %-10s\n", "ID", "NOME", "LOCALIZAÇÃO", "PÁGINAS");
+        System.out.println("-".repeat(65));
         for (Book b : books) {
-            System.out.println("ID: " + b.getBookId());
-            System.out.println("Nome: " + b.getBookName());
-            System.out.println("Local: " + b.getBookLocation());
-            System.out.println("--------------------------");
+            System.out.printf("%-5d %-30s %-15s %-10d\n",
+                b.getBookId(),
+                b.getBookName(),
+                b.getBookLocation() != null ? b.getBookLocation() : "-",
+                b.getNumberOfPages());
         }
     }
 
@@ -125,7 +125,7 @@ public class LibrarianView extends EmployeeView {
     }
 
     public String readAuthorName() {
-        sc.nextLine(); // limpar buffer
+        sc.nextLine();
         System.out.print("Novo Nome do Autor: ");
         return sc.nextLine();
     }
@@ -142,7 +142,7 @@ public class LibrarianView extends EmployeeView {
     }
 
     public String readCategoryName() {
-        getSc().nextLine(); // limpar buffer
+        getSc().nextLine();
         System.out.print("Novo Nome da Categoria: ");
         return getSc().nextLine();
     }

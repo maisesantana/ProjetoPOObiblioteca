@@ -9,6 +9,7 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 
 public class AttendantView extends EmployeeView {
+
     private Scanner scanner = new Scanner(System.in);
 
     @Override public int showMenu() {
@@ -19,12 +20,12 @@ public class AttendantView extends EmployeeView {
         System.out.println("4. Registrar Renovação");
         System.out.println("5. Pesquisar Livros");
         System.out.println("6. Listar Empréstimos Ativos");
+        System.out.println("7. Listar Todos os Livros");
         System.out.println("0. Sair");
         System.out.print("Opção: ");
         return scanner.nextInt();
     }
 
-    // Dentro de AttendantView.java
     public int showClientMenu() {
         System.out.println("\n--- GERENCIAR CLIENTES ---");
         System.out.println("1. Listar Clientes");
@@ -33,11 +34,10 @@ public class AttendantView extends EmployeeView {
         System.out.println("0. Voltar");
         System.out.print("Escolha uma opção: ");
         int op = scanner.nextInt();
-        scanner.nextLine(); // LIMPA O BUFFER LOGO APÓS O INT
+        scanner.nextLine();
         return op;
     }
 
-    // Método para exibir a lista (precisaremos buscar os dados no Controller)
     public void showClients(List<br.com.atlas.model.Client> clients) {
         br.com.atlas.view.EmployeeView.clearScreen();
         if (clients.isEmpty()) {
@@ -55,7 +55,7 @@ public class AttendantView extends EmployeeView {
         System.out.print("Nome: "); dto.setName(scanner.nextLine());
         System.out.print("Email: "); dto.setEmail(scanner.nextLine());
         System.out.print("Gênero (M/F): "); dto.setGender(scanner.next().charAt(0));
-       DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         while (true) {
             try {
                 System.out.print("Data Nasc (DD/MM/AAAA): ");
@@ -93,7 +93,16 @@ public class AttendantView extends EmployeeView {
     }
 
     public void showBooks(List<Book> books) {
-        if (books.isEmpty()) System.out.println("Nenhum livro encontrado.");
-        else books.forEach(b -> System.out.println("ID: " + b.getBookId() + " | Nome: " + b.getBookName()));
+        System.out.println("\n====== LIVROS ======");
+        if (books == null || books.isEmpty()) {
+            System.out.println("Nenhum livro encontrado.");
+            return;
+        }
+        System.out.printf("%-5s %-30s %-15s\n", "ID", "NOME", "LOCALIZAÇÃO");
+        System.out.println("-".repeat(55));
+        books.forEach(b -> System.out.printf("%-5d %-30s %-15s\n",
+            b.getBookId(),
+            b.getBookName(),
+            b.getBookLocation() != null ? b.getBookLocation() : "-"));
     }
 }

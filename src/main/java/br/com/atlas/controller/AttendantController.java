@@ -44,6 +44,7 @@ public class AttendantController {
                 case 4 -> registerRenewal();
                 case 5 -> searchBooks();
                 case 6 -> listActiveLoans();
+                case 7 -> listBooks();
                 case 0 -> System.out.println("Deslogando Atendente...");
                 default -> { System.out.println("Opção inválida!"); pressEnterToContinue(); }
             }
@@ -155,12 +156,22 @@ public class AttendantController {
         pressEnterToContinue();
     }
 
+    private void listBooks() {
+        br.com.atlas.view.EmployeeView.clearScreen();
+        System.out.println("=== LISTAGEM DE TODOS OS LIVROS ===");
+        try {
+            List<Book> books = bookService.findAll();
+            view.showBooks(books);
+        } catch (Exception e) {
+            System.out.println("❌ Erro ao listar livros: " + e.getMessage());
+        }
+        pressEnterToContinue();
+    }
+
     private void listActiveLoans() {
         br.com.atlas.view.EmployeeView.clearScreen();
         System.out.println("=== LISTAGEM DE EMPRÉSTIMOS ATIVOS ===");
-
         List<String> loans = loanService.listActiveLoansInfo();
-
         if (loans.isEmpty()) {
             System.out.println("Nenhum empréstimo ativo no momento.");
         } else {

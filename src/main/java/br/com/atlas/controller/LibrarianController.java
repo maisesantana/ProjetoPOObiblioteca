@@ -35,6 +35,7 @@ public class LibrarianController {
                 case 4 -> searchBooks();
                 case 5 -> manageAuthors();
                 case 6 -> manageCategories();
+                case 7 -> listBooks();
                 case 0 -> System.out.println("Saindo...");
                 default -> System.out.println("❌ Opção inválida!");
             }
@@ -43,10 +44,8 @@ public class LibrarianController {
 
     private void registerBook() {
         Book b = view.readBookData();
-
         b.getAuthors().add(view.askAuthorName());
         b.getCategories().add(view.askCategoryName());
-
         try {
             bookService.insert(b);
             System.out.println("✅ Livro cadastrado com sucesso!");
@@ -86,6 +85,18 @@ public class LibrarianController {
         pressEnterToContinue();
     }
 
+    private void listBooks() {
+        br.com.atlas.view.EmployeeView.clearScreen();
+        System.out.println("=== LISTAGEM DE TODOS OS LIVROS ===");
+        try {
+            List<Book> books = bookService.findAll();
+            view.showBooks(books);
+        } catch (Exception e) {
+            System.out.println("❌ Erro ao listar livros: " + e.getMessage());
+        }
+        pressEnterToContinue();
+    }
+
     private void manageAuthors() {
         int op;
         try (Connection conn = br.com.atlas.util.ConnectionDb.getConexao()) {
@@ -95,19 +106,9 @@ public class LibrarianController {
                 op = view.showAuthorMenu();
                 switch (op) {
                     case 1 -> view.showAuthors(dao.findAll());
-                    case 2 -> {
-                        dao.insert(new Author(view.readAuthorName()));
-                        System.out.println("✅ Autor cadastrado!");
-                    }
-                    case 3 -> {
-                        int id = view.askAuthorId();
-                        dao.update(new Author(id, view.readAuthorName()));
-                        System.out.println("✅ Autor atualizado!");
-                    }
-                    case 4 -> {
-                        dao.delete(view.askAuthorId());
-                        System.out.println("✅ Autor removido!");
-                    }
+                    case 2 -> { dao.insert(new Author(view.readAuthorName())); System.out.println("✅ Autor cadastrado!"); }
+                    case 3 -> { int id = view.askAuthorId(); dao.update(new Author(id, view.readAuthorName())); System.out.println("✅ Autor atualizado!"); }
+                    case 4 -> { dao.delete(view.askAuthorId()); System.out.println("✅ Autor removido!"); }
                     case 5 -> {
                         List<String> books = dao.findBooksByAuthor(view.askAuthorId());
                         System.out.println("\n📚 Livros deste autor:");
@@ -117,9 +118,7 @@ public class LibrarianController {
                 }
                 if (op != 0) pressEnterToContinue();
             } while (op != 0);
-        } catch (Exception e) {
-            System.out.println("❌ Erro: " + e.getMessage());
-        }
+        } catch (Exception e) { System.out.println("❌ Erro: " + e.getMessage()); }
     }
 
     private void manageCategories() {
@@ -131,19 +130,9 @@ public class LibrarianController {
                 op = view.showCategoryMenu();
                 switch (op) {
                     case 1 -> view.showCategories(dao.findAll());
-                    case 2 -> {
-                        dao.insert(new br.com.atlas.model.Category(view.readCategoryName()));
-                        System.out.println("✅ Categoria cadastrada!");
-                    }
-                    case 3 -> {
-                        int id = view.askCategoryId();
-                        dao.update(new br.com.atlas.model.Category(id, view.readCategoryName()));
-                        System.out.println("✅ Categoria atualizada!");
-                    }
-                    case 4 -> {
-                        dao.delete(view.askCategoryId());
-                        System.out.println("✅ Categoria removida!");
-                    }
+                    case 2 -> { dao.insert(new br.com.atlas.model.Category(view.readCategoryName())); System.out.println("✅ Categoria cadastrada!"); }
+                    case 3 -> { int id = view.askCategoryId(); dao.update(new br.com.atlas.model.Category(id, view.readCategoryName())); System.out.println("✅ Categoria atualizada!"); }
+                    case 4 -> { dao.delete(view.askCategoryId()); System.out.println("✅ Categoria removida!"); }
                     case 5 -> {
                         List<String> books = dao.findBooksByCategory(view.askCategoryId());
                         System.out.println("\n📚 Livros nesta categoria:");
@@ -153,9 +142,7 @@ public class LibrarianController {
                 }
                 if (op != 0) pressEnterToContinue();
             } while (op != 0);
-        } catch (Exception e) {
-            System.out.println("❌ Erro em Categorias: " + e.getMessage());
-        }
+        } catch (Exception e) { System.out.println("❌ Erro em Categorias: " + e.getMessage()); }
     }
 
     private void pressEnterToContinue() {

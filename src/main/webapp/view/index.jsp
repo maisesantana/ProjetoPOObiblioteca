@@ -54,20 +54,5 @@
         <span class="copyright">© 2026 Atlas. Todos os direitos reservados.</span>
     </footer>
 </div>
-
-<script>
-    const togglePassword = document.querySelector('#togglePassword');
-    const password = document.querySelector('#senha');
-
-    togglePassword.addEventListener('click', function () {
-        const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
-        password.setAttribute('type', type);
-        
-        // Alterna entre fa-eye e fa-eye-slash
-        this.classList.toggle('fa-eye');
-        this.classList.toggle('fa-eye-slash');
-    });
-</script>
-
 </body>
 </html>
