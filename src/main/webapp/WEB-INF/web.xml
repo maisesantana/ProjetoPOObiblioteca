@@ -130,4 +130,14 @@
     <url-pattern>/manageCategory</url-pattern>
   </servlet-mapping>
 
+  <servlet>
+    <servlet-name>ClientController</servlet-name>
+    <servlet-class>br.com.atlas.webcontroller.ClientController</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>ClientController</servlet-name>
+    <url-pattern>/clients</url-pattern>
+  </servlet-mapping>
+
 </web-app>

@@ -1,0 +1,203 @@
+/* clients.css */
+:root {
+  --atlas-primary: #6B1A2B;
+  --atlas-primary-hover: #521320;
+  --atlas-action-blue: #3B82F6;
+  --atlas-action-blue-hover: #2563EB;
+  --atlas-text: #1B1B1B;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  background: #fff;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  color: var(--atlas-text);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+main { flex: 1; }
+
+.clients-container {
+  max-width: 850px;
+  margin: 0 auto;
+  padding: 1.8rem 1.5rem 4rem;
+}
+
+.breadcrumb-custom {
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+  margin-bottom: 1.2rem;
+  font-size: .9rem;
+}
+
+.breadcrumb-custom a { text-decoration: none; color: #6E7BF2; }
+.breadcrumb-custom span { color: #7C7C7C; }
+.breadcrumb-custom .current { color: var(--atlas-primary); font-weight: 600; }
+
+.titulo-section { margin-bottom: 2rem; }
+.titulo-section h1 { font-size: 1.42rem; font-weight: 700; color: #222; margin-bottom: .35rem; }
+.titulo-section p { color: #8C8C8C; font-size: .94rem; }
+
+/* Toast */
+.toast-msg {
+  display: none;
+  align-items: center;
+  gap: .75rem;
+  border-radius: 14px;
+  padding: 1rem 1.4rem;
+  font-weight: 600;
+  font-size: .97rem;
+  margin-bottom: 1.5rem;
+  animation: fadeIn 0.3s ease;
+}
+
+.toast-msg.show { display: flex; }
+.toast-success { background: #D1FAE5; border: 1.5px solid #6EE7B7; color: #065F46; }
+.toast-success i { color: #059669; font-size: 1.3rem; }
+.toast-error { background: #FEE2E2; border: 1.5px solid #FCA5A5; color: #991B1B; }
+.toast-error i { color: #DC2626; font-size: 1.3rem; }
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Barra de busca + botão cadastrar */
+.search-register {
+  display: flex;
+  gap: .75rem;
+  margin-bottom: 2rem;
+}
+
+.search-register form {
+  flex: 1;
+  display: flex;
+  gap: .75rem;
+}
+
+.search-register input {
+  flex: 1;
+  background: #F3F3F3;
+  border: none;
+  border-radius: 16px;
+  padding: .9rem 1.35rem;
+  font-size: 1rem;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  outline: none;
+  transition: box-shadow .2s;
+}
+
+.search-register input:focus { box-shadow: 0 0 0 2px var(--atlas-action-blue); }
+
+.btn-search {
+  background: var(--atlas-action-blue);
+  color: #fff;
+  border: none;
+  border-radius: 16px;
+  padding: .9rem 2rem;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background .2s;
+}
+
+.btn-search:hover { background: var(--atlas-action-blue-hover); }
+
+.btn-register {
+  background: var(--atlas-primary);
+  color: #fff;
+  border: none;
+  border-radius: 16px;
+  padding: .9rem 1.5rem;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: .4rem;
+  transition: background .2s;
+}
+
+.btn-register:hover { background: var(--atlas-primary-hover); color: #fff; }
+
+/* Lista de clientes */
+.clients-list { display: flex; flex-direction: column; gap: 1rem; }
+
+.client-card {
+  display: flex;
+  align-items: center;
+  gap: 1.15rem;
+}
+
+.client-icon {
+  width: 56px;
+  height: 56px;
+  border-radius: 14px;
+  background: #ECECEC;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.client-icon i { font-size: 1.5rem; color: #111; }
+
+.client-info {
+  flex: 1;
+  background: #F3F3F3;
+  border-radius: 14px;
+  padding: 1rem 1.35rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.client-name { font-size: 1.05rem; font-weight: 700; color: #1B1B1B; }
+.client-cpf { font-size: .88rem; color: #8C8C8C; }
+
+.client-status-ok {
+  font-size: .82rem;
+  font-weight: 600;
+  color: #059669;
+  background: #D1FAE5;
+  padding: .2rem .7rem;
+  border-radius: 20px;
+}
+
+.client-status-suspended {
+  font-size: .82rem;
+  font-weight: 600;
+  color: #DC2626;
+  background: #FEE2E2;
+  padding: .2rem .7rem;
+  border-radius: 20px;
+}
+
+.client-actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.btn-view {
+  color: var(--atlas-primary);
+  font-weight: 700;
+  font-size: .93rem;
+  text-decoration: none;
+  transition: opacity .2s;
+}
+
+.btn-view:hover { opacity: .7; color: var(--atlas-primary); }
+
+@media (max-width: 768px) {
+  .search-register { flex-direction: column; }
+  .client-info { flex-direction: column; align-items: flex-start; }
+}

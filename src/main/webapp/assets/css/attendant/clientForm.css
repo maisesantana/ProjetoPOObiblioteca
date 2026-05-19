@@ -1,0 +1,98 @@
+/* clientForm.css — usado em registerClient.jsp e editClient.jsp */
+:root {
+  --atlas-primary: #6B1A2B;
+  --atlas-primary-hover: #521320;
+  --atlas-action-blue: #3B82F6;
+  --atlas-text: #1B1B1B;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  background: #fff;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  color: var(--atlas-text);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+main { flex: 1; }
+
+.form-container {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 1.8rem 1.5rem 4rem;
+}
+
+.breadcrumb-custom {
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+  margin-bottom: 2rem;
+  font-size: .9rem;
+}
+
+.breadcrumb-custom a { text-decoration: none; color: #6E7BF2; }
+.breadcrumb-custom span { color: #7C7C7C; }
+.breadcrumb-custom .current { color: var(--atlas-primary); font-weight: 600; }
+
+.titulo-section { margin-bottom: 2rem; }
+.titulo-section h1 { font-size: 1.42rem; font-weight: 700; color: #222; margin-bottom: .35rem; }
+.titulo-section p { color: #8C8C8C; font-size: .94rem; }
+
+.form-group { margin-bottom: 1.2rem; }
+
+.form-group label {
+  display: block;
+  font-size: .85rem;
+  font-weight: 600;
+  color: #555;
+  margin-bottom: .4rem;
+  text-transform: uppercase;
+  letter-spacing: .4px;
+}
+
+.form-group input,
+.form-group select {
+  width: 100%;
+  background: #F3F3F3;
+  border: none;
+  border-radius: 12px;
+  padding: .85rem 1.2rem;
+  font-size: 1rem;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  color: var(--atlas-text);
+  outline: none;
+  transition: box-shadow .2s;
+}
+
+.form-group input:focus,
+.form-group select:focus { box-shadow: 0 0 0 2px var(--atlas-action-blue); }
+
+.form-group input:disabled { opacity: .6; cursor: not-allowed; }
+
+.form-actions { margin-top: 1.5rem; display: flex; align-items: center; gap: 1.5rem; }
+
+.btn-submit {
+  background: var(--atlas-primary);
+  color: #fff;
+  border: none;
+  border-radius: 14px;
+  padding: .9rem 2.5rem;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background .2s;
+}
+
+.btn-submit:hover { background: var(--atlas-primary-hover); }
+
+.btn-cancel-link {
+  color: #8C8C8C;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: .95rem;
+}
+
+.btn-cancel-link:hover { color: #555; }

@@ -45,7 +45,7 @@
               <a class="nav-link active" href="${pageContext.request.contextPath}/view/attendant/attendantPanel.jsp">Início</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="${pageContext.request.contextPath}/view/attendant/clients.jsp">Clientes</a>
+              <a class="nav-link" href="${pageContext.request.contextPath}/clients">Clientes</a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="${pageContext.request.contextPath}/view/attendant/loan.jsp">Empréstimo</a>
@@ -102,7 +102,7 @@
           <div class="row justify-content-center text-center g-5">
 
             <div class="col-lg-4 col-md-6">
-              <a href="${pageContext.request.contextPath}/view/attendant/clients.jsp" class="tool-card">
+              <a href="${pageContext.request.contextPath}/clients" class="tool-card">
                 <div class="tool-icon">
                   <span class="material-symbols-rounded">group</span>
                 </div>
