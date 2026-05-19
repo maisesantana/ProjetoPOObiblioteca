@@ -112,7 +112,7 @@
       <input type="hidden" name="action" value="search"/>
       <div class="col-md-8">
         <label for="cpf" class="form-label">CPF</label>
-        <input type="text" id="cpf" name="cpf" class="form-control" placeholder="000.000.000-00" required/>
+        <input type="text" id="cpf" name="cpf" class="form-control" placeholder="00000000000" required maxlength="11" pattern="\d{11}"/>
       </div>
       <div class="col-md-4 align-self-end">
         <button type="submit" class="btn btn-primary w-100">Buscar</button>

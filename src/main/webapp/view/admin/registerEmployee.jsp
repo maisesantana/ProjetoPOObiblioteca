@@ -202,8 +202,9 @@
                id="cpf"
                name="cpf"
                class="form-control"
-               placeholder="000.000.000-00"
-               maxlength="14"
+               placeholder="00000000000"
+               maxlength="11"
+               pattern="\d{11}"
                required/>
       </div>
 
