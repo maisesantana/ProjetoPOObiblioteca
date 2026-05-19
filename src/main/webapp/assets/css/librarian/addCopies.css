@@ -1,10 +1,10 @@
 :root {
-  --atlas-primary: #6B1A2B;
+  --atlas-primary: #6b1a2b;
   --atlas-primary-hover: #521320;
-  --atlas-action-blue: #3B82F6;
-  --atlas-action-blue-hover: #2563EB;
-  --atlas-gray: #F3F3F3;
-  --atlas-text: #1B1B1B;
+  --atlas-action-blue: #3b82f6;
+  --atlas-action-blue-hover: #2563eb;
+  --atlas-gray: #f3f3f3;
+  --atlas-text: #1b1b1b;
 }
 
 * {
@@ -14,8 +14,8 @@
 }
 
 body {
-  background: #FFFFFF;
-  font-family: 'Plus Jakarta Sans', sans-serif;
+  background: #ffffff;
+  font-family: "Plus Jakarta Sans", sans-serif;
   color: var(--atlas-text);
   min-height: 100vh;
   display: flex;
@@ -44,11 +44,11 @@ main {
 
 .breadcrumb-custom a {
   text-decoration: none;
-  color: #6E7BF2;
+  color: #6e7bf2;
 }
 
 .breadcrumb-custom span {
-  color: #7C7C7C;
+  color: #7c7c7c;
 }
 
 .breadcrumb-custom .current {
@@ -69,7 +69,7 @@ main {
 }
 
 .titulo-section p {
-  color: #8C8C8C;
+  color: #8c8c8c;
   font-size: 0.94rem;
 }
 
@@ -91,30 +91,36 @@ main {
 }
 
 .toast-success {
-  background: #FEE2E2;
-  border: 1.5px solid #FCA5A5;
-  color: #991B1B;
+  background: #dcfce7;
+  border: 1.5px solid #86efac;
+  color: #166534;
 }
 
 .toast-success i {
-  color: #DC2626;
+  color: #16a34a;
   font-size: 1.3rem;
 }
 
 .toast-error {
-  background: #FEE2E2;
-  border: 1.5px solid #FCA5A5;
-  color: #991B1B;
+  background: #fee2e2;
+  border: 1.5px solid #fca5a5;
+  color: #991b1b;
 }
 
 .toast-error i {
-  color: #DC2626;
+  color: #dc2626;
   font-size: 1.3rem;
 }
 
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(-8px); }
-  to   { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 /* Barra de Busca (Botão Azul) */
@@ -130,12 +136,12 @@ main {
 
 .search-box input[type="text"] {
   flex: 1;
-  background: #F3F3F3;
+  background: #f3f3f3;
   border: none;
   border-radius: 16px;
   padding: 1rem 1.35rem;
   font-size: 1rem;
-  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-family: "Plus Jakarta Sans", sans-serif;
   color: var(--atlas-text);
   outline: none;
   transition: box-shadow 0.2s;
@@ -153,7 +159,7 @@ main {
   padding: 0.9rem 2rem;
   font-size: 1rem;
   font-weight: 600;
-  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-family: "Plus Jakarta Sans", sans-serif;
   cursor: pointer;
   transition: background 0.2s;
   white-space: nowrap;
@@ -180,7 +186,7 @@ main {
   width: 68px;
   height: 68px;
   border-radius: 16px;
-  background: #ECECEC;
+  background: #ececec;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -194,7 +200,7 @@ main {
 
 .book-info {
   flex: 1;
-  background: #F3F3F3;
+  background: #f3f3f3;
   border-radius: 16px;
   padding: 1.1rem 1.35rem;
   display: flex;
@@ -212,13 +218,13 @@ main {
 .book-info h3 {
   font-size: 1.08rem;
   font-weight: 700;
-  font-family: 'Plus Jakarta Sans', sans-serif;
-  color: #1B1B1B;
+  font-family: "Plus Jakarta Sans", sans-serif;
+  color: #1b1b1b;
   margin: 0;
 }
 
 .book-info .book-author {
-  color: #5F5F5F;
+  color: #5f5f5f;
   font-size: 0.95rem;
   font-weight: 500;
 }
@@ -242,7 +248,7 @@ main {
   border-radius: 10px;
   padding: 0.55rem 0.5rem;
   font-size: 0.97rem;
-  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-family: "Plus Jakarta Sans", sans-serif;
   color: var(--atlas-text);
   font-weight: 600;
   text-align: center;
@@ -258,7 +264,7 @@ main {
   padding: 0.55rem 1.2rem;
   font-size: 0.93rem;
   font-weight: 700;
-  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-family: "Plus Jakarta Sans", sans-serif;
   cursor: pointer;
   transition: background 0.2s;
   white-space: nowrap;
@@ -275,7 +281,7 @@ main {
   .search-box form {
     flex-direction: column;
   }
-  
+
   .search-box button {
     width: 100%;
   }
@@ -283,7 +289,7 @@ main {
   .book-card {
     flex-direction: column;
     align-items: stretch;
-    background: #FAFAFA;
+    background: #fafafa;
     padding: 1rem;
     border-radius: 20px;
   }

@@ -85,8 +85,7 @@ public class ManageAuthorsController extends HttpServlet {
                 String idParam = request.getParameter("authorId");
                 String name    = request.getParameter("authorName");
                 String query   = request.getParameter("query");
-                String tab     = request.getParameter("tab");
-
+                
                 if (name == null || name.trim().isEmpty()) {
                     response.sendRedirect(request.getContextPath() + "/manageAuthors?msg=name_empty&tab=edit");
                     return;

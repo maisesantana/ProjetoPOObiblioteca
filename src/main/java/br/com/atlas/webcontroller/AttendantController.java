@@ -21,9 +21,9 @@ import java.time.LocalDate;
 @WebServlet("/attendant/action")
 public class AttendantController extends HttpServlet {
 
-    private final ClientService clientService       = new ClientService(new ClientDAO());
-    private final LoanService loanService           = new LoanService(new LoanDAO(), new ClientDAO(), new BookCopyDAO());
-    private final RenewalService renewalService     = new RenewalService(new LoanDAO(), new RenewalDAO());
+    private final ClientService clientService         = new ClientService(new ClientDAO());
+    private final LoanService loanService             = new LoanService(new LoanDAO(), new ClientDAO(), new BookCopyDAO());
+    private final RenewalService renewalService       = new RenewalService(new LoanDAO(), new RenewalDAO());
     private final ReturnBookService returnBookService = new ReturnBookService(new LoanDAO(), new ReturnBookDAO());
 
     @Override
@@ -39,53 +39,54 @@ public class AttendantController extends HttpServlet {
         }
 
         String action = request.getParameter("action");
+        String base   = request.getContextPath() + "/view/attendant/";
 
         try {
             switch (action) {
 
                 case "registerClient":
                     clientService.insert(mapClientFromRequest(request));
-                    response.sendRedirect("clients.jsp?msg=success");
+                    response.sendRedirect(base + "clients.jsp?msg=success");
                     break;
 
                 case "updateClient":
                     clientService.update(mapClientFromRequest(request));
-                    response.sendRedirect("clients.jsp?msg=update_success");
+                    response.sendRedirect(base + "clients.jsp?msg=update_success");
                     break;
 
                 case "removeClient":
                     clientService.delete(request.getParameter("cpf"));
-                    response.sendRedirect("clients.jsp?msg=remove_success");
+                    response.sendRedirect(base + "clients.jsp?msg=remove_success");
                     break;
 
                 case "loan":
                     String cpfLoan = request.getParameter("cpf");
                     int copyId = Integer.parseInt(request.getParameter("copyId"));
                     loanService.registerLoan(cpfLoan, copyId);
-                    response.sendRedirect("loan_panel.jsp?msg=loan_ok");
+                    response.sendRedirect(base + "panel.jsp?msg=loan_ok");
                     break;
 
                 case "return":
                     int loanIdReturn = Integer.parseInt(request.getParameter("loanId"));
                     returnBookService.registerReturn(loanIdReturn);
-                    response.sendRedirect("loan_panel.jsp?msg=return_ok");
+                    response.sendRedirect(base + "panel.jsp?msg=return_ok");
                     break;
 
                 case "renewal":
                     int loanIdRenewal = Integer.parseInt(request.getParameter("loanId"));
                     renewalService.registerRenewal(loanIdRenewal);
-                    response.sendRedirect("loan_panel.jsp?msg=renewal_ok");
+                    response.sendRedirect(base + "panel.jsp?msg=renewal_ok");
                     break;
 
                 default:
-                    response.sendRedirect("loan_panel.jsp?msg=invalid_action");
+                    response.sendRedirect(base + "panel.jsp?msg=invalid_action");
             }
 
         } catch (IllegalArgumentException | IllegalStateException e) {
-            response.sendRedirect("loan_panel.jsp?msg=error&detail=" + e.getMessage());
+            response.sendRedirect(base + "panel.jsp?msg=error&detail=" + e.getMessage());
         } catch (Exception e) {
             e.printStackTrace();
-            response.sendRedirect("loan_panel.jsp?msg=error&detail=" + e.getMessage());
+            response.sendRedirect(base + "panel.jsp?msg=error&detail=" + e.getMessage());
         }
     }
 

@@ -1,3 +1,14 @@
+<%@ page import="br.com.atlas.model.Librarian" %>
+
+<%
+    Object user = session.getAttribute("userLogged");
+    if(user == null || !(user instanceof Librarian)){
+        response.sendRedirect(request.getContextPath() + "/view/login.jsp?msg=unauthorized");
+        return;
+    }
+    Librarian librarian = (Librarian) user;
+%>
+
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" isELIgnored="false" %>
 <!DOCTYPE html>
 <html lang="pt-BR">
@@ -9,12 +20,9 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@400;500;600&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,0,0"/>
-
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"/>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet"/>
-
     <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/admin/navbarAdm.css"/>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/admin/admTools.css"/>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/footer.css"/>
@@ -28,11 +36,9 @@
                 <a class="navbar-brand" href="#">
                     <img src="${pageContext.request.contextPath}/assets/images/logo.png" alt="Atlas — Gestão de Biblioteca"/>
                 </a>
-
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarAtlas">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-
                 <div class="collapse navbar-collapse" id="navbarAtlas">
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                         <li class="nav-item">
@@ -45,7 +51,7 @@
                             <a class="nav-link" href="${pageContext.request.contextPath}/removeBook">Remover</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="${pageContext.request.contextPath}/view/librarian/addCopies.jsp">Exemplares</a>
+                            <a class="nav-link" href="${pageContext.request.contextPath}/addCopies">Exemplares</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="${pageContext.request.contextPath}/searchBooks">Buscar</a>
@@ -57,7 +63,6 @@
                             <a class="nav-link" href="${pageContext.request.contextPath}/manageCategory">Categorias</a>
                         </li>
                     </ul>
-
                     <a href="${pageContext.request.contextPath}/logout" class="btn-sair">
                         <i class="bi bi-box-arrow-right"></i> Sair
                     </a>
@@ -70,9 +75,10 @@
         <div class="row">
             <main class="col-12 pt-4 px-5">
                 <section class="ferramentas-admin">
+
                     <div class="ferramentas-titulo">
                         <span>BIBLIOTECÁRIO</span>
-                        <h2>Gestão de Acervo</h2>
+                        <h2>Olá, <%= librarian.getName() %>! O que deseja fazer?</h2>
                     </div>
 
                     <div class="row justify-content-center text-center g-5">
@@ -98,7 +104,7 @@
                         </div>
 
                         <div class="col-lg-4 col-md-6">
-                            <a href="${pageContext.request.contextPath}/view/librarian/addCopies.jsp" class="tool-card">
+                            <a href="${pageContext.request.contextPath}/addCopies" class="tool-card">
                                 <div class="tool-icon">
                                     <span class="material-symbols-rounded">library_books</span>
                                 </div>
@@ -142,6 +148,7 @@
             </main>
         </div>
     </div>
+
     <jsp:include page="/view/footer.jsp"/>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
