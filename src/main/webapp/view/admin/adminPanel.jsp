@@ -7,6 +7,7 @@
         response.sendRedirect(request.getContextPath() + "/view/index.jsp");
         return;
     }
+    Administrator administrator = (Administrator) user;
 %>
 
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" isELIgnored="false" %>
@@ -94,8 +95,8 @@
     <section class="ferramentas-admin">
 
       <div class="ferramentas-titulo">
-        <span>FERRAMENTAS</span>
-        <h2>Veja o que você pode fazer</h2>
+        <span>ADMINISTRADOR</span>
+        <h2>Olá, <%= administrator.getName() %>! O que deseja fazer?</h2>
       </div>
 
       <div class="row justify-content-center text-center g-5">

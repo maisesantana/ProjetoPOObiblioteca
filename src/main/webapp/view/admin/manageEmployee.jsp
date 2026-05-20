@@ -18,12 +18,13 @@
   <title>Atlas - Gerenciar Funcionário</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"/>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet"/>
   <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/admin/navbarAdm.css"/>
   <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/admin/registerEmployee.css"/>
   <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/footer.css"/>
+  <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/admin/manageEmployee.css"/>
 </head>
 <body>
   <header>
@@ -72,7 +73,6 @@
 
     <div class="mb-4">
       <h1>Gerenciar Funcionários</h1>
-      <p class="text-muted">Use o CPF para localizar um funcionário e editar ou remover o cadastro.</p>
     </div>
 
     <%
@@ -108,15 +108,13 @@
       }
     %>
 
-    <form action="${pageContext.request.contextPath}/manageEmployee" method="get" class="row g-3 mb-4">
+    <form action="${pageContext.request.contextPath}/manageEmployee" method="get" class="mb-4" style="max-width: 360px;">
       <input type="hidden" name="action" value="search"/>
-      <div class="col-md-8">
+      <div class="mb-3">
         <label for="cpf" class="form-label">CPF</label>
         <input type="text" id="cpf" name="cpf" class="form-control" placeholder="00000000000" required maxlength="11" pattern="\d{11}"/>
       </div>
-      <div class="col-md-4 align-self-end">
-        <button type="submit" class="btn btn-primary w-100">Buscar</button>
-      </div>
+      <button type="submit" class="btn btn-primary w-100">Buscar</button>
     </form>
 
     <%
@@ -130,21 +128,64 @@
           roleLabel = "Bibliotecário";
         }
     %>
-      <div class="card">
-        <div class="card-body">
-          <h5 class="card-title">Funcionário encontrado</h5>
-          <p class="card-text"><strong>CPF:</strong> <%= employee.getCpf() %></p>
-          <p class="card-text"><strong>Nome:</strong> <%= employee.getName() %></p>
-          <p class="card-text"><strong>Email:</strong> <%= employee.getEmail() %></p>
-          <p class="card-text"><strong>Função:</strong> <%= roleLabel %></p>
-          <a href="<%= request.getContextPath() %>/manageEmployee?action=edit&cpf=<%= employee.getCpf() %>" class="btn btn-warning me-2">Editar</a>
-          <form action="<%= request.getContextPath() %>/manageEmployee" method="post" style="display:inline;">
-            <input type="hidden" name="action" value="remove"/>
-            <input type="hidden" name="cpf" value="<%= employee.getCpf() %>"/>
-            <button type="submit" class="btn btn-danger">Remover</button>
-          </form>
+
+      <div class="employee-card">
+        
+
+        <div class="d-flex align-items-center gap-3">
+          <div class="employee-avatar">
+            <i class="bi bi-person-fill"></i>
+          </div>
+          <div>
+            <p class="employee-name"><%= employee.getName() %></p>
+            <p class="employee-role"><%= roleLabel %></p>
+          </div>
+        </div>
+
+        <div class="info-row">
+          <div class="info-item">
+            <span class="info-label">CPF</span>
+            <span class="info-value"><%= employee.getCpf() %></span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">E-mail</span>
+            <span class="info-value"><%= employee.getEmail() %></span>
+          </div>
+        </div>
+
+        <div class="employee-actions">
+          <a href="<%= request.getContextPath() %>/manageEmployee?action=edit&cpf=<%= employee.getCpf() %>" class="btn-edit-emp">
+            Atualizar funcionário
+          </a>
+          <button type="button" class="btn-remove-emp" data-bs-toggle="modal" data-bs-target="#modalRemover">
+            Remover funcionário
+          </button>
         </div>
       </div>
+
+      <div class="modal fade" id="modalRemover" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">Confirmar remoção</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+              Tem certeza que deseja remover <strong><%= employee.getName() %></strong>?
+              <br/><span class="text-muted">Esta ação não pode ser desfeita.</span>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+              <form action="<%= request.getContextPath() %>/manageEmployee" method="post" style="display:inline;">
+                <input type="hidden" name="action" value="remove"/>
+                <input type="hidden" name="cpf" value="<%= employee.getCpf() %>"/>
+                <button type="submit" class="btn btn-danger">Sim, remover</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+
     <%
       }
     %>
