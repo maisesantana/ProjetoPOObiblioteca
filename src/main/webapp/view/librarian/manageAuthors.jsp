@@ -50,19 +50,25 @@
         <div class="collapse navbar-collapse" id="navbarAtlas">
           <ul class="navbar-nav me-auto mb-2 mb-lg-0">
             <li class="nav-item">
-              <a class="nav-link" href="${pageContext.request.contextPath}/view/librarian/librarianPanel.jsp">Início</a>
+                <a class="nav-link active" href="${pageContext.request.contextPath}/view/librarian/librarianPanel.jsp">Início</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="${pageContext.request.contextPath}/view/librarian/registerBook.jsp">Cadastrar</a>
+                <a class="nav-link" href="${pageContext.request.contextPath}/view/librarian/registerBook.jsp">Cadastrar</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="${pageContext.request.contextPath}/removeBook">Remover</a>
+                <a class="nav-link" href="${pageContext.request.contextPath}/removeBook">Remover</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="${pageContext.request.contextPath}/searchBooks">Buscar</a>
+                <a class="nav-link" href="${pageContext.request.contextPath}/addCopies">Exemplares</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link active" href="${pageContext.request.contextPath}/manageAuthors">Autores</a>
+                <a class="nav-link" href="${pageContext.request.contextPath}/searchBooks">Buscar</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="${pageContext.request.contextPath}/manageAuthors">Autores</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="${pageContext.request.contextPath}/manageCategory">Categorias</a>
             </li>
           </ul>
           <a href="${pageContext.request.contextPath}/logout" class="btn-sair">
