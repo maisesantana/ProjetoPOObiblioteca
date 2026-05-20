@@ -231,11 +231,15 @@ public class BookDAO {
     public List<Book> findByName(String name) {
         List<Book> list = new ArrayList<>();
         // O operador LIKE com % permite encontrar o texto em qualquer parte do nome
-        String sql = "SELECT * FROM Book WHERE BookName LIKE ?";
+        String sql = "SELECT DISTINCT b.* FROM Book b " +
+             "LEFT JOIN BookAuthor ba ON b.BookId = ba.BookId " +
+             "LEFT JOIN Author a ON ba.AuthorId = a.AuthorId " +
+             "WHERE b.BookName LIKE ? OR a.AuthorName LIKE ?";
 
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setString(1, "%" + name + "%");
-
+    stmt.setString(1, "%" + name + "%");
+    stmt.setString(2, "%" + name + "%");
+    
             try (ResultSet rs = stmt.executeQuery()) {
                 while (rs.next()) {
                     Book b = mapResultSet(rs);
