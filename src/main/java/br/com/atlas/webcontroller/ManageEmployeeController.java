@@ -106,6 +106,37 @@ public class ManageEmployeeController extends HttpServlet {
                 return;
             }
 
+            // Impede que o admin remova a si mesmo
+            if (cpf.equals(admin.getCpf())) {
+                response.sendRedirect(request.getContextPath()
+                        + "/view/admin/manageEmployee.jsp?msg=cannot_remove_self");
+                return;
+            }
+
+            try {
+                Employee target = employeeService.findByCpf(cpf)
+                        .orElseThrow(() -> new IllegalArgumentException("CPF não encontrado"));
+
+                // Impede que o admin remova outro administrador
+                if (target instanceof Administrator) {
+                    response.sendRedirect(request.getContextPath()
+                            + "/view/admin/manageEmployee.jsp?msg=cannot_remove_admin");
+                    return;
+                }
+
+                employeeService.delete(cpf.trim());
+                response.sendRedirect(request.getContextPath()
+                        + "/view/admin/manageEmployee.jsp?msg=removed");
+
+            } catch (IllegalArgumentException e) {
+                response.sendRedirect(request.getContextPath()
+                        + "/view/admin/manageEmployee.jsp?msg=not_found");
+            } catch (Exception e) {
+                e.printStackTrace();
+                response.sendRedirect(request.getContextPath()
+                        + "/view/admin/manageEmployee.jsp?msg=error");
+            }
+
             try {
                 employeeService.delete(cpf.trim());
                 response.sendRedirect(request.getContextPath()

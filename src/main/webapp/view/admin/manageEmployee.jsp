@@ -96,6 +96,12 @@
             case "removed":
               out.print("Funcionário removido com sucesso.");
               break;
+            case "cannot_remove_self":
+              out.print("Você não pode remover sua própria conta.");
+              break;
+            case "cannot_remove_admin":
+              out.print("Não é permitido remover outro administrador.");
+              break;
             default:
               out.print(msg);
           }
@@ -130,7 +136,6 @@
     %>
 
       <div class="employee-card">
-        
 
         <div class="d-flex align-items-center gap-3">
           <div class="employee-avatar">
@@ -157,9 +162,11 @@
           <a href="<%= request.getContextPath() %>/manageEmployee?action=edit&cpf=<%= employee.getCpf() %>" class="btn-edit-emp">
             Atualizar funcionário
           </a>
-          <button type="button" class="btn-remove-emp" data-bs-toggle="modal" data-bs-target="#modalRemover">
-            Remover funcionário
-          </button>
+          <% if (!(employee instanceof br.com.atlas.model.Administrator)) { %>
+            <button type="button" class="btn-remove-emp" data-bs-toggle="modal" data-bs-target="#modalRemover">
+              Remover funcionário
+            </button>
+          <% } %>
         </div>
       </div>
 
