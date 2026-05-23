@@ -34,7 +34,7 @@ public class AttendantController extends HttpServlet {
         Employee user = (Employee) session.getAttribute("userLogged");
 
         if (!(user instanceof Attendant)) {
-            response.sendRedirect(request.getContextPath() + "/view/login.jsp?msg=access_denied");
+            response.sendRedirect(request.getContextPath() + "/view/index.jsp?msg=access_denied");
             return;
         }
 

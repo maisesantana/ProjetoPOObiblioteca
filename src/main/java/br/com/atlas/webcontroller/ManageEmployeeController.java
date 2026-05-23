@@ -246,7 +246,7 @@ public class ManageEmployeeController extends HttpServlet {
             return (Administrator) user;
         }
 
-        res.sendRedirect(req.getContextPath() + "/view/login.jsp?msg=unauthorized");
+        res.sendRedirect(req.getContextPath() + "/view/index.jsp?msg=unauthorized");
         return null;
     }
 

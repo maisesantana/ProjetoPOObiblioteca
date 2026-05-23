@@ -31,6 +31,8 @@
                 <% } else if(msg.equals("invalid_credentials")) { %> Senha incorreta.
                 <% } else if(msg.equals("empty_fields")) { %> Preencha todos os campos.
                 <% } else if(msg.equals("password_must_be_number")) { %> A senha deve ser numérica.
+                <% } else if(msg.equals("session_expired")) { %> Sua sessão expirou. Faça login novamente.
+                <% } else if(msg.equals("access_denied") || msg.equals("unauthorized")) { %> Você não tem permissão para acessar esta página.
                 <% } else { %> Erro ao realizar login. <% } %>
             </div>
         <% } %>

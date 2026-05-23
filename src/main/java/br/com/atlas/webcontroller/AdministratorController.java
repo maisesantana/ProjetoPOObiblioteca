@@ -31,7 +31,7 @@ public class AdministratorController extends HttpServlet {
         Object user = session.getAttribute("userLogged");
 
         if (user == null || !(user instanceof Administrator)) {
-            response.sendRedirect(request.getContextPath() + "/view/login.jsp?msg=unauthorized");
+            response.sendRedirect(request.getContextPath() + "/view/index.jsp?msg=unauthorized");
             return;
         }
 
@@ -177,7 +177,7 @@ public class AdministratorController extends HttpServlet {
 
         if (user == null || !(user instanceof Administrator)) {
 
-            response.sendRedirect(request.getContextPath() + "/view/login.jsp");
+            response.sendRedirect(request.getContextPath() + "/view/index.jsp?msg=unauthorized");
             return;
         }
 

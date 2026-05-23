@@ -1,5 +1,4 @@
 <%@ page import="br.com.atlas.model.Attendant" %>
-<%@ page import="java.util.List" %>
 <%@ page import="br.com.atlas.model.Book" %>
 
 <%
@@ -8,8 +7,13 @@
         response.sendRedirect(request.getContextPath() + "/view/index.jsp?msg=unauthorized");
         return;
     }
-
-    List<Book> books = (List<Book>) request.getAttribute("books");
+    Book book = (Book) request.getAttribute("book");
+    if (book == null) {
+        response.sendRedirect(request.getContextPath() + "/searchBooks");
+        return;
+    }
+    int totalCopies     = book.getCopies().size();
+    int availableCopies = book.totalAvailableCopies();
 %>
 
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" isELIgnored="false" %>
@@ -19,15 +23,34 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Atlas - Buscar Livros</title>
+  <title>Atlas - <%= book.getBookName() %></title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@400;500;600&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"/>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet"/>
   <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/admin/navbarAdm.css"/>
-  <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/librarian/searchBooks.css"/>
   <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/footer.css"/>
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box}
+    body{background:#fff;font-family:'Plus Jakarta Sans',sans-serif;color:#1B1B1B;min-height:100vh;display:flex;flex-direction:column}
+    main{flex:1}
+    .view-container{max-width:700px;margin:0 auto;padding:2rem 1.5rem 4rem}
+    .breadcrumb-custom{display:flex;align-items:center;gap:.5rem;margin-bottom:2rem;font-size:.9rem}
+    .breadcrumb-custom a{text-decoration:none;color:#6E7BF2}
+    .breadcrumb-custom span{color:#7C7C7C}
+    .book-cover{display:flex;justify-content:center;margin-bottom:1.5rem}
+    .book-cover-placeholder{width:130px;height:185px;background:#ECECEC;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:4rem;color:#999}
+    .book-title-section{text-align:center;margin-bottom:2rem}
+    .book-title-section h1{font-size:1.4rem;font-weight:700;color:#222}
+    .details-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1rem;margin-bottom:1.5rem}
+    .detail-card{background:#F3F3F3;border-radius:12px;padding:1rem 1.2rem}
+    .detail-card .label{font-size:.78rem;font-weight:600;color:#8C8C8C;margin-bottom:.3rem;text-transform:uppercase;letter-spacing:.4px}
+    .detail-card .value{font-size:1rem;font-weight:600;color:#1B1B1B}
+    .btn-back{display:inline-block;margin-top:2rem;color:#6E7BF2;text-decoration:none;font-weight:600;font-size:.95rem}
+    .btn-back:hover{opacity:.75}
+    @media(max-width:600px){.details-grid{grid-template-columns:1fr 1fr}}
+  </style>
 </head>
 <body>
   <header>
@@ -55,42 +78,30 @@
     </nav>
   </header>
 
-  <main class="container-fluid books-container">
+  <main class="container-fluid view-container">
     <nav class="breadcrumb-custom">
       <a href="${pageContext.request.contextPath}/view/attendant/attendantPanel.jsp">Início</a>
       <span>/</span>
-      <span class="current">Buscar Livros</span>
+      <a href="${pageContext.request.contextPath}/searchBooks">Livros</a>
+      <span>/</span>
+      <span style="color:#1B1B1B"><%= book.getBookName() %></span>
     </nav>
-    <section class="titulo-section">
-      <h1>Visualizar e buscar livros no acervo do sistema</h1>
-      <p>Consulta de Acervo</p>
-    </section>
-    <section class="search-box">
-      <form action="${pageContext.request.contextPath}/searchBooks" method="get">
-        <input type="text" name="query" placeholder="Digite o título do livro ou autor para buscar..."
-               value="${param.query != null ? param.query : ''}">
-        <button type="submit">Buscar</button>
-      </form>
-    </section>
-    <section class="books-list">
-      <% if (books != null && !books.isEmpty()) { %>
-        <% for (Book book : books) { %>
-          <div class="book-card">
-            <div class="book-icon"><i class="bi bi-book"></i></div>
-            <div class="book-info">
-              <div class="book-details">
-                <h3><%= book.getBookName() %></h3>
-                <span class="book-author">Autor: <%= String.join(", ", book.getAuthors()) %></span>
-              </div>
-              <span class="book-copies"><%= book.getCopies().size() %> un.</span>
-            </div>
-            <a href="${pageContext.request.contextPath}/viewBook?id=<%= book.getBookId() %>" class="book-view">Ver</a>
-          </div>
-        <% } %>
-      <% } else { %>
-        <p class="text-muted text-center py-4">Nenhum livro encontrado no acervo.</p>
-      <% } %>
-    </section>
+    <div class="book-cover">
+      <div class="book-cover-placeholder"><i class="bi bi-book"></i></div>
+    </div>
+    <div class="book-title-section"><h1>Resumo do livro</h1></div>
+    <div class="details-grid">
+      <div class="detail-card"><div class="label">Nome</div><div class="value"><%= book.getBookName() %></div></div>
+      <div class="detail-card"><div class="label">Páginas</div><div class="value"><%= book.getNumberOfPages() %></div></div>
+      <div class="detail-card"><div class="label">Autor</div><div class="value"><%= String.join(", ", book.getAuthors()) %></div></div>
+      <div class="detail-card"><div class="label">Exemplares</div><div class="value"><%= totalCopies %></div></div>
+      <div class="detail-card"><div class="label">Editora</div><div class="value"><%= book.getPublisher() != null ? book.getPublisher() : "-" %></div></div>
+      <div class="detail-card"><div class="label">Categoria</div><div class="value"><%= String.join(", ", book.getCategories()) %></div></div>
+      <div class="detail-card"><div class="label">Disponíveis</div><div class="value"><%= availableCopies %></div></div>
+    </div>
+    <a href="${pageContext.request.contextPath}/searchBooks" class="btn-back">
+      <i class="bi bi-arrow-left"></i> Voltar para busca
+    </a>
   </main>
 
   <jsp:include page="/view/footer.jsp"/>

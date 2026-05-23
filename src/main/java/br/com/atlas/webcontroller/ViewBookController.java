@@ -6,8 +6,10 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
 import br.com.atlas.dao.BookDAO;
+import br.com.atlas.model.Attendant;
 import br.com.atlas.model.Book;
 import br.com.atlas.model.BookCopy;
+import br.com.atlas.model.Librarian;
 import br.com.atlas.util.ConnectionDb;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -65,7 +67,10 @@ public class ViewBookController extends HttpServlet {
                 }
 
                 request.setAttribute("book", book);
-                request.getRequestDispatcher("/view/librarian/viewBook.jsp").forward(request, response);
+                String viewPath = (user instanceof Attendant)
+                        ? "/view/attendant/viewBook.jsp"
+                        : "/view/librarian/viewBook.jsp";
+                request.getRequestDispatcher(viewPath).forward(request, response);
             }
 
         } catch (NumberFormatException e) {

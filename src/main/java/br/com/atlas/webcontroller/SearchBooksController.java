@@ -66,10 +66,13 @@ public class SearchBooksController extends HttpServlet {
             }
 
         } catch (Exception e) {
-           // e.printStackTrace();
+            log("Erro ao carregar a lista de livros", e);
         }
 
         request.setAttribute("books", bookList);
-        request.getRequestDispatcher("/view/librarian/searchBooks.jsp").forward(request, response);
+        String viewPath = (user instanceof Attendant)
+                ? "/view/attendant/searchBooks.jsp"
+                : "/view/librarian/searchBooks.jsp";
+        request.getRequestDispatcher(viewPath).forward(request, response);
     }
 }
