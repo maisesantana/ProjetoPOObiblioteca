@@ -7,8 +7,10 @@ import java.sql.ResultSet;
 import java.util.List;
 
 import br.com.atlas.dao.BookDAO;
+import br.com.atlas.model.Attendant;
 import br.com.atlas.model.Book;
 import br.com.atlas.model.BookCopy;
+import br.com.atlas.model.Librarian;
 import br.com.atlas.util.ConnectionDb;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -27,7 +29,7 @@ public class SearchBooksController extends HttpServlet {
 
         HttpSession session = request.getSession();
         Object user = session.getAttribute("userLogged");
-        if (user == null) {
+        if (user == null || !(user instanceof Librarian || user instanceof Attendant)) {
             response.sendRedirect(request.getContextPath() + "/index.jsp?msg=session_expired");
             return;
         }

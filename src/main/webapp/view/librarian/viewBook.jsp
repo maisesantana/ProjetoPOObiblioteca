@@ -1,10 +1,11 @@
+<%@ page import="br.com.atlas.model.Attendant" %>
 <%@ page import="br.com.atlas.model.Librarian" %>
 <%@ page import="br.com.atlas.model.Book" %>
 
 <%
     Object user = session.getAttribute("userLogged");
-    if(user == null || !(user instanceof Librarian)){
-        response.sendRedirect(request.getContextPath() + "/view/login.jsp?msg=unauthorized");
+    if(user == null || !(user instanceof Librarian || user instanceof Attendant)){
+        response.sendRedirect(request.getContextPath() + "/view/index.jsp?msg=unauthorized");
         return;
     }
     Book book = (Book) request.getAttribute("book");

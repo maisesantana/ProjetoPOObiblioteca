@@ -3,7 +3,7 @@
 <%
     Object user = session.getAttribute("userLogged");
     if(user == null || !(user instanceof Attendant)){
-        response.sendRedirect(request.getContextPath() + "/view/login.jsp?msg=unauthorized");
+        response.sendRedirect(request.getContextPath() + "/view/index.jsp?msg=unauthorized");
         return;
     }
     Attendant attendant = (Attendant) user;
@@ -26,6 +26,7 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet"/>
   <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/admin/navbarAdm.css"/>
   <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/admin/admTools.css"/>
+  <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/footer.css"/>
 </head>
 
 <body>
@@ -57,7 +58,7 @@
               <a class="nav-link" href="${pageContext.request.contextPath}/view/attendant/renewal.jsp">Renovação</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="${pageContext.request.contextPath}/view/attendant/searchBooks.jsp">Buscar Livros</a>
+              <a class="nav-link" href="${pageContext.request.contextPath}/searchBooks">Buscar Livros</a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="${pageContext.request.contextPath}/view/attendant/activeLoans.jsp">Empréstimos Ativos</a>
@@ -142,7 +143,7 @@
             </div>
 
             <div class="col-lg-4 col-md-6">
-              <a href="${pageContext.request.contextPath}/view/attendant/searchBooks.jsp" class="tool-card">
+              <a href="${pageContext.request.contextPath}/searchBooks" class="tool-card">
                 <div class="tool-icon">
                   <span class="material-symbols-rounded">search</span>
                 </div>
@@ -166,11 +167,7 @@
       </main>
     </div>
   </div>
-
-  <footer class="text-center py-4 mt-5 text-muted" style="font-size: 0.8rem; border-top: 1px solid #eee;">
-    © 2026 Atlas. Todos os direitos reservados.
-  </footer>
-
+  <jsp:include page="/view/footer.jsp"/>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
