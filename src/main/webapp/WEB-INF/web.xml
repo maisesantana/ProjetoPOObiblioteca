@@ -65,6 +65,11 @@
     <servlet-class>br.com.atlas.webcontroller.ManageCategoryController</servlet-class>
   </servlet>
 
+   <servlet>
+  <servlet-name>BookListController</servlet-name>
+  <servlet-class>br.com.atlas.webcontroller.BookListController</servlet-class>
+</servlet>
+
 
   <servlet-mapping>
     <servlet-name>LoginController</servlet-name>
@@ -139,5 +144,10 @@
     <servlet-name>ClientController</servlet-name>
     <url-pattern>/clients</url-pattern>
   </servlet-mapping>
+
+<servlet-mapping>
+  <servlet-name>BookListController</servlet-name>
+  <url-pattern>/bookList</url-pattern>
+</servlet-mapping>
 
 </web-app>

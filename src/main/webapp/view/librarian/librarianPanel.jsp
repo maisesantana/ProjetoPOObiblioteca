@@ -62,6 +62,9 @@
                         <li class="nav-item">
                             <a class="nav-link" href="${pageContext.request.contextPath}/manageCategory">Categorias</a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="${pageContext.request.contextPath}/bookList">Lista de livros</a>
+                        </li>
                     </ul>
                     <a href="${pageContext.request.contextPath}/logout" class="btn-sair">
                         <i class="bi bi-box-arrow-right"></i> Sair
