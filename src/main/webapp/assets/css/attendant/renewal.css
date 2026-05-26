@@ -1,0 +1,159 @@
+:root {
+    --atlas-primary: #6B1A2B;
+    --atlas-blue: #6E7BF2;
+    --atlas-gray: #F3F3F3;
+    --atlas-text: #1B1B1B;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background: #fff;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    color: var(--atlas-text);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+main { flex: 1; }
+
+.renewal-container {
+    max-width: 850px;
+    margin: 0 auto;
+    padding: 2rem 1.5rem 4rem;
+}
+
+.breadcrumb-custom {
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+    margin-bottom: 2rem;
+    font-size: .9rem;
+}
+
+.breadcrumb-custom a {
+    text-decoration: none;
+    color: #6E7BF2;
+}
+
+.breadcrumb-custom span { color: #7C7C7C; }
+
+.current-page {
+    color: var(--atlas-primary);
+    font-weight: 700;
+}
+
+.titulo-section { margin-bottom: 2rem; }
+
+.titulo-section h1 {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: .4rem;
+}
+
+.titulo-section p { color: #8C8C8C; }
+
+.book-cover {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 1.5rem;
+}
+
+.book-icon {
+    width: 120px;
+    height: 170px;
+    background: #F3F3F3;
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.book-icon i {
+    font-size: 4rem;
+    color: #8C8C8C;
+}
+
+.book-title-section {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.book-title-section h2 {
+    font-size: 1.3rem;
+    font-weight: 700;
+}
+
+.details-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.detail-card {
+    background: #F3F3F3;
+    border-radius: 12px;
+    padding: 1rem;
+}
+
+/* Renomeado para evitar conflito com Bootstrap */
+.card-label {
+    font-size: .75rem;
+    font-weight: 700;
+    color: #7A7A7A;
+    margin-bottom: .35rem;
+    text-transform: uppercase;
+    letter-spacing: .4px;
+}
+
+.card-value {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #1B1B1B;
+}
+
+.status-book {
+    width: fit-content;
+    margin: 0 auto 2rem;
+    background: #D1FAE5;
+    color: #065F46;
+    border-radius: 12px;
+    padding: .9rem 1.2rem;
+    display: flex;
+    align-items: center;
+    gap: .8rem;
+}
+
+.status-book i { font-size: 1.2rem; }
+
+.status-book strong {
+    display: block;
+    font-size: .9rem;
+}
+
+.status-book span { font-size: .85rem; }
+
+.btn-renew {
+    width: 100%;
+    border: none;
+    background: #8EA2FF;
+    color: #fff;
+    padding: 1rem;
+    border-radius: 14px;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: .2s;
+}
+
+.btn-renew:hover { background: #6E7BF2; }
+
+@media (max-width: 768px) {
+    .details-grid { grid-template-columns: 1fr; }
+}

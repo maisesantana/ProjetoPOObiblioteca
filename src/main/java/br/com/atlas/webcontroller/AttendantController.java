@@ -1,5 +1,8 @@
 package br.com.atlas.webcontroller;
 
+import java.io.IOException;
+import java.time.LocalDate;
+
 import br.com.atlas.dao.BookCopyDAO;
 import br.com.atlas.dao.ClientDAO;
 import br.com.atlas.dao.LoanDAO;
@@ -14,9 +17,10 @@ import br.com.atlas.service.RenewalService;
 import br.com.atlas.service.ReturnBookService;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.*;
-import java.io.IOException;
-import java.time.LocalDate;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 
 @WebServlet("/attendant/action")
 public class AttendantController extends HttpServlet {
@@ -63,31 +67,33 @@ public class AttendantController extends HttpServlet {
                     String cpfLoan = request.getParameter("cpf");
                     int copyId = Integer.parseInt(request.getParameter("copyId"));
                     loanService.registerLoan(cpfLoan, copyId);
-                    response.sendRedirect(base + "panel.jsp?msg=loan_ok");
+                    response.sendRedirect(base + "attendantPanel.jsp?msg=loan_ok");
                     break;
 
                 case "return":
                     int loanIdReturn = Integer.parseInt(request.getParameter("loanId"));
                     returnBookService.registerReturn(loanIdReturn);
-                    response.sendRedirect(base + "panel.jsp?msg=return_ok");
+                    response.sendRedirect(base + "attendantPanel.jsp?msg=return_ok");
                     break;
 
                 case "renewal":
                     int loanIdRenewal = Integer.parseInt(request.getParameter("loanId"));
                     renewalService.registerRenewal(loanIdRenewal);
-                    response.sendRedirect(base + "panel.jsp?msg=renewal_ok");
+                    response.sendRedirect(base + "attendantPanel.jsp?msg=renewal_ok");
                     break;
 
                 default:
-                    response.sendRedirect(base + "panel.jsp?msg=invalid_action");
+                    response.sendRedirect(base + "attendantPanel.jsp?msg=invalid_action");
             }
 
         } catch (IllegalArgumentException | IllegalStateException e) {
-            response.sendRedirect(base + "panel.jsp?msg=error&detail=" + e.getMessage());
-        } catch (Exception e) {
-            e.printStackTrace();
-            response.sendRedirect(base + "panel.jsp?msg=error&detail=" + e.getMessage());
-        }
+    response.sendRedirect(base + "attendantPanel.jsp?msg=error&detail=" 
+        + java.net.URLEncoder.encode(e.getMessage() != null ? e.getMessage() : "Erro", "UTF-8"));
+} catch (Exception e) {
+    e.printStackTrace();
+    response.sendRedirect(base + "attendantPanel.jsp?msg=error&detail=" 
+        + java.net.URLEncoder.encode(e.getMessage() != null ? e.getMessage() : "Erro", "UTF-8"));
+}
     }
 
     private Client mapClientFromRequest(HttpServletRequest request) {

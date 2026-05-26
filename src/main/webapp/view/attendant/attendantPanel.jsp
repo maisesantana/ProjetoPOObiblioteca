@@ -55,7 +55,7 @@
               <a class="nav-link" href="${pageContext.request.contextPath}/view/attendant/returnBook.jsp">Devolução</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="${pageContext.request.contextPath}/view/attendant/renewal.jsp">Renovação</a>
+              <a class="nav-link" href="${pageContext.request.contextPath}/attendant/action?action=viewRenewal&loanId=1">Renovação</a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="${pageContext.request.contextPath}/searchBooks">Buscar Livros</a>
