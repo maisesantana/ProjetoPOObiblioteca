@@ -13,6 +13,8 @@ import java.util.Optional;
 
 public class LoanService {
 
+    private static final int MAX_LOANS = 6; // RF19: máximo 6 empréstimos simultâneos
+
     private final LoanDAO loanDAO;
     private final ClientDAO clientDAO;
     private final BookCopyDAO bookCopyDAO;
@@ -36,8 +38,17 @@ public class LoanService {
             throw new IllegalArgumentException("Exemplar não encontrado com ID: " + copyId);
         }
 
+        // RF27: cliente suspenso não pode pegar emprestado
         if (!client.canBorrow()) {
             throw new IllegalStateException("Cliente está suspenso e não pode realizar empréstimos.");
+        }
+
+        // RF19: limite de 6 empréstimos simultâneos
+        int activeLoans = loanDAO.countActiveLoans(cpf);
+        if (activeLoans >= MAX_LOANS) {
+            throw new IllegalStateException(
+                "Cliente já possui " + MAX_LOANS + " empréstimos ativos. Devolva um livro antes de realizar novo empréstimo."
+            );
         }
 
         if (!bookCopy.isAvailable()) {
@@ -47,7 +58,7 @@ public class LoanService {
         Loan loan = new Loan(client, bookCopy);
         client.addLoan(loan);
 
-        loanDAO.insert(loan); // o LoanDAO já atualiza disponibilidade do exemplar na transação
+        loanDAO.insert(loan);
 
         return loan;
     }
@@ -62,7 +73,7 @@ public class LoanService {
         return loanDAO.findAll();
     }
 
-    // LISTA EMPRÉSTIMOS ATIVOS FORMATADOS (usado em relatórios)
+    // LISTA EMPRÉSTIMOS ATIVOS FORMATADOS
     public List<String> listActiveLoansInfo() {
         return loanDAO.listActiveLoansInfo();
     }

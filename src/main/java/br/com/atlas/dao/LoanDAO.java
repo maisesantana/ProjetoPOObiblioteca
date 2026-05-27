@@ -11,12 +11,12 @@ import java.util.List;
 
 public class LoanDAO {
 
-    // CREATE (insere novo empréstimo no banco)
+    // CREATE
     public void insert(Loan loan) {
         String sql = "INSERT INTO loan (cpf, bookCopyId, loanDate, expectedReturnDate, renewals, active) VALUES (?, ?, ?, ?, ?, ?)";
 
         try (Connection conn = ConnectionDb.getConexao()) {
-            conn.setAutoCommit(false); // controla transação (commit/rollback)
+            conn.setAutoCommit(false);
 
             try (PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
@@ -24,32 +24,22 @@ public class LoanDAO {
                 stmt.setInt(2, loan.getBookCopy().getBookCopyId());
                 stmt.setTimestamp(3, Timestamp.valueOf(loan.getLoanDate()));
                 stmt.setTimestamp(4, Timestamp.valueOf(loan.getExpectedReturnDate()));
-
-                // salva quantidade de renovações (inicia com 0)
                 stmt.setInt(5, loan.getRenewalCount());
-
                 stmt.setBoolean(6, loan.isActive());
-
                 stmt.executeUpdate();
 
-                // Recupera o ID gerado para que os próximos passos (Renovação/Devolução) funcionem
                 try (ResultSet rs = stmt.getGeneratedKeys()) {
-                    if (rs.next()) {
-                        loan.setLoanId(rs.getInt(1));
-                    }
+                    if (rs.next()) loan.setLoanId(rs.getInt(1));
                 }
 
-                // MUDANÇA CRUCIAL: Passamos a conexão 'conn' para o DAO de Exemplar
-                BookCopyDAO bcDAO = new BookCopyDAO(conn); 
-                
+                BookCopyDAO bcDAO = new BookCopyDAO(conn);
                 loan.getBookCopy().setAvailable(false);
                 bcDAO.update(loan.getBookCopy());
 
-                conn.commit(); // Agora sim, confirma as duas operações juntas!
-                System.out.println("✅ Empréstimo e atualização de exemplar confirmados.");
+                conn.commit();
 
             } catch (SQLException e) {
-                conn.rollback(); // Se der erro no insert ou no update, desfaz TUDO
+                conn.rollback();
                 throw e;
             }
 
@@ -58,9 +48,8 @@ public class LoanDAO {
         }
     }
 
-    // READ ALL (busca todos os empréstimos)
+    // READ ALL
     public List<Loan> findAll() {
-
         List<Loan> list = new ArrayList<>();
         String sql = "SELECT * FROM loan";
 
@@ -68,10 +57,7 @@ public class LoanDAO {
              PreparedStatement stmt = conn.prepareStatement(sql);
              ResultSet rs = stmt.executeQuery()) {
 
-            while (rs.next()) {
-                // usa método auxiliar pra montar o objeto
-                list.add(mapResultSet(rs));
-            }
+            while (rs.next()) list.add(mapResultSet(rs));
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -80,9 +66,8 @@ public class LoanDAO {
         return list;
     }
 
-    // READ BY ID (busca empréstimo específico)
+    // READ BY ID
     public Loan findById(int id) {
-
         String sql = "SELECT * FROM loan WHERE loanId = ?";
 
         try (Connection conn = ConnectionDb.getConexao();
@@ -91,9 +76,7 @@ public class LoanDAO {
             stmt.setInt(1, id);
 
             try (ResultSet rs = stmt.executeQuery()) {
-                if (rs.next()) {
-                    return mapResultSet(rs); // usa método auxiliar
-                }
+                if (rs.next()) return mapResultSet(rs);
             }
 
         } catch (SQLException e) {
@@ -103,9 +86,44 @@ public class LoanDAO {
         return null;
     }
 
-    // UPDATE (atualiza dados do empréstimo)
-    public boolean update(Loan loan) {
+    // BUSCA EMPRÉSTIMOS ATIVOS DE UM CLIENTE COM NOME DO LIVRO
+    public List<Loan> findActiveLoansByCpf(String cpf) {
+        List<Loan> list = new ArrayList<>();
+        String sql = """
+            SELECT l.loanId, l.cpf, l.bookCopyId, l.loanDate,
+                   l.expectedReturnDate, l.renewals, l.active,
+                   b.bookName
+            FROM Loan l
+            JOIN BookCopy bc ON l.bookCopyId = bc.bookCopyId
+            JOIN Book b ON bc.bookId = b.bookId
+            WHERE l.cpf = ? AND l.active = TRUE
+        """;
 
+        try (Connection conn = ConnectionDb.getConexao();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setString(1, cpf);
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    Loan loan = mapResultSet(rs);
+                    // Popula o objeto Book dentro do BookCopy com o nome do livro
+                    br.com.atlas.model.Book book = new br.com.atlas.model.Book();
+                    book.setBookName(rs.getString("bookName"));
+                    loan.getBookCopy().setBook(book);
+                    list.add(loan);
+                }
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return list;
+    }
+
+    // UPDATE
+    public boolean update(Loan loan) {
         String sql = "UPDATE loan SET cpf=?, bookCopyId=?, loanDate=?, expectedReturnDate=?, renewals=?, active=? WHERE loanId=?";
 
         try (Connection conn = ConnectionDb.getConexao();
@@ -115,10 +133,7 @@ public class LoanDAO {
             stmt.setInt(2, loan.getBookCopy().getBookCopyId());
             stmt.setTimestamp(3, Timestamp.valueOf(loan.getLoanDate()));
             stmt.setTimestamp(4, Timestamp.valueOf(loan.getExpectedReturnDate()));
-
-            // atualiza quantidade de renovações
             stmt.setInt(5, loan.getRenewalCount());
-
             stmt.setBoolean(6, loan.isActive());
             stmt.setInt(7, loan.getLoanId());
 
@@ -131,49 +146,43 @@ public class LoanDAO {
         }
     }
 
-    // MÉTODO AUXILIAR (evita repetição de código)
-    private Loan mapResultSet(ResultSet rs) throws SQLException {
+    // CONTA EMPRÉSTIMOS ATIVOS DE UM CLIENTE (RF19)
+    public int countActiveLoans(String cpf) {
+        String sql = "SELECT COUNT(*) FROM loan WHERE cpf = ? AND active = TRUE";
 
-        // cria objetos básicos (lazy load - só cpf e id)
-        Client c = new Client();
-        c.setCpf(rs.getString("cpf"));
+        try (Connection conn = ConnectionDb.getConexao();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
 
-        BookCopy bc = new BookCopy();
-        bc.setBookCopyId(rs.getInt("bookCopyId"));
+            stmt.setString(1, cpf);
 
-        // monta o objeto Loan
-        Loan loan = new Loan(c, bc);
-
-        loan.setLoanId(rs.getInt("loanId"));
-        loan.setLoanDate(rs.getTimestamp("loanDate").toLocalDateTime());
-        loan.setExpectedReturnDate(rs.getTimestamp("expectedReturnDate").toLocalDateTime());
-        loan.setActive(rs.getBoolean("active"));
-
-        // pega quantidade de renovações do banco
-        loan.setRenewalCount(rs.getInt("renewals"));
-
-        return loan;
-    }
-
-    public boolean hasActiveLoans() {
-        // Busca se existe pelo menos um empréstimo com status ativo no banco
-        String sql = "SELECT COUNT(*) FROM loan WHERE active = TRUE";
-        
-        try (Connection conn = br.com.atlas.util.ConnectionDb.getConexao();
-            PreparedStatement stmt = conn.prepareStatement(sql);
-            ResultSet rs = stmt.executeQuery()) {
-            
-            if (rs.next()) {
-                // Se o contador for maior que 0, significa que há empréstimos para tratar
-                return rs.getInt(1) > 0;
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) return rs.getInt(1);
             }
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return false; // Por segurança, se der erro ou estiver vazio, retorna false
+
+        return 0;
     }
 
-        public List<String> listActiveLoansInfo() {
+    public boolean hasActiveLoans() {
+        String sql = "SELECT COUNT(*) FROM loan WHERE active = TRUE";
+
+        try (Connection conn = ConnectionDb.getConexao();
+             PreparedStatement stmt = conn.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+
+            if (rs.next()) return rs.getInt(1) > 0;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return false;
+    }
+
+    public List<String> listActiveLoansInfo() {
         List<String> report = new ArrayList<>();
         String sql = """
             SELECT p.name AS clientName, b.bookName, l.loanDate, l.expectedReturnDate, l.renewals
@@ -185,8 +194,8 @@ public class LoanDAO {
         """;
 
         try (Connection conn = ConnectionDb.getConexao();
-            PreparedStatement stmt = conn.prepareStatement(sql);
-            ResultSet rs = stmt.executeQuery()) {
+             PreparedStatement stmt = conn.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
 
             while (rs.next()) {
                 String info = String.format(
@@ -198,7 +207,27 @@ public class LoanDAO {
                 );
                 report.add(info);
             }
-        } catch (SQLException e) { e.printStackTrace(); }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
         return report;
+    }
+
+    private Loan mapResultSet(ResultSet rs) throws SQLException {
+        Client c = new Client();
+        c.setCpf(rs.getString("cpf"));
+
+        BookCopy bc = new BookCopy();
+        bc.setBookCopyId(rs.getInt("bookCopyId"));
+
+        Loan loan = new Loan(c, bc);
+        loan.setLoanId(rs.getInt("loanId"));
+        loan.setLoanDate(rs.getTimestamp("loanDate").toLocalDateTime());
+        loan.setExpectedReturnDate(rs.getTimestamp("expectedReturnDate").toLocalDateTime());
+        loan.setActive(rs.getBoolean("active"));
+        loan.setRenewalCount(rs.getInt("renewals"));
+
+        return loan;
     }
 }

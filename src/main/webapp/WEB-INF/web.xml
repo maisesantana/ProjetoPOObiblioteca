@@ -150,4 +150,14 @@
   <url-pattern>/bookList</url-pattern>
 </servlet-mapping>
 
+<servlet>
+  <servlet-name>ReturnBookController</servlet-name>
+  <servlet-class>br.com.atlas.webcontroller.ReturnBookController</servlet-class>
+</servlet>
+
+<servlet-mapping>
+  <servlet-name>ReturnBookController</servlet-name>
+  <url-pattern>/returnBook</url-pattern>
+</servlet-mapping>
+
 </web-app>
