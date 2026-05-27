@@ -65,10 +65,30 @@
     <servlet-class>br.com.atlas.webcontroller.ManageCategoryController</servlet-class>
   </servlet>
 
-   <servlet>
-  <servlet-name>BookListController</servlet-name>
-  <servlet-class>br.com.atlas.webcontroller.BookListController</servlet-class>
-</servlet>
+  <servlet>
+    <servlet-name>BookListController</servlet-name>
+    <servlet-class>br.com.atlas.webcontroller.BookListController</servlet-class>
+  </servlet>
+
+  <servlet>
+    <servlet-name>ClientController</servlet-name>
+    <servlet-class>br.com.atlas.webcontroller.ClientController</servlet-class>
+  </servlet>
+
+  <servlet>
+    <servlet-name>ReturnBookController</servlet-name>
+    <servlet-class>br.com.atlas.webcontroller.ReturnBookController</servlet-class>
+  </servlet>
+
+  <servlet>
+    <servlet-name>RenewalController</servlet-name>
+    <servlet-class>br.com.atlas.webcontroller.RenewalController</servlet-class>
+  </servlet>
+
+  <servlet>
+    <servlet-name>ActiveLoansController</servlet-name>
+    <servlet-class>br.com.atlas.webcontroller.ActiveLoansController</servlet-class>
+  </servlet>
 
 
   <servlet-mapping>
@@ -80,6 +100,7 @@
     <servlet-name>AdministratorController</servlet-name>
     <url-pattern>/registerEmployee</url-pattern>
   </servlet-mapping>
+
   <servlet-mapping>
     <servlet-name>AdministratorController</servlet-name>
     <url-pattern>/listEmployees</url-pattern>
@@ -135,38 +156,29 @@
     <url-pattern>/manageCategory</url-pattern>
   </servlet-mapping>
 
-  <servlet>
-    <servlet-name>ClientController</servlet-name>
-    <servlet-class>br.com.atlas.webcontroller.ClientController</servlet-class>
-  </servlet>
+  <servlet-mapping>
+    <servlet-name>BookListController</servlet-name>
+    <url-pattern>/bookList</url-pattern>
+  </servlet-mapping>
 
   <servlet-mapping>
     <servlet-name>ClientController</servlet-name>
     <url-pattern>/clients</url-pattern>
   </servlet-mapping>
 
-<servlet-mapping>
-  <servlet-name>BookListController</servlet-name>
-  <url-pattern>/bookList</url-pattern>
-</servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>ReturnBookController</servlet-name>
+    <url-pattern>/returnBook</url-pattern>
+  </servlet-mapping>
 
-<servlet>
-  <servlet-name>ReturnBookController</servlet-name>
-  <servlet-class>br.com.atlas.webcontroller.ReturnBookController</servlet-class>
-</servlet>
+  <servlet-mapping>
+    <servlet-name>RenewalController</servlet-name>
+    <url-pattern>/renewal</url-pattern>
+  </servlet-mapping>
 
-<servlet-mapping>
-  <servlet-name>ReturnBookController</servlet-name>
-  <url-pattern>/returnBook</url-pattern>
-</servlet-mapping>
-
-<servlet>
-  <servlet-name>RenewalController</servlet-name>
-  <servlet-class>br.com.atlas.webcontroller.RenewalController</servlet-class>
-</servlet>
-<servlet-mapping>
-  <servlet-name>RenewalController</servlet-name>
-  <url-pattern>/renewal</url-pattern>
-</servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>ActiveLoansController</servlet-name>
+    <url-pattern>/activeLoans</url-pattern>
+  </servlet-mapping>
 
 </web-app>

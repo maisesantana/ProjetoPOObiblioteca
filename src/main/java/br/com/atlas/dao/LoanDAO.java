@@ -122,6 +122,49 @@ public class LoanDAO {
         return list;
     }
 
+// BUSCA TODOS OS EMPRÉSTIMOS ATIVOS COM NOME DO LIVRO E NOME DO CLIENTE
+    public List<Loan> findAllActive() {
+        List<Loan> list = new ArrayList<>();
+        String sql = """
+            SELECT l.loanId, l.cpf, l.bookCopyId, l.loanDate,
+                l.expectedReturnDate, l.renewals, l.active,
+                b.bookName,
+                p.name AS clientName
+            FROM Loan l
+            JOIN BookCopy bc ON l.bookCopyId = bc.bookCopyId
+            JOIN Book b      ON bc.bookId    = b.bookId
+            JOIN Person p    ON l.cpf        = p.cpf
+            WHERE l.active = TRUE
+            ORDER BY l.expectedReturnDate ASC
+        """;
+
+        try (Connection conn = ConnectionDb.getConexao();
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            ResultSet rs = stmt.executeQuery()) {
+
+            while (rs.next()) {
+                Loan loan = mapResultSet(rs);
+
+                // Popula nome do cliente
+                Client client = loan.getClient();
+                client.setName(rs.getString("clientName"));
+
+                // Popula nome do livro dentro do BookCopy
+                br.com.atlas.model.Book book = new br.com.atlas.model.Book();
+                book.setBookName(rs.getString("bookName"));
+                loan.getBookCopy().setBook(book);
+
+                list.add(loan);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return list;
+    }
+
+
     // UPDATE
     public boolean update(Loan loan) {
         String sql = "UPDATE loan SET cpf=?, bookCopyId=?, loanDate=?, expectedReturnDate=?, renewals=?, active=? WHERE loanId=?";

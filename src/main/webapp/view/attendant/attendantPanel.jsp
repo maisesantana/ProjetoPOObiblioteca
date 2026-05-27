@@ -61,7 +61,7 @@
               <a class="nav-link" href="${pageContext.request.contextPath}/searchBooks">Buscar Livros</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="${pageContext.request.contextPath}/view/attendant/activeLoans.jsp">Empréstimos Ativos</a>
+              <a class="nav-link" href="${pageContext.request.contextPath}/activeLoans">Empréstimos Ativos</a>
             </li>
           </ul>
           <a href="${pageContext.request.contextPath}/logout" class="btn-sair">
@@ -152,8 +152,8 @@
               </a>
             </div>
 
-            <div class="col-lg-4 col-md-6">
-              <a href="${pageContext.request.contextPath}/view/attendant/activeLoans.jsp" class="tool-card">
+            <div class="col-lg-4 col-md-6"><a href="${pageContext.request.contextPath}/activeLoans" class="tool-card">
+              
                 <div class="tool-icon">
                   <span class="material-symbols-rounded">pending_actions</span>
                 </div>
