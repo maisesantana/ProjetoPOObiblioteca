@@ -16,6 +16,13 @@
     String errorMsg  = (String) request.getAttribute("errorMsg");
     String msg       = request.getParameter("msg");
     String cpfParam  = request.getParameter("cpf");
+    String type      = request.getParameter("type"); // "return" ou "renewal"
+    if (type == null) type = "return";
+
+    boolean isReturn  = "return".equals(type);
+    String actionUrl  = isReturn
+        ? request.getContextPath() + "/returnBook"
+        : request.getContextPath() + "/renewal";
 %>
 
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" isELIgnored="false" %>
@@ -25,7 +32,7 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Atlas — Devolução</title>
+  <title>Atlas — <%= isReturn ? "Devolução" : "Renovação" %></title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@400;500;600&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -51,8 +58,8 @@
             <li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/view/attendant/attendantPanel.jsp">Início</a></li>
             <li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/clients">Clientes</a></li>
             <li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/view/attendant/loan.jsp">Empréstimo</a></li>
-            <li class="nav-item"><a class="nav-link active" href="${pageContext.request.contextPath}/returnBook">Devolução</a></li>
-            <li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/view/attendant/renewal.jsp">Renovação</a></li>
+            <li class="nav-item"><a class="nav-link <%= isReturn ? "active" : "" %>" href="${pageContext.request.contextPath}/returnBook?type=return">Devolução</a></li>
+            <li class="nav-item"><a class="nav-link <%= !isReturn ? "active" : "" %>" href="${pageContext.request.contextPath}/returnBook?type=renewal">Renovação</a></li>
             <li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/searchBooks">Buscar Livros</a></li>
             <li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/view/attendant/activeLoans.jsp">Empréstimos Ativos</a></li>
           </ul>
@@ -69,11 +76,11 @@
     <nav class="breadcrumb-custom">
       <a href="${pageContext.request.contextPath}/view/attendant/attendantPanel.jsp">Início</a>
       <span>/</span>
-      <span class="current">Devolução</span>
+      <span class="current"><%= isReturn ? "Devolução" : "Renovação" %></span>
     </nav>
 
     <section class="titulo-section">
-      <h1>Registrar Devolução</h1>
+      <h1><%= isReturn ? "Registrar Devolução" : "Registrar Renovação" %></h1>
       <p>Informe o CPF do cliente para localizar os empréstimos ativos.</p>
     </section>
 
@@ -82,10 +89,14 @@
       <div class="toast-msg toast-success show" id="toastMsg">
         <i class="bi bi-check-circle-fill"></i> Devolução registrada com sucesso!
       </div>
+    <% } else if ("renewal_success".equals(msg)) { %>
+      <div class="toast-msg toast-success show" id="toastMsg">
+        <i class="bi bi-check-circle-fill"></i> Renovação registrada com sucesso!
+      </div>
     <% } else if ("error".equals(msg)) { %>
       <div class="toast-msg toast-error show" id="toastMsg">
         <i class="bi bi-x-circle-fill"></i>
-        <%= request.getParameter("detail") != null ? request.getParameter("detail") : "Erro ao registrar devolução." %>
+        <%= request.getParameter("detail") != null ? request.getParameter("detail") : "Erro ao processar." %>
       </div>
     <% } %>
 
@@ -95,8 +106,9 @@
       </div>
     <% } %>
 
-    <%-- Busca por CPF --%>
+    <%-- Busca por CPF — mantém o type na URL --%>
     <form action="${pageContext.request.contextPath}/returnBook" method="get" class="search-box">
+      <input type="hidden" name="type" value="<%= type %>"/>
       <input type="text" name="cpf" placeholder="Digite o CPF do cliente..."
              value="<%= cpfParam != null ? cpfParam : "" %>" required/>
       <button type="submit" class="btn-search">Buscar</button>
@@ -160,20 +172,35 @@
               </div>
             </div>
 
-            <% if (isLate) { %>
+            <% if (isReturn && isLate) { %>
               <div class="late-warning">
                 <i class="bi bi-exclamation-triangle-fill"></i>
                 Devolução atrasada! O cliente receberá suspensão de 2 dias por dia de atraso.
               </div>
             <% } %>
 
-            <form action="${pageContext.request.contextPath}/returnBook" method="post">
+            <%-- Botão de ação: Devolver OU Renovar --%>
+            <form action="<%= actionUrl %>" method="post">
               <input type="hidden" name="loanId" value="<%= loan.getLoanId() %>">
-              <input type="hidden" name="cpf" value="<%= client.getCpf() %>">
-              <button type="submit" class="btn-confirm">
-                <i class="bi bi-arrow-return-left"></i> Confirmar Devolução
-              </button>
+              <input type="hidden" name="cpf"    value="<%= client.getCpf() %>">
+              <input type="hidden" name="type"   value="<%= type %>">
+              <% if (isReturn) { %>
+                <button type="submit" class="btn-confirm btn-return">
+                  <i class="bi bi-arrow-return-left"></i> Confirmar Devolução
+                </button>
+              <% } else { %>
+                <button type="submit" class="btn-confirm btn-renewal"
+                  <%= (loan.getRenewalCount() >= 3 || isLate) ? "disabled title='Renovação não permitida'" : "" %>>
+                  <i class="bi bi-arrow-repeat"></i> Confirmar Renovação
+                </button>
+                <% if (loan.getRenewalCount() >= 3) { %>
+                  <span class="renewal-blocked">Limite de renovações atingido</span>
+                <% } else if (isLate) { %>
+                  <span class="renewal-blocked">Não é possível renovar com atraso</span>
+                <% } %>
+              <% } %>
             </form>
+
           </div>
         <% } %>
       </div>

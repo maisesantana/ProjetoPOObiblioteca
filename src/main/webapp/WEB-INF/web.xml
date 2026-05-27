@@ -160,4 +160,13 @@
   <url-pattern>/returnBook</url-pattern>
 </servlet-mapping>
 
+<servlet>
+  <servlet-name>RenewalController</servlet-name>
+  <servlet-class>br.com.atlas.webcontroller.RenewalController</servlet-class>
+</servlet>
+<servlet-mapping>
+  <servlet-name>RenewalController</servlet-name>
+  <url-pattern>/renewal</url-pattern>
+</servlet-mapping>
+
 </web-app>

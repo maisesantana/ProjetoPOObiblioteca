@@ -52,10 +52,10 @@
               <a class="nav-link" href="${pageContext.request.contextPath}/view/attendant/loan.jsp">Empréstimo</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="${pageContext.request.contextPath}/view/attendant/returnBook.jsp">Devolução</a>
+              <a class="nav-link" href="${pageContext.request.contextPath}/returnBook?type=return">Devolução</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="${pageContext.request.contextPath}/attendant/action?action=viewRenewal&loanId=1">Renovação</a>
+              <a class="nav-link" href="${pageContext.request.contextPath}/returnBook?type=renewal">Renovação</a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="${pageContext.request.contextPath}/searchBooks">Buscar Livros</a>
@@ -123,7 +123,7 @@
             </div>
 
             <div class="col-lg-4 col-md-6">
-              <a href="${pageContext.request.contextPath}/view/attendant/returnBook.jsp" class="tool-card">
+              <a href="${pageContext.request.contextPath}/returnBook?type=return" class="tool-card">
                 <div class="tool-icon">
                   <span class="material-symbols-rounded">assignment_return</span>
                 </div>
@@ -133,7 +133,7 @@
             </div>
 
             <div class="col-lg-4 col-md-6">
-              <a href="${pageContext.request.contextPath}/view/attendant/renewal.jsp" class="tool-card">
+              <a href="${pageContext.request.contextPath}/returnBook?type=renewal" class="tool-card">
                 <div class="tool-icon">
                   <span class="material-symbols-rounded">autorenew</span>
                 </div>
