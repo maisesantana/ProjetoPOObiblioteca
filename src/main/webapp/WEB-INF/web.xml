@@ -160,4 +160,14 @@
   <url-pattern>/returnBook</url-pattern>
 </servlet-mapping>
 
+<servlet>
+  <servlet-name>ActiveLoansController</servlet-name>
+  <servlet-class>br.com.atlas.webcontroller.ActiveLoansController</servlet-class>
+</servlet>
+
+<servlet-mapping>
+  <servlet-name>ActiveLoansController</servlet-name>
+  <url-pattern>/activeLoans</url-pattern>
+</servlet-mapping>
+
 </web-app>
