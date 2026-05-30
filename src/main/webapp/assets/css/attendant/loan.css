@@ -1,0 +1,380 @@
+:root{
+    --atlas-primary: #6B1A2B;
+    --atlas-primary-hover: #521320;
+    --atlas-blue: #80A4ED;
+    --atlas-blue-hover: #6D94E4;
+    --atlas-light-green: #B2FFB5;
+    --atlas-green-text: #1B8D28;
+    --atlas-text: #1B1B1B;
+    --atlas-gray: #8C8C8C;
+    --atlas-soft-bg: #F3F3F3;
+    --atlas-danger-bg: #FEE2E2;
+    --atlas-danger-text: #DC2626;
+}
+
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body{
+    background: #fff;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    color: var(--atlas-text);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+main{
+    flex: 1;
+}
+
+.loan-container{
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 1.8rem 1.5rem 4rem;
+}
+
+.breadcrumb-custom{
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+    margin-bottom: 1.2rem;
+    font-size: .9rem;
+}
+
+.breadcrumb-custom a{
+    text-decoration: none;
+    color: #6E7BF2;
+}
+
+.breadcrumb-custom span{
+    color: #7C7C7C;
+}
+
+.current-page{
+    color: var(--atlas-primary);
+    font-weight: 600;
+}
+
+.title-section{
+    margin-bottom: 2rem;
+}
+
+.title-section h1{
+    font-size: 1.42rem;
+    font-weight: 700;
+    color: #222;
+    margin-bottom: .35rem;
+}
+
+.title-section p{
+    color: var(--atlas-gray);
+    font-size: .94rem;
+}
+
+.search-book-box{
+    display: flex;
+    gap: .75rem;
+    margin-bottom: 1.5rem;
+}
+
+.search-book-box input{
+    flex: 1;
+    background: var(--atlas-soft-bg);
+    border: none;
+    border-radius: 16px;
+    padding: .9rem 1.35rem;
+    font-size: 1rem;
+    outline: none;
+    transition: .2s;
+}
+
+.search-book-box input:focus{
+    box-shadow: 0 0 0 2px var(--atlas-blue);
+}
+
+.btn-search-book{
+    background: var(--atlas-blue);
+    color: #fff;
+    border: none;
+    border-radius: 16px;
+    padding: .9rem 1.8rem;
+    font-size: .95rem;
+    font-weight: 600;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: .2s;
+}
+
+.btn-search-book:hover{
+    background: var(--atlas-blue-hover);
+}
+
+.loan-card{
+    background: var(--atlas-soft-bg);
+    border-radius: 20px;
+    padding: 1.5rem;
+}
+
+.book-summary{
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.book-icon{
+    width: 70px;
+    height: 70px;
+    border-radius: 16px;
+    background: #E9E9E9;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.book-icon i{
+    font-size: 1.8rem;
+    color: var(--atlas-primary);
+}
+
+.book-content{
+    flex: 1;
+}
+
+.book-header{
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.book-header h2{
+    font-size: 1.05rem;
+    font-weight: 700;
+    margin-bottom: .25rem;
+}
+
+.book-header span{
+    font-size: .9rem;
+    color: var(--atlas-gray);
+}
+
+.available-badge{
+    background: var(--atlas-light-green);
+    color: var(--atlas-green-text);
+    border-radius: 999px;
+    padding: .4rem .8rem;
+    font-size: .8rem;
+    font-weight: 700;
+    white-space: nowrap;
+    height: fit-content;
+}
+
+.book-grid{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: .9rem;
+}
+
+.info-box{
+    background: #fff;
+    border-radius: 12px;
+    padding: .9rem 1rem;
+}
+
+.info-box small{
+    display: block;
+    font-size: .75rem;
+    font-weight: 600;
+    color: var(--atlas-gray);
+    margin-bottom: .3rem;
+    text-transform: uppercase;
+    letter-spacing: .4px;
+}
+
+.info-box strong{
+    font-size: .95rem;
+}
+
+.client-section{
+    margin-top: 1.5rem;
+}
+
+.client-section h3{
+    font-size: 1.05rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+}
+
+.client-search{
+    display: flex;
+    gap: .75rem;
+    margin-bottom: 1.3rem;
+}
+
+.client-search input{
+    flex: 1;
+    background: #fff;
+    border: none;
+    border-radius: 16px;
+    padding: .9rem 1.2rem;
+    outline: none;
+    box-shadow: none;
+}
+
+.client-search input:focus{
+    box-shadow: 0 0 0 2px var(--atlas-blue);
+}
+
+.btn-check{
+    background: var(--atlas-blue);
+    color: #fff;
+    border: none;
+    border-radius: 16px;
+    padding: 0 1.5rem;
+    font-weight: 600;
+    transition: .2s;
+    white-space: nowrap;
+}
+
+.btn-check:hover{
+    background: var(--atlas-blue-hover);
+}
+
+.client-card{
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    background: #fff;
+    border-radius: 16px;
+    padding: 1rem;
+    margin-bottom: 1.2rem;
+}
+
+.client-avatar{
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    background: var(--atlas-primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.client-avatar i{
+    color: #fff;
+    font-size: 1.3rem;
+}
+
+.client-name{
+    font-size: 1rem;
+    font-weight: 700;
+    margin-bottom: .25rem;
+}
+
+.client-status{
+    display: inline-flex;
+    align-items: center;
+    gap: .45rem;
+    padding: .35rem .8rem;
+    border-radius: 999px;
+    font-size: .82rem;
+    font-weight: 600;
+}
+
+.client-status.available{
+    background: var(--atlas-light-green);
+    color: var(--atlas-green-text);
+}
+
+.client-status.suspended{
+    background: var(--atlas-danger-bg);
+    color: var(--atlas-danger-text);
+}
+
+.loan-details{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: .9rem;
+    margin-bottom: 1.3rem;
+}
+
+.detail-box{
+    background: #fff;
+    border-radius: 12px;
+    padding: .9rem 1rem;
+}
+
+.detail-box small{
+    display: block;
+    font-size: .75rem;
+    font-weight: 600;
+    color: var(--atlas-gray);
+    margin-bottom: .3rem;
+    text-transform: uppercase;
+    letter-spacing: .4px;
+}
+
+.detail-box strong{
+    font-size: .95rem;
+}
+
+.btn-confirm{
+    width: 100%;
+    border: none;
+    background: var(--atlas-primary);
+    color: #fff;
+    border-radius: 14px;
+    padding: .95rem;
+    font-size: .97rem;
+    font-weight: 700;
+    transition: .2s;
+}
+
+.btn-confirm:hover{
+    background: var(--atlas-primary-hover);
+}
+
+.selected-book-info{
+    display: none;
+    margin-top: 20px;
+    padding: 15px;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+}
+
+.selected-book-info.visible{
+    display: block;
+}
+
+@media(max-width: 600px){
+
+    .book-grid{
+        grid-template-columns: 1fr;
+    }
+
+    .loan-details{
+        grid-template-columns: 1fr;
+    }
+
+    .client-search{
+        flex-direction: column;
+    }
+
+    .search-book-box{
+        flex-direction: column;
+    }
+
+    .book-header{
+        flex-direction: column;
+    }
+
+    .book-summary{
+        flex-direction: column;
+    }
+}

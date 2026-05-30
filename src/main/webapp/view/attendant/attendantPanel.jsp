@@ -30,7 +30,6 @@
 </head>
 
 <body>
-
   <header>
     <nav class="navbar navbar-expand-lg atlas-navbar">
       <div class="container-fluid">
@@ -49,7 +48,7 @@
               <a class="nav-link" href="${pageContext.request.contextPath}/clients">Clientes</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="${pageContext.request.contextPath}/view/attendant/loan.jsp">Empréstimo</a>
+               <a class="nav-link" href="${pageContext.request.contextPath}/view/attendant/loan.jsp">Empréstimo</a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="${pageContext.request.contextPath}/returnBook?type=return">Devolução</a>
@@ -113,7 +112,7 @@
             </div>
 
             <div class="col-lg-4 col-md-6">
-              <a href="${pageContext.request.contextPath}/view/attendant/loan.jsp" class="tool-card">
+              <a href="${pageContext.request.contextPath}/loan" class="tool-card">
                 <div class="tool-icon">
                   <span class="material-symbols-rounded">book_ribbon</span>
                 </div>
@@ -171,3 +170,4 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
+

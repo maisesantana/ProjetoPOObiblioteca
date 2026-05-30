@@ -230,21 +230,23 @@ public class BookDAO {
      */
     public List<Book> findByName(String name) {
         List<Book> list = new ArrayList<>();
-        // O operador LIKE com % permite encontrar o texto em qualquer parte do nome
+        String query = name == null ? "" : name.trim().toLowerCase();
+
+        // Busca no nome e no autor de forma case-insensitive
         String sql = "SELECT DISTINCT b.* FROM Book b " +
-             "LEFT JOIN BookAuthor ba ON b.BookId = ba.BookId " +
-             "LEFT JOIN Author a ON ba.AuthorId = a.AuthorId " +
-             "WHERE b.BookName LIKE ? OR a.AuthorName LIKE ?";
+                "LEFT JOIN BookAuthor ba ON b.BookId = ba.BookId " +
+                "LEFT JOIN Author a ON ba.AuthorId = a.AuthorId " +
+                "WHERE LOWER(b.BookName) LIKE ? OR LOWER(a.AuthorName) LIKE ?";
 
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
-    stmt.setString(1, "%" + name + "%");
-    stmt.setString(2, "%" + name + "%");
-    
+            stmt.setString(1, "%" + query + "%");
+            stmt.setString(2, "%" + query + "%");
+
             try (ResultSet rs = stmt.executeQuery()) {
                 while (rs.next()) {
                     Book b = mapResultSet(rs);
-                    // Crucial: Carregar autores e categorias para cada resultado
-                    fillAuthorsAndCategories(b); 
+                    // Carrega autores e categorias para exibir no resultado
+                    fillAuthorsAndCategories(b);
                     list.add(b);
                 }
             }

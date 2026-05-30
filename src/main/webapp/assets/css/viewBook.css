@@ -92,3 +92,40 @@ main { flex: 1; }
 @media (max-width: 600px) {
   .details-grid { grid-template-columns: 1fr 1fr; }
 }
+
+/*Para atendente: */
+.loan-action{
+    margin-top:1rem;
+    display:flex;
+    justify-content:center;
+}
+
+.btn-loan{
+    background:#6B1A2B;
+    color:#fff;
+    border:none;
+    border-radius:14px;
+    padding:.8rem 1.6rem;
+    font-weight:600;
+    text-decoration:none;
+    display:inline-flex;
+    align-items:center;
+    gap:.5rem;
+    transition:.2s ease;
+}
+
+.btn-loan:hover{
+    background:#551523;
+    color:#fff;
+    transform:translateY(-1px);
+}
+
+.btn-loan-disabled{
+    background:#BDBDBD;
+    color:#fff;
+    border:none;
+    border-radius:14px;
+    padding:.8rem 1.6rem;
+    font-weight:600;
+    cursor:not-allowed;
+}

@@ -90,6 +90,19 @@
     <servlet-class>br.com.atlas.webcontroller.ActiveLoansController</servlet-class>
   </servlet>
 
+  <servlet>
+    <servlet-name>LoanController</servlet-name>
+    <servlet-class>br.com.atlas.webcontroller.LoanController</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>LoanController</servlet-name>
+    <url-pattern>/loan</url-pattern>
+  </servlet-mapping>
+
+  <servlet-mapping>
+    <servlet-name>LoanController</servlet-name>
+    <url-pattern>/loan.jsp</url-pattern>
+  </servlet-mapping>
 
   <servlet-mapping>
     <servlet-name>LoginController</servlet-name>

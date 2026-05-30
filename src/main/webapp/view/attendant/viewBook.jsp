@@ -47,7 +47,7 @@
           <ul class="navbar-nav me-auto mb-2 mb-lg-0">
             <li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/view/attendant/attendantPanel.jsp">Início</a></li>
             <li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/clients">Clientes</a></li>
-            <li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/view/attendant/loan.jsp">Empréstimo</a></li>
+            <li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/loan">Empréstimo</a></li>
             <li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/returnBook?type=return">Devolução</a></li>
             <li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/returnBook?type=renewal">Renovação</a></li>
             <li class="nav-item"><a class="nav-link active" href="${pageContext.request.contextPath}/searchBooks">Buscar Livros</a></li>
@@ -84,7 +84,19 @@
       <div class="detail-card"><div class="label">Categoria</div><div class="value"><%= String.join(", ", book.getCategories()) %></div></div>
       <div class="detail-card"><div class="label">Disponíveis</div><div class="value"><%= availableCopies %></div></div>
     </div>
-
+    <div class="loan-action">
+    <% if(availableCopies > 0){ %>
+        <a href="${pageContext.request.contextPath}/loan?bookId=<%= book.getBookId() %>"
+            class="btn-loan">
+            <i class="bi bi-journal-arrow-up"></i>
+            Realizar Empréstimo
+        </a>
+    <% } else { %>
+        <button class="btn-loan-disabled" disabled>
+            Sem exemplares disponíveis
+        </button>
+    <% } %>
+    </div>
     <a href="${pageContext.request.contextPath}/searchBooks" class="btn-back">
       <i class="bi bi-arrow-left"></i> Voltar para busca
     </a>
@@ -94,3 +106,4 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
+
