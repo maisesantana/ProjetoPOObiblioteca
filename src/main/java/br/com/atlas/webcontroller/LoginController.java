@@ -29,7 +29,7 @@ public class LoginController extends HttpServlet {
 
         // Validação básica de campos vazios
         if (cpf == null || cpf.trim().isEmpty() || senhaTexto == null || senhaTexto.trim().isEmpty()) {
-            response.sendRedirect(request.getContextPath() + "/index.jsp?msg=empty_fields");
+            response.sendRedirect(request.getContextPath() + "/view/login.jsp?msg=empty_fields");
             return;
         }
 
@@ -104,18 +104,18 @@ public class LoginController extends HttpServlet {
             } else {
                 // Senha errada ou CPF não encontrado em nenhuma tabela
                 if (!loginDAO.cpfLoginExists(cpf)) {
-                        response.sendRedirect(request.getContextPath() + "/view/index.jsp?msg=cpf_not_found");
+                    response.sendRedirect(request.getContextPath() + "/view/login.jsp?msg=cpf_not_found");
                 } else {
-                        response.sendRedirect(request.getContextPath() + "/view/index.jsp?msg=invalid_credentials");
+                    response.sendRedirect(request.getContextPath() + "/view/login.jsp?msg=invalid_credentials");
                 }
             }
 
         } catch (NumberFormatException e) {
             // Caso o usuário digite letras onde deveria ser senha numérica
-            response.sendRedirect(request.getContextPath() + "/view/index.jsp?msg=password_must_be_number");
+            response.sendRedirect(request.getContextPath() + "/view/login.jsp?msg=password_must_be_number");
         } catch (Exception e) {
            // e.printStackTrace();
-            response.sendRedirect(request.getContextPath() + "/view/index.jsp?msg=internal_error");
+            response.sendRedirect(request.getContextPath() + "/view/login.jsp?msg=internal_error");
         }
     }
 
@@ -127,6 +127,6 @@ public class LoginController extends HttpServlet {
             throws ServletException, IOException {
         HttpSession session = request.getSession();
         session.invalidate(); // Mata a sessão (destrói o crachá)
-        response.sendRedirect(request.getContextPath() + "/view/index.jsp");
+        response.sendRedirect(request.getContextPath() + "/view/login.jsp");
     }
 }
