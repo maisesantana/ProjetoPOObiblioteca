@@ -43,7 +43,9 @@
             <li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/view/attendant/returnBook.jsp">Devolução</a></li>
             <li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/view/attendant/renewal.jsp">Renovação</a></li>
             <li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/searchBooks">Buscar Livros</a></li>
-            <li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/view/attendant/activeLoans.jsp">Empréstimos Ativos</a></li>
+            <li class="nav-item">
+              <a class="nav-link" href="${pageContext.request.contextPath}/activeLoans">Empréstimos Ativos</a>
+            </li>
           </ul>
           <a href="${pageContext.request.contextPath}/logout" class="btn-sair"><i class="bi bi-box-arrow-right"></i> Sair</a>
         </div>

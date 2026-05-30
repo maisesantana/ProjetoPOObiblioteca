@@ -51,7 +51,9 @@
             <li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/returnBook?type=return">Devolução</a></li>
             <li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/returnBook?type=renewal">Renovação</a></li>
             <li class="nav-item"><a class="nav-link active" href="${pageContext.request.contextPath}/searchBooks">Buscar Livros</a></li>
-            <li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/activeLoans">Empréstimos Ativos</a></li>
+            <li class="nav-item">
+              <a class="nav-link" href="${pageContext.request.contextPath}/activeLoans">Empréstimos Ativos</a>
+            </li>
           </ul>
           <a href="${pageContext.request.contextPath}/logout" class="btn-sair"><i class="bi bi-box-arrow-right"></i> Sair</a>
         </div>
