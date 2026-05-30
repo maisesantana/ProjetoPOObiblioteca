@@ -13,3 +13,6 @@ bin/
 # OS
 .DS_Store
 Thumbs.db
+
+# Compile output
+compile_output.txt
