@@ -186,7 +186,7 @@ main {
   border-radius: 8px;
 }
 
-.book-view {
+.btn-view {
   text-decoration: none;
   color: var(--atlas-primary);
   font-weight: 700;
@@ -195,7 +195,7 @@ main {
   white-space: nowrap;
 }
 
-.book-view:hover {
+.btn-view:hover {
   opacity: 0.7;
 }
 
