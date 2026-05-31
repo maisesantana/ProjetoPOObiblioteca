@@ -73,10 +73,12 @@ main { flex: 1; }
   gap: 1.35rem;
 }
 
+/* O container pai agora distribui o ícone, o bloco cinza e o botão externo */
 .book-card {
   display: flex;
   align-items: center;
   gap: 1.15rem;
+  width: 100%;
 }
 
 .book-icon {
@@ -95,6 +97,7 @@ main { flex: 1; }
   color: #111;
 }
 
+/* Quadrado Cinza de conteúdo interno */
 .book-info {
   flex: 1;
   background: #F3F3F3;
@@ -126,67 +129,28 @@ main { flex: 1; }
   font-weight: 500;
 }
 
-/* Botões de ação alinhados e coloridos */
-.book-actions {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  flex-shrink: 0;
-}
-
-/* Ver Detalhes — Verde Atlas */
+/* Botão VER — VERMELHO ATLAS (Fora do quadrado cinza) */
 .btn-view {
   text-decoration: none;
-  color: #2E7D32; /* Verde amigável para leitura/detalhes */
+  color: var(--atlas-primary) !important; 
   font-weight: 700;
-  font-size: 0.93rem;
-  transition: opacity 0.2s;
+  font-size: 0.95rem;
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+  transition: opacity 0.2s, color 0.2s;
   white-space: nowrap;
+  flex-shrink: 0;
 }
 
 .btn-view:hover { 
   opacity: 0.7; 
-  color: #1B5E20; /* Verde um pouco mais escuro no hover */
-}
-
-/* Empréstimo — Azul Atlas */
-.btn-loan {
-  background: #1565C0; /* Azul sólido para ações de transição/fluxo */
-  color: #ffffff;
-  border: none;
-  border-radius: 10px;
-  padding: 0.45rem 1.1rem;
-  font-size: 0.9rem;
-  font-weight: 600;
-  font-family: 'Plus Jakarta Sans', sans-serif;
-  cursor: pointer;
-  text-decoration: none;
-  display: inline-flex;
-  align-items: center;
-  gap: 0.35rem;
-  transition: opacity 0.2s;
-  white-space: nowrap;
-}
-
-.btn-loan:hover { 
-  opacity: 0.85; 
-  color: #ffffff; 
-  background: #0D47A1; /* Azul mais escuro ao passar o mouse */
+  color: #4A101D !important; 
 }
 
 /* Responsividade */
 @media (max-width: 768px) {
-  .book-card { align-items: flex-start; }
-
-  .book-info {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 0.9rem;
-  }
-
-  .book-actions { 
-    width: 100%;
-    justify-content: space-between;
-    flex-wrap: wrap; 
+  .book-card { 
+    align-items: center;
+    position: relative;
   }
 }

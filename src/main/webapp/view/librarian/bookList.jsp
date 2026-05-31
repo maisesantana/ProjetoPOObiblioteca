@@ -71,17 +71,18 @@
       <% if (books != null && !books.isEmpty()) { %>
         <% for (Book book : books) { %>
           <div class="book-card">
+            <!-- Ícone do Livro -->
             <div class="book-icon"><i class="bi bi-book"></i></div>
+            
+            <!-- Conteúdo Interno Cinza -->
             <div class="book-info">
               <div class="book-details">
                 <h3><%= book.getBookName() %></h3>
                 <span class="book-author">Autor: <%= String.join(", ", book.getAuthors()) %></span>
               </div>
-              <div class="book-actions">
-                <a href="${pageContext.request.contextPath}/viewBook?id=<%= book.getBookId() %>&origem=lista"
-                   class="btn-view">Ver</a>
-              </div>
             </div>
+
+<a href="${pageContext.request.contextPath}/viewBook?id=<%= book.getBookId() %>&origem=lista" class="btn-view">Ver</a>
           </div>
         <% } %>
       <% } else { %>
