@@ -1,0 +1,132 @@
+/* viewBook.css */
+
+:root {
+  --atlas-primary: #6B1A2B;
+  --atlas-text: #1B1B1B;
+  --atlas-bg-card: #F3F3F3;
+}
+
+body {
+  background: #FFFFFF;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  color: var(--atlas-text);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+main { 
+  flex: 1; 
+}
+
+.view-container {
+  max-width: 850px;
+  margin: 0 auto;
+  padding-top: 1.8rem;
+  padding-bottom: 4rem;
+}
+
+/* Caminho de navegação (Breadcrumb) */
+.breadcrumb-custom {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 2rem;
+  font-size: 0.9rem;
+}
+
+.breadcrumb-custom a {
+  text-decoration: none;
+  color: #6E7BF2;
+}
+
+.breadcrumb-custom span { 
+  color: #7C7C7C; 
+}
+
+/* Placeholder/Ícone grande da capa do livro */
+.book-cover {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1.5rem;
+}
+
+.book-cover-placeholder {
+  width: 90px;
+  height: 90px;
+  border-radius: 20px;
+  background: #ECECEC;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.book-cover-placeholder i {
+  font-size: 2.2rem;
+  color: #111;
+}
+
+/* Seção de Título */
+.book-title-section {
+  text-align: center;
+  margin-bottom: 2.5rem;
+}
+
+.book-title-section h1 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #111;
+}
+
+/* Grid de Detalhes - 2 colunas */
+.details-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.2rem;
+  margin-bottom: 3rem;
+}
+
+/* Card individual cinza */
+.detail-card {
+  background: var(--atlas-bg-card);
+  border-radius: 16px;
+  padding: 1.2rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.detail-card .label {
+  color: #7C7C7C;
+  font-size: 0.88rem;
+  font-weight: 500;
+}
+
+.detail-card .value {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--atlas-text);
+}
+
+/* Botão de Voltar moderno */
+.btn-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  text-decoration: none;
+  color: var(--atlas-primary) !important;
+  font-weight: 700;
+  font-size: 0.95rem;
+  transition: opacity 0.2s;
+}
+
+.btn-back:hover {
+  opacity: 0.8;
+}
+
+/* Responsividade para telas de celular */
+@media (max-width: 768px) {
+  .details-grid {
+    grid-template-columns: 1fr;
+  }
+}
