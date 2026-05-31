@@ -209,6 +209,21 @@ public class LoanDAO {
         return 0;
     }
 
+    // VERIFICA SE CLIENTE TEM QUALQUER EMPRÉSTIMO (ativo ou histórico)
+    public boolean hasAnyLoans(String cpf) {
+        String sql = "SELECT COUNT(*) FROM loan WHERE cpf = ?";
+        try (Connection conn = ConnectionDb.getConexao();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, cpf);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) return rs.getInt(1) > 0;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
     public boolean hasActiveLoans() {
         String sql = "SELECT COUNT(*) FROM loan WHERE active = TRUE";
 

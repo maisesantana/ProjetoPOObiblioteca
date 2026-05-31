@@ -48,7 +48,7 @@
               <a class="nav-link" href="${pageContext.request.contextPath}/clients">Clientes</a>
             </li>
             <li class="nav-item">
-               <a class="nav-link" href="${pageContext.request.contextPath}/view/attendant/loan.jsp">Empréstimo</a>
+               <a class="nav-link" href="${pageContext.request.contextPath}/loan.jsp">Empréstimo</a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="${pageContext.request.contextPath}/returnBook?type=return">Devolução</a>

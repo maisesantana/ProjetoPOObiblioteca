@@ -137,6 +137,9 @@ public class ClientController extends HttpServlet {
         } catch (IllegalArgumentException e) {
             response.sendRedirect(request.getContextPath()
                 + "/clients?msg=error&detail=" + java.net.URLEncoder.encode(e.getMessage(), "UTF-8"));
+        } catch (IllegalStateException e) {
+            response.sendRedirect(request.getContextPath()
+                + "/clients?msg=error&detail=" + java.net.URLEncoder.encode(e.getMessage(), "UTF-8"));
         } catch (Exception e) {
             e.printStackTrace();
             response.sendRedirect(request.getContextPath() + "/clients?msg=error");

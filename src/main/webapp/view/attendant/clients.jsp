@@ -77,7 +77,10 @@
     <% } else if ("not_found".equals(msg)) { %>
       <div class="toast-msg toast-error show" id="toastMsg"><i class="bi bi-x-circle-fill"></i> Cliente não encontrado.</div>
     <% } else if ("error".equals(msg)) { %>
-      <div class="toast-msg toast-error show" id="toastMsg"><i class="bi bi-x-circle-fill"></i> Ocorreu um erro. Tente novamente.</div>
+    <div class="toast-msg toast-error show" id="toastMsg">
+      <i class="bi bi-x-circle-fill"></i>
+      <%= request.getParameter("detail") != null ? request.getParameter("detail") : "Ocorreu um erro. Tente novamente." %>
+    </div>
     <% } %>
 
     <div class="search-register">
