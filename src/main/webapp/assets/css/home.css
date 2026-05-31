@@ -6,7 +6,7 @@
 
 body {
     font-family: 'Poppins', sans-serif;
-    background: #f8f9fa;
+    background: #ffffff;
     color: #181e4b;
     overflow-x: hidden;
 }
@@ -47,10 +47,11 @@ body {
 
 .hero-section {
     padding-top: 150px;
-    padding-bottom: 100px;
+    padding-bottom: 60px;
     min-height: 100vh;
     display: flex;
     align-items: center;
+    background: #ffffff;
 }
 
 .hero-tag {
@@ -140,51 +141,27 @@ body {
 /* SECTION */
 
 .section-header {
-    margin-bottom: 70px;
+    margin-bottom: 50px;
 }
 
 .section-tag {
+    font-size: 36px;
     color: #ccbda9;
     font-weight: 700;
     letter-spacing: 3px;
 }
 
 .section-header h2 {
-    font-size: 48px;
+    font-size: 32px;
     margin-top: 10px;
     font-weight: 700;
-}
-
-/* SERVICES */
-
-.services-section {
-    padding: 120px 0;
-}
-
-.service-image {
-    width: 100%;
-    border-radius: 24px;
-    height: 420px;
-    object-fit: cover;
-}
-
-.service-title {
-    font-size: 40px;
-    margin-bottom: 20px;
-    line-height: 1.3;
-}
-
-.service-text {
-    color: #5e6282;
-    line-height: 1.9;
-    font-size: 17px;
 }
 
 /* TEAM */
 
 .team-section {
-    padding: 120px 0;
-    background: white;
+    padding: 70px 0;
+    background: #ffffff;
 }
 
 .team-card {
@@ -229,7 +206,8 @@ body {
 /* CTA */
 
 .cta-section {
-    padding: 120px 0;
+    padding: 70px 0;
+    background: #ffffff;
 }
 
 .cta-box {
@@ -256,6 +234,145 @@ body {
     padding: 40px 0;
     color: #777;
     font-size: 14px;
+}
+
+/* =====================
+   SEÇÕES SOBRE
+   ===================== */
+
+.about-section {
+    padding: 70px 0;
+    background: #ffffff;
+}
+
+.about-section.about-section-white {
+    background: #ffffff;
+}
+
+/* CARDS DE INFO */
+
+.info-card {
+    background: #f8f9fa;
+    border-radius: 24px;
+    padding: 36px 28px;
+    height: 100%;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+    transition: 0.4s;
+}
+
+.info-card:hover {
+    transform: translateY(-6px);
+}
+
+.info-card .icon-box {
+    width: 52px;
+    height: 52px;
+    background: #eff4fd;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 18px;
+    font-size: 24px;
+    color: #80a4ed;
+}
+
+.info-card h4 {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 12px;
+}
+
+.info-card p {
+    color: #5e6282;
+    line-height: 1.8;
+    font-size: 15px;
+}
+
+/* FUNCIONALIDADES */
+
+.feature-item {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    background: #f8f9fa;
+    border-radius: 14px;
+    padding: 16px 22px;
+    font-size: 15px;
+    font-weight: 500;
+    color: #181e4b;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.04);
+    transition: 0.3s;
+}
+
+.feature-item:hover {
+    transform: translateX(4px);
+}
+
+.feature-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: #80a4ed;
+    flex-shrink: 0;
+}
+
+/* TECNOLOGIAS */
+
+.tech-tag {
+    background: #eff4fd;
+    color: #4a72c4;
+    border-radius: 12px;
+    padding: 10px 22px;
+    font-weight: 600;
+    font-size: 14px;
+}
+
+/* AVATAR EQUIPE */
+
+.team-avatar {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: #eff4fd;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 18px;
+    font-size: 28px;
+    font-weight: 700;
+    color: #80a4ed;
+}
+
+/* CAIXA ACADÊMICA */
+
+.academic-box {
+    background: linear-gradient(135deg, #80a4ed, #6a8dda);
+    border-radius: 30px;
+    padding: 80px 50px;
+    color: white;
+    text-align: center;
+}
+
+.academic-box h2 {
+    font-size: 40px;
+    font-weight: 700;
+    margin-bottom: 24px;
+}
+
+.academic-box p {
+    font-size: 17px;
+    line-height: 1.9;
+    opacity: 0.93;
+    max-width: 780px;
+    margin: 0 auto 14px;
+}
+
+.academic-box .closing-text {
+    font-size: 15px;
+    opacity: 0.75;
+    margin-top: 24px;
+    font-style: italic;
 }
 
 /* RESPONSIVO */
@@ -291,12 +408,12 @@ body {
         font-size: 38px;
     }
 
-    .service-title {
-        font-size: 32px;
-    }
-
     .cta-box h2 {
         font-size: 36px;
+    }
+
+    .academic-box h2 {
+        font-size: 32px;
     }
 }
 
@@ -342,10 +459,6 @@ body {
         font-size: 32px;
     }
 
-    .service-title {
-        font-size: 28px;
-    }
-
     .cta-box {
         padding: 60px 25px;
     }
@@ -353,4 +466,17 @@ body {
     .cta-box h2 {
         font-size: 30px;
     }
+
+    .academic-box {
+        padding: 50px 24px;
+    }
+
+    .academic-box h2 {
+        font-size: 26px;
+    }
+}
+
+.tech-tag i {
+    font-size: 18px;
+    color: #4a72c4;
 }
