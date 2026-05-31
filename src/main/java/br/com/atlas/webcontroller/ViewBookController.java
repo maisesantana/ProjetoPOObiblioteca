@@ -68,7 +68,7 @@ public class ViewBookController extends HttpServlet {
                 request.setAttribute("book", book);
                 String origem = request.getParameter("origem");
                 request.setAttribute("origem", origem);
-                
+
                 String viewPath = (user instanceof Attendant)
                         ? "/view/attendant/viewBook.jsp"
                         : "/view/librarian/viewBook.jsp";

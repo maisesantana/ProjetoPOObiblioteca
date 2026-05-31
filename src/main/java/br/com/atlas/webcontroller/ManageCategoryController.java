@@ -81,13 +81,15 @@ public class ManageCategoryController extends HttpServlet {
                 String name = request.getParameter("categoryName");
                 if (name != null && !name.trim().isEmpty()) {
                     categoryDAO.update(new Category(id, name.trim()));
-                    response.sendRedirect(request.getContextPath() + "/manageCategory?query=" + query + "&msg=category_updated");
+                    response.sendRedirect(
+                            request.getContextPath() + "/manageCategory?query=" + query + "&msg=category_updated");
                     return;
                 }
             } else if ("delete".equals(action)) {
                 int id = Integer.parseInt(request.getParameter("categoryId"));
                 categoryDAO.delete(id);
-                response.sendRedirect(request.getContextPath() + "/manageCategory?query=" + query + "&msg=category_deleted");
+                response.sendRedirect(
+                        request.getContextPath() + "/manageCategory?query=" + query + "&msg=category_deleted");
                 return;
             }
         } catch (SQLException e) {

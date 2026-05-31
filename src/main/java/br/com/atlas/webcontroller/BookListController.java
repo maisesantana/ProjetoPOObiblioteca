@@ -24,7 +24,7 @@ public class BookListController extends HttpServlet {
 
         HttpSession session = request.getSession();
         Object user = session.getAttribute("userLogged");
-        
+
         // Validação de sessão robusta para funcionários do Atlas
         if (user == null) {
             response.sendRedirect(request.getContextPath() + "/view/index.jsp?msg=session_expired");
@@ -35,7 +35,7 @@ public class BookListController extends HttpServlet {
 
         try (Connection conn = ConnectionDb.getConexao()) {
             BookDAO bookDAO = new BookDAO(conn);
-            
+
             bookList = bookDAO.findAll();
 
         } catch (Exception e) {

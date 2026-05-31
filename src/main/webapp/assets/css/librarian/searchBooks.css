@@ -48,6 +48,7 @@ main {
 .breadcrumb-custom span {
   color: #7C7C7C;
 }
+
 .breadcrumb-custom .current-page {
   color: var(--atlas-primary);
   font-weight: 700;

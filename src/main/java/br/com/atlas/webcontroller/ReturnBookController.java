@@ -1,5 +1,8 @@
 package br.com.atlas.webcontroller;
 
+import java.io.IOException;
+import java.util.List;
+
 import br.com.atlas.dao.ClientDAO;
 import br.com.atlas.dao.LoanDAO;
 import br.com.atlas.dao.ReturnBookDAO;
@@ -9,15 +12,15 @@ import br.com.atlas.model.Employee;
 import br.com.atlas.model.Loan;
 import br.com.atlas.service.ReturnBookService;
 import jakarta.servlet.ServletException;
-import jakarta.servlet.http.*;
-import java.io.IOException;
-import java.util.List;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 
 public class ReturnBookController extends HttpServlet {
 
-    private final ReturnBookService returnBookService =
-        new ReturnBookService(new LoanDAO(), new ReturnBookDAO());
-    private final LoanDAO loanDAO     = new LoanDAO();
+    private final ReturnBookService returnBookService = new ReturnBookService(new LoanDAO(), new ReturnBookDAO());
+    private final LoanDAO loanDAO = new LoanDAO();
     private final ClientDAO clientDAO = new ClientDAO();
 
     @Override
@@ -32,9 +35,10 @@ public class ReturnBookController extends HttpServlet {
             return;
         }
 
-        String cpf  = request.getParameter("cpf");
+        String cpf = request.getParameter("cpf");
         String type = request.getParameter("type");
-        if (type == null) type = "return";
+        if (type == null)
+            type = "return";
         request.setAttribute("type", type);
 
         if (cpf != null && !cpf.isBlank()) {
@@ -78,22 +82,22 @@ public class ReturnBookController extends HttpServlet {
         }
 
         String loanIdParam = request.getParameter("loanId");
-        String cpf         = request.getParameter("cpf");
+        String cpf = request.getParameter("cpf");
 
         try {
             int loanId = Integer.parseInt(loanIdParam);
             returnBookService.registerReturn(loanId);
             response.sendRedirect(request.getContextPath()
-                + "/returnBook?cpf=" + cpf + "&type=return&msg=return_success");
+                    + "/returnBook?cpf=" + cpf + "&type=return&msg=return_success");
 
         } catch (IllegalArgumentException | IllegalStateException e) {
             response.sendRedirect(request.getContextPath()
-                + "/returnBook?cpf=" + cpf + "&type=return&msg=error&detail="
-                + java.net.URLEncoder.encode(e.getMessage(), "UTF-8"));
+                    + "/returnBook?cpf=" + cpf + "&type=return&msg=error&detail="
+                    + java.net.URLEncoder.encode(e.getMessage(), "UTF-8"));
         } catch (Exception e) {
             e.printStackTrace();
             response.sendRedirect(request.getContextPath()
-                + "/returnBook?cpf=" + cpf + "&type=return&msg=error");
+                    + "/returnBook?cpf=" + cpf + "&type=return&msg=error");
         }
     }
 }

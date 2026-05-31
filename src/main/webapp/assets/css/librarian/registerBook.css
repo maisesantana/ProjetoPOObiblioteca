@@ -1,52 +1,52 @@
 /* registerBook.css */
 
 body {
-  font-family: 'Plus Jakarta Sans', sans-serif;
-  background-color: #fff;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    background-color: #fff;
 }
 
 .breadcrumb-atlas {
-  font-size: 0.9rem;
-  color: #6c757d;
+    font-size: 0.9rem;
+    color: #6c757d;
 }
 
 .breadcrumb-atlas a {
-  text-decoration: none;
-  color: #80A4ED;
+    text-decoration: none;
+    color: #80A4ED;
 }
 
 .form-label {
-  font-weight: 600;
-  color: #333;
-  margin-bottom: 0.5rem;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 0.5rem;
 }
 
 .form-control,
 .form-select {
-  border-radius: 8px;
-  padding: 0.6rem 1rem;
-  border: 1px solid #dee2e6;
+    border-radius: 8px;
+    padding: 0.6rem 1rem;
+    border: 1px solid #dee2e6;
 }
 
 .btn-finalizar {
-  background-color: #80A4ED;
-  border: none;
-  color: white;
-  font-weight: 600;
-  padding: 0.8rem;
-  border-radius: 8px;
-  transition: 0.3s;
-  width: 100%;
-  max-width: 500px;
+    background-color: #80A4ED;
+    border: none;
+    color: white;
+    font-weight: 600;
+    padding: 0.8rem;
+    border-radius: 8px;
+    transition: 0.3s;
+    width: 100%;
+    max-width: 500px;
 }
 
 .btn-finalizar:hover {
-  background-color: #6690d8;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(128, 164, 237, 0.3);
+    background-color: #6690d8;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(128, 164, 237, 0.3);
 }
 
 #newCategoryDiv {
-  display: none;
-  margin-top: 0.5rem;
+    display: none;
+    margin-top: 0.5rem;
 }

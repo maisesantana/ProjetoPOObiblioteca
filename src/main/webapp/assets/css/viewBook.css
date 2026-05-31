@@ -1,5 +1,9 @@
 /* viewBook.css */
-* { margin: 0; padding: 0; box-sizing: border-box; }
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
 
 body {
   background: #fff;
@@ -10,7 +14,9 @@ body {
   flex-direction: column;
 }
 
-main { flex: 1; }
+main {
+  flex: 1;
+}
 
 .view-container {
   max-width: 700px;
@@ -26,8 +32,14 @@ main { flex: 1; }
   font-size: .9rem;
 }
 
-.breadcrumb-custom a { text-decoration: none; color: #6E7BF2; }
-.breadcrumb-custom span { color: #7C7C7C; }
+.breadcrumb-custom a {
+  text-decoration: none;
+  color: #6E7BF2;
+}
+
+.breadcrumb-custom span {
+  color: #7C7C7C;
+}
 
 .book-cover {
   display: flex;
@@ -52,7 +64,11 @@ main { flex: 1; }
   margin-bottom: 2rem;
 }
 
-.book-title-section h1 { font-size: 1.4rem; font-weight: 700; color: #222; }
+.book-title-section h1 {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #222;
+}
 
 .details-grid {
   display: grid;
@@ -76,7 +92,11 @@ main { flex: 1; }
   letter-spacing: .4px;
 }
 
-.detail-card .value { font-size: 1rem; font-weight: 600; color: #1B1B1B; }
+.detail-card .value {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #1B1B1B;
+}
 
 .btn-back {
   display: inline-block;
@@ -87,45 +107,49 @@ main { flex: 1; }
   font-size: .95rem;
 }
 
-.btn-back:hover { opacity: .75; }
+.btn-back:hover {
+  opacity: .75;
+}
 
 @media (max-width: 600px) {
-  .details-grid { grid-template-columns: 1fr 1fr; }
+  .details-grid {
+    grid-template-columns: 1fr 1fr;
+  }
 }
 
 /*Para atendente: */
-.loan-action{
-    margin-top:1rem;
-    display:flex;
-    justify-content:center;
+.loan-action {
+  margin-top: 1rem;
+  display: flex;
+  justify-content: center;
 }
 
-.btn-loan{
-    background:#6B1A2B;
-    color:#fff;
-    border:none;
-    border-radius:14px;
-    padding:.8rem 1.6rem;
-    font-weight:600;
-    text-decoration:none;
-    display:inline-flex;
-    align-items:center;
-    gap:.5rem;
-    transition:.2s ease;
+.btn-loan {
+  background: #6B1A2B;
+  color: #fff;
+  border: none;
+  border-radius: 14px;
+  padding: .8rem 1.6rem;
+  font-weight: 600;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: .5rem;
+  transition: .2s ease;
 }
 
-.btn-loan:hover{
-    background:#551523;
-    color:#fff;
-    transform:translateY(-1px);
+.btn-loan:hover {
+  background: #551523;
+  color: #fff;
+  transform: translateY(-1px);
 }
 
-.btn-loan-disabled{
-    background:#BDBDBD;
-    color:#fff;
-    border:none;
-    border-radius:14px;
-    padding:.8rem 1.6rem;
-    font-weight:600;
-    cursor:not-allowed;
+.btn-loan-disabled {
+  background: #BDBDBD;
+  color: #fff;
+  border: none;
+  border-radius: 14px;
+  padding: .8rem 1.6rem;
+  font-weight: 600;
+  cursor: not-allowed;
 }

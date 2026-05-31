@@ -1,5 +1,8 @@
 package br.com.atlas.webcontroller;
 
+import java.io.IOException;
+import java.util.List;
+
 import br.com.atlas.dao.ClientDAO;
 import br.com.atlas.dao.LoanDAO;
 import br.com.atlas.dao.RenewalDAO;
@@ -9,15 +12,15 @@ import br.com.atlas.model.Employee;
 import br.com.atlas.model.Loan;
 import br.com.atlas.service.RenewalService;
 import jakarta.servlet.ServletException;
-import jakarta.servlet.http.*;
-import java.io.IOException;
-import java.util.List;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 
 public class RenewalController extends HttpServlet {
 
-    private final RenewalService renewalService =
-        new RenewalService(new LoanDAO(), new RenewalDAO());
-    private final LoanDAO loanDAO     = new LoanDAO();
+    private final RenewalService renewalService = new RenewalService(new LoanDAO(), new RenewalDAO());
+    private final LoanDAO loanDAO = new LoanDAO();
     private final ClientDAO clientDAO = new ClientDAO();
 
     @Override
@@ -80,22 +83,22 @@ public class RenewalController extends HttpServlet {
         }
 
         String loanIdParam = request.getParameter("loanId");
-        String cpf         = request.getParameter("cpf");
+        String cpf = request.getParameter("cpf");
 
         try {
             int loanId = Integer.parseInt(loanIdParam);
             renewalService.registerRenewal(loanId);
             response.sendRedirect(request.getContextPath()
-                + "/renewal?cpf=" + cpf + "&type=renewal&msg=renewal_success");
+                    + "/renewal?cpf=" + cpf + "&type=renewal&msg=renewal_success");
 
         } catch (IllegalArgumentException | IllegalStateException e) {
             response.sendRedirect(request.getContextPath()
-                + "/renewal?cpf=" + cpf + "&type=renewal&msg=error&detail="
-                + java.net.URLEncoder.encode(e.getMessage(), "UTF-8"));
+                    + "/renewal?cpf=" + cpf + "&type=renewal&msg=error&detail="
+                    + java.net.URLEncoder.encode(e.getMessage(), "UTF-8"));
         } catch (Exception e) {
             e.printStackTrace();
             response.sendRedirect(request.getContextPath()
-                + "/renewal?cpf=" + cpf + "&type=renewal&msg=error");
+                    + "/renewal?cpf=" + cpf + "&type=renewal&msg=error");
         }
     }
 }

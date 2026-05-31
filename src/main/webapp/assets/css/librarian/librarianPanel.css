@@ -1,96 +1,96 @@
 /* admTools.css */
 
 :root {
-  --atlas-primary: #6B1A2B;
-  --atlas-text: #1B1B1B;
-  --atlas-gray-light: #F8F9FA;
-  --atlas-card-bg: #FFFFFF;
-  --atlas-border: #E9ECEF;
+    --atlas-primary: #6B1A2B;
+    --atlas-text: #1B1B1B;
+    --atlas-gray-light: #F8F9FA;
+    --atlas-card-bg: #FFFFFF;
+    --atlas-border: #E9ECEF;
 }
 
 /* Título e Subtítulo da Seção */
 .ferramentas-admin {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding-bottom: 4rem;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding-bottom: 4rem;
 }
 
 .ferramentas-titulo {
-  margin-bottom: 3.5rem;
+    margin-bottom: 3.5rem;
 }
 
 .ferramentas-titulo span {
-  font-size: 0.85rem;
-  font-weight: 700;
-  color: var(--atlas-primary);
-  letter-spacing: 1.5px;
-  display: block;
-  margin-bottom: 0.5rem;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--atlas-primary);
+    letter-spacing: 1.5px;
+    display: block;
+    margin-bottom: 0.5rem;
 }
 
 .ferramentas-titulo h2 {
-  font-size: 1.75rem;
-  font-weight: 700;
-  color: var(--atlas-text);
-  margin: 0;
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: var(--atlas-text);
+    margin: 0;
 }
 
 /* Estilização dos Cards de Ferramentas */
 .tool-card {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  background-color: var(--atlas-card-bg);
-  border: 1px solid var(--atlas-border);
-  border-radius: 20px;
-  padding: 2.5rem 2rem;
-  text-decoration: none !important;
-  color: var(--atlas-text) !important;
-  height: 100%;
-  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--atlas-card-bg);
+    border: 1px solid var(--atlas-border);
+    border-radius: 20px;
+    padding: 2.5rem 2rem;
+    text-decoration: none !important;
+    color: var(--atlas-text) !important;
+    height: 100%;
+    transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
 }
 
 /* Efeito Hover nos Cards */
 .tool-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.04);
-  border-color: #D3C4AE;
+    transform: translateY(-5px);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.04);
+    border-color: #D3C4AE;
 }
 
 /* Ícones dos Cards */
 .tool-icon {
-  width: 64px;
-  height: 64px;
-  background-color: var(--atlas-gray-light);
-  border-radius: 16px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 1.5rem;
-  color: var(--atlas-primary);
-  transition: background-color 0.25s ease, color 0.25s ease;
+    width: 64px;
+    height: 64px;
+    background-color: var(--atlas-gray-light);
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1.5rem;
+    color: var(--atlas-primary);
+    transition: background-color 0.25s ease, color 0.25s ease;
 }
 
 .tool-card:hover .tool-icon {
-  background-color: var(--atlas-primary);
-  color: #FFFFFF;
+    background-color: var(--atlas-primary);
+    color: #FFFFFF;
 }
 
 .tool-icon .material-symbols-rounded {
-  font-size: 1.8rem;
+    font-size: 1.8rem;
 }
 
 /* Textos dentro do Card */
 .tool-card h5 {
-  font-size: 1.15rem;
-  font-weight: 700;
-  margin-bottom: 0.6rem;
+    font-size: 1.15rem;
+    font-weight: 700;
+    margin-bottom: 0.6rem;
 }
 
 .tool-card p {
-  font-size: 0.92rem;
-  color: #6C757D;
-  margin: 0;
-  line-height: 1.5;
+    font-size: 0.92rem;
+    color: #6C757D;
+    margin: 0;
+    line-height: 1.5;
 }

@@ -18,43 +18,43 @@ import jakarta.servlet.http.HttpSession;
 public class ManageAuthorsController extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
-@Override
-protected void doGet(HttpServletRequest request, HttpServletResponse response)
-        throws ServletException, IOException {
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
 
-    HttpSession session = request.getSession();
-    if (session.getAttribute("userLogged") == null) {
-        response.sendRedirect(request.getContextPath() + "/index.jsp?msg=session_expired");
-        return;
-    }
-
-    String query = request.getParameter("query");
-    String tab   = request.getParameter("tab");
-
-    // SE A ABA VIER VAZIA (CLIQUE INICIAL DA NAVBAR), FORÇA 'register'
-    if (tab == null || tab.trim().isEmpty()) {
-        tab = "register";
-    }
-
-    List<Author> authors = null;
-
-    try (Connection conn = ConnectionDb.getConexao()) {
-        AuthorDAO dao = new AuthorDAO(conn);
-        if (query != null && !query.trim().isEmpty()) {
-            authors = dao.findByName(query.trim());
-        } else {
-            authors = dao.findAll();
+        HttpSession session = request.getSession();
+        if (session.getAttribute("userLogged") == null) {
+            response.sendRedirect(request.getContextPath() + "/index.jsp?msg=session_expired");
+            return;
         }
-    } catch (Exception e) {
-        e.printStackTrace();
+
+        String query = request.getParameter("query");
+        String tab = request.getParameter("tab");
+
+        // SE A ABA VIER VAZIA (CLIQUE INICIAL DA NAVBAR), FORÇA 'register'
+        if (tab == null || tab.trim().isEmpty()) {
+            tab = "register";
+        }
+
+        List<Author> authors = null;
+
+        try (Connection conn = ConnectionDb.getConexao()) {
+            AuthorDAO dao = new AuthorDAO(conn);
+            if (query != null && !query.trim().isEmpty()) {
+                authors = dao.findByName(query.trim());
+            } else {
+                authors = dao.findAll();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        request.setAttribute("authors", authors);
+        // ADICIONA O ATRIBUTO TAB DIRETAMENTE NA REQUISIÇÃO PARA O JSP ENXERGAR
+        request.setAttribute("activeTab", tab);
+
+        request.getRequestDispatcher("/view/librarian/manageAuthors.jsp").forward(request, response);
     }
-    
-    request.setAttribute("authors", authors);
-    // ADICIONA O ATRIBUTO TAB DIRETAMENTE NA REQUISIÇÃO PARA O JSP ENXERGAR
-    request.setAttribute("activeTab", tab); 
-    
-    request.getRequestDispatcher("/view/librarian/manageAuthors.jsp").forward(request, response);
-}
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -86,8 +86,8 @@ protected void doGet(HttpServletRequest request, HttpServletResponse response)
             } else if ("update".equals(action)) {
 
                 String idParam = request.getParameter("authorId");
-                String name    = request.getParameter("authorName");
-                String query   = request.getParameter("query");
+                String name = request.getParameter("authorName");
+                String query = request.getParameter("query");
 
                 if (name == null || name.trim().isEmpty()) {
                     response.sendRedirect(request.getContextPath() + "/manageAuthors?msg=name_empty&tab=edit");
@@ -109,8 +109,8 @@ protected void doGet(HttpServletRequest request, HttpServletResponse response)
             } else if ("delete".equals(action)) {
 
                 String idParam = request.getParameter("authorId");
-                String query   = request.getParameter("query");
-                int authorId   = Integer.parseInt(idParam);
+                String query = request.getParameter("query");
+                int authorId = Integer.parseInt(idParam);
 
                 try (Connection conn = ConnectionDb.getConexao()) {
                     AuthorDAO dao = new AuthorDAO(conn);

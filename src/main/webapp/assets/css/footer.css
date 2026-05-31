@@ -9,10 +9,10 @@ body {
   flex-direction: column;
 }
 
-body > main,
-body > div.container-fluid,
-body > div.container,
-body > .login-page {
+body>main,
+body>div.container-fluid,
+body>div.container,
+body>.login-page {
   flex: 1;
 }
 

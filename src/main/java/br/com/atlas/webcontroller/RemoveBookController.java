@@ -18,7 +18,8 @@ import jakarta.servlet.http.HttpSession;
 public class RemoveBookController extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
-    // GET: busca livros pelo título e exibe a lista para o usuário escolher qual remover
+    // GET: busca livros pelo título e exibe a lista para o usuário escolher qual
+    // remover
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -46,7 +47,8 @@ public class RemoveBookController extends HttpServlet {
         request.getRequestDispatcher("/view/librarian/removeBook.jsp").forward(request, response);
     }
 
-    // POST: recebe o bookId e remove do banco, depois redireciona com msg de sucesso
+    // POST: recebe o bookId e remove do banco, depois redireciona com msg de
+    // sucesso
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -72,8 +74,8 @@ public class RemoveBookController extends HttpServlet {
                     // Remove vínculos de empréstimo ativo antes de deletar
                     // O BookDAO.delete() já cuida de BookAuthor e BookCategory
                     // Precisamos remover BookCopy antes (FK)
-                    try (java.sql.PreparedStatement ps =
-                            conn.prepareStatement("DELETE FROM BookCopy WHERE BookId = ?")) {
+                    try (java.sql.PreparedStatement ps = conn
+                            .prepareStatement("DELETE FROM BookCopy WHERE BookId = ?")) {
                         ps.setInt(1, bookId);
                         ps.executeUpdate();
                     }
@@ -88,8 +90,8 @@ public class RemoveBookController extends HttpServlet {
 
             // Redireciona para a mesma busca com msg de sucesso
             String redirectQuery = (query != null && !query.trim().isEmpty())
-                ? "?msg=book_removed&query=" + java.net.URLEncoder.encode(query, "UTF-8")
-                : "?msg=book_removed";
+                    ? "?msg=book_removed&query=" + java.net.URLEncoder.encode(query, "UTF-8")
+                    : "?msg=book_removed";
 
             response.sendRedirect(request.getContextPath() + "/removeBook" + redirectQuery);
 

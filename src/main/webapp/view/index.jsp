@@ -1,177 +1,178 @@
 <%@ page contentType="text/html; charset=UTF-8" isELIgnored="false" %>
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!DOCTYPE html>
+    <html lang="pt-BR">
 
-    <title>Atlas - Biblioteca</title>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <!-- GOOGLE FONTS -->
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+        <title>Atlas - Biblioteca</title>
 
-    <!-- BOOTSTRAP -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- BOOTSTRAP ICONS -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+        <!-- GOOGLE FONTS -->
+        <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
+            rel="stylesheet">
 
-    <!-- FONT AWESOME -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+        <!-- BOOTSTRAP -->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+        <!-- BOOTSTRAP ICONS -->
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
-    <!-- FOOTER CSS -->
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/footer.css"/>
+        <!-- FONT AWESOME -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-    <!-- CSS -->
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/home.css">
-</head>
+        <!-- FOOTER CSS -->
+        <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/footer.css" />
 
-<body>
+        <!-- CSS -->
+        <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/home.css">
+    </head>
 
-<!-- NAVBAR -->
-<nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm fixed-top py-3">
-    <div class="container">
+    <body>
 
-        <a class="navbar-brand" href="#">
-            <img src="${pageContext.request.contextPath}/assets/images/logo.png"
-                 alt="Atlas Logo"
-                 class="logo">
-        </a>
+        <!-- NAVBAR -->
+        <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm fixed-top py-3">
+            <div class="container">
 
-        <button class="navbar-toggler border-0 shadow-none"
-                type="button"
-                data-bs-toggle="collapse"
-                data-bs-target="#navbarAtlas">
+                <a class="navbar-brand" href="#">
+                    <img src="${pageContext.request.contextPath}/assets/images/logo.png" alt="Atlas Logo" class="logo">
+                </a>
 
-            <span class="navbar-toggler-icon"></span>
-        </button>
+                <button class="navbar-toggler border-0 shadow-none" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#navbarAtlas">
 
-        <div class="collapse navbar-collapse" id="navbarAtlas">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
 
-            <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
-                <li class="nav-item">
-                    <a class="nav-link active" href="#">Início</a>
-                </li>
-            </ul>
+                <div class="collapse navbar-collapse" id="navbarAtlas">
 
-            <a href="${pageContext.request.contextPath}/view/login.jsp"
-               class="btn btn-atlas">
-                Login
-            </a>
+                    <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
+                        <li class="nav-item">
+                            <a class="nav-link active" href="#">Início</a>
+                        </li>
+                    </ul>
 
-        </div>
-    </div>
-</nav>
+                    <a href="${pageContext.request.contextPath}/view/login.jsp" class="btn btn-atlas">
+                        Login
+                    </a>
 
-<!-- MAIN -->
-<main>
+                </div>
+            </div>
+        </nav>
 
-    <!-- HERO -->
-    <section class="hero-section">
+        <!-- MAIN -->
+        <main>
 
-        <div class="container">
+            <!-- HERO -->
+            <section class="hero-section">
 
-            <div class="row align-items-center g-5">
+                <div class="container">
 
-                <!-- TEXTO -->
-                <div class="col-lg-6">
+                    <div class="row align-items-center g-5">
 
-                    <h1 class="hero-title">
-                        <span>Busque.</span>
-                        <span>Organize.</span>
-                        <span>Transforme.</span>
-                        Conhecimento ao alcance de todos.
-                    </h1>
+                        <!-- TEXTO -->
+                        <div class="col-lg-6">
 
-                    <p class="hero-description">
-                        Sistema moderno para gerenciamento de biblioteca,
-                        empréstimos, devoluções e organização de acervo.
-                        Tudo de forma prática, rápida e eficiente.
-                    </p>
+                            <h1 class="hero-title">
+                                <span>Busque.</span>
+                                <span>Organize.</span>
+                                <span>Transforme.</span>
+                                Conhecimento ao alcance de todos.
+                            </h1>
 
-                    <div class="d-flex gap-3 flex-wrap">
+                            <p class="hero-description">
+                                Sistema moderno para gerenciamento de biblioteca,
+                                empréstimos, devoluções e organização de acervo.
+                                Tudo de forma prática, rápida e eficiente.
+                            </p>
 
-                        <a href="${pageContext.request.contextPath}/view/login.jsp"
-                           class="btn btn-atlas btn-lg">
-                            Entrar no sistema
-                        </a>
+                            <div class="d-flex gap-3 flex-wrap">
+
+                                <a href="${pageContext.request.contextPath}/view/login.jsp"
+                                    class="btn btn-atlas btn-lg">
+                                    Entrar no sistema
+                                </a>
+
+                            </div>
+                        </div>
+
+                        <!-- IMAGENS -->
+                        <div class="col-lg-6">
+
+                            <div class="hero-images">
+
+                                <div class="book-card card-1">
+                                    <img
+                                        src="https://images.unsplash.com/photo-1541963463532-d68292c34b19?q=80&w=800&auto=format&fit=crop">
+                                </div>
+
+                                <div class="book-card card-2">
+                                    <img
+                                        src="https://images.unsplash.com/photo-1512820790803-83ca734da794?q=80&w=800&auto=format&fit=crop">
+                                </div>
+
+                                <div class="book-card card-3">
+                                    <img
+                                        src="https://images.unsplash.com/photo-1495446815901-a7297e633e8d?q=80&w=800&auto=format&fit=crop">
+                                </div>
+
+                            </div>
+
+                        </div>
 
                     </div>
+
                 </div>
 
-                <!-- IMAGENS -->
-                <div class="col-lg-6">
+            </section>
 
-                    <div class="hero-images">
+            <!-- SERVIÇOS -->
+            <section class="services-section">
 
-                        <div class="book-card card-1">
-                            <img src="https://images.unsplash.com/photo-1541963463532-d68292c34b19?q=80&w=800&auto=format&fit=crop">
+                <div class="container">
+
+                    <div class="section-header text-center">
+                        <span class="section-tag">SERVIÇOS</span>
+
+                        <h2>
+                            Nossos serviços para você
+                        </h2>
+                    </div>
+
+                    <div class="row align-items-center g-5 mb-5">
+
+                        <div class="col-lg-6">
+                            <img src="https://images.unsplash.com/photo-1524995997946-a1c2e315a42f?q=80&w=1200&auto=format&fit=crop"
+                                class="service-image">
                         </div>
 
-                        <div class="book-card card-2">
-                            <img src="https://images.unsplash.com/photo-1512820790803-83ca734da794?q=80&w=800&auto=format&fit=crop">
-                        </div>
+                        <div class="col-lg-6">
 
-                        <div class="book-card card-3">
-                            <img src="https://images.unsplash.com/photo-1495446815901-a7297e633e8d?q=80&w=800&auto=format&fit=crop">
+                            <h3 class="service-title">
+                                Empréstimos rápidos e organizados
+                            </h3>
+
+                            <p class="service-text">
+                                Gerencie livros, usuários e empréstimos
+                                com uma plataforma intuitiva e eficiente,
+                                feita para otimizar o fluxo da biblioteca.
+                            </p>
+
                         </div>
 
                     </div>
 
                 </div>
 
-            </div>
+            </section>
 
-        </div>
+        </main>
 
-    </section>
+        <!-- FOOTER -->
+        <jsp:include page="/view/footer.jsp" />
 
-    <!-- SERVIÇOS -->
-    <section class="services-section">
+        <!-- BOOTSTRAP JS -->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
-        <div class="container">
+    </body>
 
-            <div class="section-header text-center">
-                <span class="section-tag">SERVIÇOS</span>
-
-                <h2>
-                    Nossos serviços para você
-                </h2>
-            </div>
-
-            <div class="row align-items-center g-5 mb-5">
-
-                <div class="col-lg-6">
-                    <img src="https://images.unsplash.com/photo-1524995997946-a1c2e315a42f?q=80&w=1200&auto=format&fit=crop"
-                         class="service-image">
-                </div>
-
-                <div class="col-lg-6">
-
-                    <h3 class="service-title">
-                        Empréstimos rápidos e organizados
-                    </h3>
-
-                    <p class="service-text">
-                        Gerencie livros, usuários e empréstimos
-                        com uma plataforma intuitiva e eficiente,
-                        feita para otimizar o fluxo da biblioteca.
-                    </p>
-
-                </div>
-
-            </div>
-
-        </div>
-
-    </section>
-
-</main>
-
-<!-- FOOTER -->
-<jsp:include page="/view/footer.jsp"/>
-
-<!-- BOOTSTRAP JS -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-
-</body>
-</html>
+    </html>

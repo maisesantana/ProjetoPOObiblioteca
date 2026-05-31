@@ -1,60 +1,66 @@
 <%@ page contentType="text/html; charset=UTF-8" isELIgnored="false" %>
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <title>Login - Atlas</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/login.css">
-</head>
-<body>
+    <!DOCTYPE html>
+    <html lang="pt-BR">
 
-<div class="login-page">
-    <header class="logo-header">
-        <img src="${pageContext.request.contextPath}/assets/images/logo.png" alt="Atlas Logo">
-    </header>
+    <head>
+        <meta charset="UTF-8">
+        <title>Login - Atlas</title>
+        <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+            rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+        <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/login.css">
+    </head>
 
-    <main class="login-card">
-        <nav class="breadcrumb">
-            <a href="#" class="link-inicio">Início</a> <span>/ Login</span>
-        </nav>
+    <body>
 
-        <h1 class="login-title">Login</h1>
-        <p class="login-subtitle">Digite seu CPF e senha</p>
+        <div class="login-page">
+            <header class="logo-header">
+                <img src="${pageContext.request.contextPath}/assets/images/logo.png" alt="Atlas Logo">
+            </header>
 
-        <% String msg = request.getParameter("msg"); 
-           if(msg != null) { %>
-            <div class="alert-error">
-                <i class="fa-solid fa-circle-exclamation"></i>
-                <% if(msg.equals("cpf_not_found")) { %> CPF não cadastrado no sistema.
-                <% } else if(msg.equals("invalid_credentials")) { %> Senha incorreta.
-                <% } else if(msg.equals("empty_fields")) { %> Preencha todos os campos.
-                <% } else if(msg.equals("password_must_be_number")) { %> A senha deve ser numérica.
-                <% } else if(msg.equals("session_expired")) { %> Sua sessão expirou. Faça login novamente.
-                <% } else if(msg.equals("access_denied") || msg.equals("unauthorized")) { %> Você não tem permissão para acessar esta página.
-                <% } else { %> Erro ao realiz ar login. <% } %>
-            </div>
-        <% } %>
+            <main class="login-card">
+                <nav class="breadcrumb">
+                    <a href="#" class="link-inicio">Início</a> <span>/ Login</span>
+                </nav>
 
-        <form action="${pageContext.request.contextPath}/login" method="post">
-            <div class="input-group">
-                <label for="cpf">CPF</label>
-                <input type="text" id="cpf" name="cpf" placeholder="Inserir CPF" required>
-            </div>
+                <h1 class="login-title">Login</h1>
+                <p class="login-subtitle">Digite seu CPF e senha</p>
 
-            <div class="input-group">
-                <label for="senha">SENHA</label>
-                <div class="password-wrapper">
-                    <input type="password" id="senha" name="password" placeholder="Senha numérica" required>
-                </div>
-            </div> <button type="submit" class="btn-login">Login</button>
-        </form>
-    </main>
+                <% String msg=request.getParameter("msg"); if(msg !=null) { %>
+                    <div class="alert-error">
+                        <i class="fa-solid fa-circle-exclamation"></i>
+                        <% if(msg.equals("cpf_not_found")) { %> CPF não cadastrado no sistema.
+                            <% } else if(msg.equals("invalid_credentials")) { %> Senha incorreta.
+                                <% } else if(msg.equals("empty_fields")) { %> Preencha todos os campos.
+                                    <% } else if(msg.equals("password_must_be_number")) { %> A senha deve ser numérica.
+                                        <% } else if(msg.equals("session_expired")) { %> Sua sessão expirou. Faça login
+                                            novamente.
+                                            <% } else if(msg.equals("access_denied") || msg.equals("unauthorized")) { %>
+                                                Você não tem permissão para acessar esta página.
+                                                <% } else { %> Erro ao realiz ar login. <% } %>
+                    </div>
+                    <% } %>
 
-    <footer class="login-footer">
-        <span class="copyright">© 2026 Atlas. Todos os direitos reservados.</span>
-    </footer>
-</div>
-</body>
-</html>
+                        <form action="${pageContext.request.contextPath}/login" method="post">
+                            <div class="input-group">
+                                <label for="cpf">CPF</label>
+                                <input type="text" id="cpf" name="cpf" placeholder="Inserir CPF" required>
+                            </div>
+
+                            <div class="input-group">
+                                <label for="senha">SENHA</label>
+                                <div class="password-wrapper">
+                                    <input type="password" id="senha" name="password" placeholder="Senha numérica"
+                                        required>
+                                </div>
+                            </div> <button type="submit" class="btn-login">Login</button>
+                        </form>
+            </main>
+
+            <footer class="login-footer">
+                <span class="copyright">© 2026 Atlas. Todos os direitos reservados.</span>
+            </footer>
+        </div>
+    </body>
+
+    </html>

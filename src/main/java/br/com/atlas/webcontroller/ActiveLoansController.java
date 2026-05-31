@@ -1,5 +1,8 @@
 package br.com.atlas.webcontroller;
 
+import java.io.IOException;
+import java.util.List;
+
 import br.com.atlas.dao.LoanDAO;
 import br.com.atlas.model.Attendant;
 import br.com.atlas.model.Loan;
@@ -9,9 +12,6 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-
-import java.io.IOException;
-import java.util.List;
 
 @WebServlet("/activeLoans")
 public class ActiveLoansController extends HttpServlet {
@@ -34,6 +34,6 @@ public class ActiveLoansController extends HttpServlet {
 
         request.setAttribute("loans", loans);
         request.getRequestDispatcher("/view/attendant/activeLoans.jsp")
-               .forward(request, response);
+                .forward(request, response);
     }
 }
