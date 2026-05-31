@@ -31,7 +31,6 @@ public class ManageAuthorsController extends HttpServlet {
         String query = request.getParameter("query");
         String tab = request.getParameter("tab");
 
-        // SE A ABA VIER VAZIA (CLIQUE INICIAL DA NAVBAR), FORÇA 'register'
         if (tab == null || tab.trim().isEmpty()) {
             tab = "register";
         }
@@ -46,11 +45,10 @@ public class ManageAuthorsController extends HttpServlet {
                 authors = dao.findAll();
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            throw new ServletException("Erro ao buscar autores no banco", e);
         }
 
         request.setAttribute("authors", authors);
-        // ADICIONA O ATRIBUTO TAB DIRETAMENTE NA REQUISIÇÃO PARA O JSP ENXERGAR
         request.setAttribute("activeTab", tab);
 
         request.getRequestDispatcher("/view/librarian/manageAuthors.jsp").forward(request, response);
@@ -83,7 +81,8 @@ public class ManageAuthorsController extends HttpServlet {
 
                 response.sendRedirect(request.getContextPath() + "/manageAuthors?msg=author_added&tab=register");
 
-            } else if ("update".equals(action)) {
+            } else if ("update".equals(action) || "updateAuthor".equals(action)) {
+                // Aceita tanto 'update' quanto 'updateAuthor' por segurança
 
                 String idParam = request.getParameter("authorId");
                 String name = request.getParameter("authorName");
@@ -115,10 +114,8 @@ public class ManageAuthorsController extends HttpServlet {
                 try (Connection conn = ConnectionDb.getConexao()) {
                     AuthorDAO dao = new AuthorDAO(conn);
 
-                    // Verifica se há livros vinculados antes de remover
                     List<String> books = dao.findBooksByAuthor(authorId);
                     if (!books.isEmpty()) {
-                        // Bloqueia a remoção e avisa
                         String redirect = request.getContextPath() + "/manageAuthors?msg=author_has_books&tab=edit";
                         if (query != null && !query.trim().isEmpty()) {
                             redirect += "&query=" + java.net.URLEncoder.encode(query, "UTF-8");
@@ -141,8 +138,7 @@ public class ManageAuthorsController extends HttpServlet {
             }
 
         } catch (Exception e) {
-            e.printStackTrace();
-            response.sendRedirect(request.getContextPath() + "/manageAuthors?msg=error");
+            throw new ServletException("Erro nas operações de persistência de autor", e);
         }
     }
 }
