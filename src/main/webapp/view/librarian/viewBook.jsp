@@ -2,12 +2,12 @@
   <%@ page import="br.com.atlas.model.Librarian" %>
     <%@ page import="br.com.atlas.model.Book" %>
 
-      <% Object user=session.getAttribute("userLogged"); if(user==null || !(user instanceof Librarian || user instanceof
-        Attendant)){ response.sendRedirect(request.getContextPath() + "/view/index.jsp?msg=unauthorized" ); return; }
-        Book book=(Book) request.getAttribute("book"); if (book==null) { response.sendRedirect(request.getContextPath()
-        + "/view/librarian/librarianPanel.jsp" ); return; } int totalCopies=book.getCopies().size(); int
-        availableCopies=book.totalAvailableCopies(); String origem=(String) request.getAttribute("origem"); if
-        (origem==null) origem="busca" ; %>
+      <% Object user=session.getAttribute("userLogged"); if (user==null || !(user instanceof Librarian || user
+        instanceof Attendant)) { response.sendRedirect(request.getContextPath() + "/view/index.jsp?msg=unauthorized" );
+        return; } Book book=(Book) request.getAttribute("book"); if (book==null) {
+        response.sendRedirect(request.getContextPath() + "/view/librarian/librarianPanel.jsp" ); return; } int
+        totalCopies=book.getCopies().size(); int availableCopies=book.totalAvailableCopies(); String origem=(String)
+        request.getAttribute("origem"); if (origem==null) origem="busca" ; %>
 
         <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" isELIgnored="false" %>
 
@@ -52,7 +52,7 @@
                           href="${pageContext.request.contextPath}/removeBook">Remover</a></li>
                       <li class="nav-item"><a class="nav-link"
                           href="${pageContext.request.contextPath}/addCopies">Exemplares</a></li>
-                      <li class="nav-item"><a class="nav-link active"
+                      <li class="nav-item"><a class="nav-link"
                           href="${pageContext.request.contextPath}/searchBooks">Buscar</a></li>
                       <li class="nav-item"><a class="nav-link"
                           href="${pageContext.request.contextPath}/manageAuthors">Autores</a></li>
@@ -69,6 +69,8 @@
             </header>
 
             <main class="container-fluid view-container">
+
+              <!-- BREADCRUMB -->
               <nav class="breadcrumb-custom">
                 <a href="${pageContext.request.contextPath}/view/librarian/librarianPanel.jsp">Início</a>
                 <span>/</span>
@@ -83,13 +85,17 @@
                       </span>
               </nav>
 
+              <!-- CAPA -->
               <div class="book-cover">
                 <div class="book-cover-placeholder"><i class="bi bi-book"></i></div>
               </div>
+
+              <!-- TÍTULO -->
               <div class="book-title-section">
                 <h1>Resumo do livro</h1>
               </div>
 
+              <!-- DETALHES -->
               <div class="details-grid">
                 <div class="detail-card">
                   <div class="label">Nome</div>
@@ -106,7 +112,8 @@
                 <div class="detail-card">
                   <div class="label">Autor</div>
                   <div class="value">
-                    <%= String.join(", ", book.getAuthors()) %></div></div>
+                    <%= String.join(", ", book.getAuthors()) %></div>
+      </div>
       <div class=" detail-card">
                       <div class="label">Exemplares</div>
                       <div class="value">
@@ -122,9 +129,11 @@
                   <div class="detail-card">
                     <div class="label">Categoria</div>
                     <div class="value">
-                      <%= String.join(", ", book.getCategories()) %></div></div>
+                      <%= String.join(", ", book.getCategories()) %></div>
+      </div>
     </div>
 
+    <!-- BOTÃO VOLTAR -->
     <% if (" lista".equals(origem)) { %>
                         <a href="${pageContext.request.contextPath}/bookList" class="btn-back">
                           <i class="bi bi-arrow-left"></i> Voltar para a lista de livros
@@ -134,6 +143,7 @@
                             <i class="bi bi-arrow-left"></i> Voltar para busca de livros
                           </a>
                           <% } %>
+
             </main>
 
             <jsp:include page="/view/footer.jsp" />

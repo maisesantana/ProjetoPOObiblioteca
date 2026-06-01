@@ -73,7 +73,7 @@
                 </nav>
 
                 <section class="titulo-section">
-                  <h1>Visualizar e buscar livros no acervo do sistema</h1>
+                  <h1>Buscar livros no acervo do sistema</h1>
                   <p>Consulta de Acervo</p>
                 </section>
 
