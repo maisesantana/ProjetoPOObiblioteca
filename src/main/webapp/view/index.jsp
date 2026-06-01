@@ -141,6 +141,26 @@
                     <h2>Nosso sistema</h2>
                 </div>
 
+                 <!-- POR QUE ATLAS -->
+                <div class="row mb-4">
+                    <div class="col-12">
+                        <div class="atlas-name-card">
+                            <div class="atlas-name-icon">
+                            </div>
+                            <div>
+                                <h4>Por que Atlas?</h4>
+                                <p>
+                                    O nome Atlas foi inspirado tanto na figura mitológica que sustenta o mundo
+                                    quanto nos grandes compêndios cartográficos que levam seu nome. Assim como
+                                    um atlas reúne e organiza o conhecimento do mundo em um só lugar, nosso
+                                    sistema busca centralizar e facilitar o acesso ao acervo da biblioteca de
+                                    forma simples e eficiente.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="row g-4">
 
                     <div class="col-lg-6">
@@ -242,6 +262,7 @@
                     <div class="col-auto"><span class="tech-tag"><i class="devicon-java-plain"></i> JSP / Servlets</span></div>
                     <div class="col-auto"><span class="tech-tag"><i class="devicon-mysql-plain"></i> MySQL</span></div>
                     <div class="col-auto"><span class="tech-tag"><i class="devicon-mysql-plain"></i> JDBC</span></div>
+                    <div class="col-auto"><span class="tech-tag"><i class="devicon-vscode-plain"></i> VS Code</span></div>
                     <div class="w-100"></div>
                     <div class="col-auto"><span class="tech-tag"><i class="devicon-bootstrap-plain"></i> Bootstrap 5</span></div>
                     <div class="col-auto"><span class="tech-tag"><i class="devicon-html5-plain"></i> HTML / CSS</span></div>

@@ -24,7 +24,7 @@ public class ManageAuthorsController extends HttpServlet {
 
         HttpSession session = request.getSession();
         if (session.getAttribute("userLogged") == null) {
-            response.sendRedirect(request.getContextPath() + "/index.jsp?msg=session_expired");
+            response.sendRedirect(request.getContextPath() + "/view/login.jsp?msg=session_expired");
             return;
         }
 
@@ -60,7 +60,7 @@ public class ManageAuthorsController extends HttpServlet {
 
         HttpSession session = request.getSession();
         if (session.getAttribute("userLogged") == null) {
-            response.sendRedirect(request.getContextPath() + "/index.jsp?msg=session_expired");
+            response.sendRedirect(request.getContextPath() + "/view/login.jsp?msg=session_expired");
             return;
         }
 

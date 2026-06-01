@@ -48,6 +48,7 @@ public class LoginController extends HttpServlet {
                 // 4. Cria ou recupera a sessão e guarda o objeto logado
                 HttpSession session = request.getSession();
                 session.setAttribute("userLogged", funcionario);
+                session.setMaxInactiveInterval(10 * 60); // 10 minutos
 
                 // 5. Redirecionamento baseado no cargo (Polimorfismo em ação!)
                 // O Java descobre o tipo real do objeto aqui
