@@ -76,13 +76,20 @@ public class ManageAuthorsController extends HttpServlet {
                 }
 
                 try (Connection conn = ConnectionDb.getConexao()) {
-                    new AuthorDAO(conn).insert(new Author(name.trim()));
+                    AuthorDAO dao = new AuthorDAO(conn);
+
+                    Author existing = dao.findByExactName(name.trim());
+                    if (existing != null) {
+                        response.sendRedirect(request.getContextPath() + "/manageAuthors?msg=author_exists&tab=register");
+                        return;
+                    }
+
+                    dao.insert(new Author(name.trim()));
                 }
 
                 response.sendRedirect(request.getContextPath() + "/manageAuthors?msg=author_added&tab=register");
 
             } else if ("update".equals(action) || "updateAuthor".equals(action)) {
-                // Aceita tanto 'update' quanto 'updateAuthor' por segurança
 
                 String idParam = request.getParameter("authorId");
                 String name = request.getParameter("authorName");
@@ -96,7 +103,19 @@ public class ManageAuthorsController extends HttpServlet {
                 int authorId = Integer.parseInt(idParam);
 
                 try (Connection conn = ConnectionDb.getConexao()) {
-                    new AuthorDAO(conn).update(new Author(authorId, name.trim()));
+                    AuthorDAO dao = new AuthorDAO(conn);
+
+                    Author existing = dao.findByExactName(name.trim());
+                    if (existing != null && existing.getAuthorId() != authorId) {
+                        String redirect = request.getContextPath() + "/manageAuthors?msg=author_exists&tab=edit";
+                        if (query != null && !query.trim().isEmpty()) {
+                            redirect += "&query=" + java.net.URLEncoder.encode(query, "UTF-8");
+                        }
+                        response.sendRedirect(redirect);
+                        return;
+                    }
+
+                    dao.update(new Author(authorId, name.trim()));
                 }
 
                 String redirect = request.getContextPath() + "/manageAuthors?msg=author_updated&tab=edit";
