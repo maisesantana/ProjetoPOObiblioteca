@@ -27,7 +27,7 @@ public class BookListController extends HttpServlet {
 
         // Validação de sessão robusta para funcionários do Atlas
         if (user == null) {
-            response.sendRedirect(request.getContextPath() + "/view/index.jsp?msg=session_expired");
+            response.sendRedirect(request.getContextPath() + "/view/login.jsp?msg=session_expired");
             return;
         }
 

@@ -37,7 +37,7 @@
                                             novamente.
                                             <% } else if(msg.equals("access_denied") || msg.equals("unauthorized")) { %>
                                                 Você não tem permissão para acessar esta página.
-                                                <% } else { %> Erro ao realiz ar login. <% } %>
+                                                <% } else { %> Erro ao realizar login. <% } %>
                     </div>
                     <% } %>
 

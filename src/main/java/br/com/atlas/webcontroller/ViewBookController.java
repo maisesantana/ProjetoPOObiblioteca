@@ -28,7 +28,7 @@ public class ViewBookController extends HttpServlet {
         HttpSession session = request.getSession();
         Object user = session.getAttribute("userLogged");
         if (user == null) {
-            response.sendRedirect(request.getContextPath() + "/index.jsp?msg=session_expired");
+            response.sendRedirect(request.getContextPath() + "/view/login.jsp?msg=session_expired");
             return;
         }
 

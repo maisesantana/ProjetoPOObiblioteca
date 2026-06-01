@@ -480,3 +480,50 @@ body {
     font-size: 18px;
     color: #4a72c4;
 }
+
+/* POR QUE ATLAS */
+
+.atlas-name-card {
+    display: flex;
+    align-items: flex-start;
+    gap: 24px;
+    background: #f8f9fa;
+    border-radius: 24px;
+    padding: 36px 28px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+    margin-bottom: 8px;
+}
+
+.atlas-name-icon {
+    width: 56px;
+    height: 56px;
+    background: #eff4fd;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 26px;
+    color: #80a4ed;
+    flex-shrink: 0;
+}
+
+.atlas-name-card h4 {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 12px;
+    color: #181e4b;
+}
+
+.atlas-name-card p {
+    color: #5e6282;
+    line-height: 1.8;
+    font-size: 15px;
+    margin: 0;
+    text-align: justify;
+}
+
+@media (max-width: 768px) {
+    .atlas-name-card {
+        flex-direction: column;
+    }
+}

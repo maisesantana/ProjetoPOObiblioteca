@@ -40,25 +40,11 @@ public class LoanController extends HttpServlet {
         String step    = request.getParameter("step");
         String query   = request.getParameter("query");
         String bookId  = request.getParameter("bookId");
+        //String copyId  = request.getParameter("copyId");
         String cpf     = request.getParameter("cpf");
+        //String msg     = request.getParameter("msg");
 
         try {
-            // VINDO DA VIEWBOOK — vai direto para o passo 2
-            if (bookId != null && !bookId.isBlank() && step == null) {
-                try (Connection conn = ConnectionDb.getConexao()) {
-                    Book book = new BookDAO(conn).findById(Integer.parseInt(bookId));
-                    BookCopyDAO copyDAO = new BookCopyDAO();
-                    List<BookCopy> available = copyDAO.findAll().stream()
-                        .filter(c -> c.getBook().getBookId() == book.getBookId() && c.isAvailable())
-                        .toList();
-                    available.forEach(book::addCopy);
-                    request.setAttribute("selectedBook", book);
-                    request.setAttribute("step", "selectBook");
-                }
-                request.getRequestDispatcher("/view/attendant/loan.jsp").forward(request, response);
-                return;
-            }
-
             // PASSO 1 — busca de livros (GET com query)
             if (query != null && !query.isBlank()) {
                 try (Connection conn = ConnectionDb.getConexao()) {
@@ -73,8 +59,6 @@ public class LoanController extends HttpServlet {
                             .toList();
                         available.forEach(book::addCopy);
                     }
-                    // Remove livros sem exemplar disponível
-                    books = books.stream().filter(b -> !b.getCopies().isEmpty()).toList();
                     request.setAttribute("books", books);
                     request.setAttribute("query", query);
                 }
