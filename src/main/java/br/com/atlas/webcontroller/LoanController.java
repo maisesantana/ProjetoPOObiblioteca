@@ -95,6 +95,7 @@ public class LoanController extends HttpServlet {
             }
 
             // PASSO 3 — livro + cliente selecionados, mostra confirmação
+            // PASSO 3 — livro + cliente selecionados, mostra confirmação
             if ("confirm".equals(step) && bookId != null && cpf != null) {
                 try (Connection conn = ConnectionDb.getConexao()) {
                     Book book = new BookDAO(conn).findById(Integer.parseInt(bookId));
@@ -105,6 +106,10 @@ public class LoanController extends HttpServlet {
                     available.forEach(book::addCopy);
 
                     Client client = new ClientDAO().findByCpf(cpf);
+
+                    // Verifica limite de empréstimos
+                    int activeLoans = new LoanDAO().countActiveLoans(cpf);
+                    request.setAttribute("activeLoans", activeLoans);
 
                     request.setAttribute("selectedBook", book);
                     request.setAttribute("client", client);

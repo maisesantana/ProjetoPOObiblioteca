@@ -174,23 +174,28 @@
           </div>
         </div>
 
-        <% if (!client.isSuspended() && copyId != null) { %>
-          <form action="${pageContext.request.contextPath}/loan" method="post" class="mt-4">
-            <input type="hidden" name="cpf" value="<%= client.getCpf() %>">
-            <input type="hidden" name="copyId" value="<%= copyId %>">
-            <button type="submit" class="btn-confirm">
-              <i class="bi bi-check-lg"></i> Confirmar Empréstimo
-            </button>
-          </form>
-        <% } else if (client.isSuspended()) { %>
-          <div class="toast-msg toast-error show mt-3">
-            <i class="bi bi-x-circle-fill"></i> Cliente suspenso — não é possível realizar empréstimo.
-          </div>
-        <% } else { %>
-          <div class="toast-msg toast-error show mt-3">
-            <i class="bi bi-x-circle-fill"></i> Nenhum exemplar disponível para este livro.
-          </div>
-        <% } %>
+        <% Integer activeLoans = (Integer) request.getAttribute("activeLoans"); %>
+          <% if (client.isSuspended()) { %>
+            <div class="toast-msg toast-error show mt-3">
+              <i class="bi bi-x-circle-fill"></i> Cliente suspenso — não é possível realizar empréstimo.
+            </div>
+          <% } else if (activeLoans != null && activeLoans >= 3) { %>
+            <div class="toast-msg toast-error show mt-3">
+              <i class="bi bi-x-circle-fill"></i> Cliente já possui 3 empréstimos ativos — limite máximo atingido.
+            </div>
+          <% } else if (copyId != null) { %>
+            <form action="${pageContext.request.contextPath}/loan" method="post" class="mt-4">
+              <input type="hidden" name="cpf" value="<%= client.getCpf() %>">
+              <input type="hidden" name="copyId" value="<%= copyId %>">
+              <button type="submit" class="btn-confirm">
+                <i class="bi bi-check-lg"></i> Confirmar Empréstimo
+              </button>
+            </form>
+          <% } else { %>
+            <div class="toast-msg toast-error show mt-3">
+              <i class="bi bi-x-circle-fill"></i> Nenhum exemplar disponível para este livro.
+            </div>
+          <% } %>
 
         <a href="${pageContext.request.contextPath}/loan?step=selectBook&bookId=<%= selectedBook.getBookId() %>"
            class="btn-back mt-3 d-inline-block">

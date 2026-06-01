@@ -13,7 +13,7 @@ import java.util.Optional;
 
 public class LoanService {
 
-    private static final int MAX_LOANS = 6; // RF19: máximo 6 empréstimos simultâneos
+    private static final int MAX_LOANS = 3; // RF19: máximo 3 empréstimos simultâneos
 
     private final LoanDAO loanDAO;
     private final ClientDAO clientDAO;

@@ -125,7 +125,7 @@ INSERT INTO Administrator (cpf) VALUES ('00000000000');
 INSERT INTO Person (cpf, name, email, gender, birthDate) VALUES
 ('11111111111', 'Ana Beatriz Souza', 'ana.souza@email.com', 'F', '2001-04-15'),
 ('22222222222', 'Carlos Henrique Lima', 'carlos.lima@email.com', 'M', '1999-09-21'),
-('33333333332', 'Mariana Alves Costa', 'mariana.costa@email.com', 'F', '2003-01-10'),
+('33333333332', 'Nalva Alves Costa', 'nalva.costa@email.com', 'F', '2003-01-10'),
 ('44444444444', 'Joao Pedro Martins', 'joao.martins@email.com', 'M', '1995-06-18'),
 ('55555555555', 'Fernanda Rocha', 'fernanda.rocha@email.com', 'F', '1992-11-03'),
 ('66666666666', 'Ricardo Mendes', 'ricardo.mendes@email.com', 'M', '1988-08-27'),
@@ -158,7 +158,8 @@ INSERT INTO Client (cpf, address) VALUES
 ('10610610606', 'Rua Goias, 77'),
 ('10710710707', 'Travessa da Paz, 12'), 
 ('10810810808', 'Rua do Comercio, 541'),
-('10910910909', 'Av. Amazonas, 99'), 
+('10910910909', 'Av. Amazonas, 99'),
+('33333333332', 'Rua das Palmeiras, 90'),
 ('11011011010', 'Rua das Palmeiras, 123');
 
 INSERT INTO Employee (cpf, password) VALUES ('44444444444', 1234), ('55555555555', 5678), ('66666666666', 4321), ('77777777777', 8765);
