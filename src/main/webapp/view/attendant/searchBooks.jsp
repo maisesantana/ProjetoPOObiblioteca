@@ -86,7 +86,7 @@
               </div>
               <span class="book-copies"><%= book.getCopies().size() %> un.</span>
             </div>
-            <a href="${pageContext.request.contextPath}/viewBook?id=<%= book.getBookId() %>" class="book-view">Ver</a>
+            <a href="${pageContext.request.contextPath}/viewBook?id=<%= book.getBookId() %>" class="btn-view">Ver</a>
           </div>
         <% } %>
       <% } else { %>
