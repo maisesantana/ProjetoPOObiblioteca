@@ -167,14 +167,37 @@ public class ClientDAO {
         try (Connection conn = ConnectionDb.getConexao()) {
             conn.setAutoCommit(false);
 
-            try (PreparedStatement s1 = conn.prepareStatement("DELETE FROM client WHERE cpf = ?");
-                 PreparedStatement s2 = conn.prepareStatement("DELETE FROM person WHERE cpf = ?")) {
-
-                s1.setString(1, cpf);
-                s1.executeUpdate();
-
-                s2.setString(1, cpf);
-                s2.executeUpdate();
+            try {
+                // 1. ReturnBook
+                try (PreparedStatement ps = conn.prepareStatement(
+                        "DELETE rb FROM ReturnBook rb JOIN Loan l ON rb.loanId = l.loanId WHERE l.cpf = ?")) {
+                    ps.setString(1, cpf);
+                    ps.executeUpdate();
+                }
+                // 2. Renewal
+                try (PreparedStatement ps = conn.prepareStatement(
+                        "DELETE r FROM Renewal r JOIN Loan l ON r.loanId = l.loanId WHERE l.cpf = ?")) {
+                    ps.setString(1, cpf);
+                    ps.executeUpdate();
+                }
+                // 3. Loan
+                try (PreparedStatement ps = conn.prepareStatement(
+                        "DELETE FROM Loan WHERE cpf = ?")) {
+                    ps.setString(1, cpf);
+                    ps.executeUpdate();
+                }
+                // 4. Client
+                try (PreparedStatement ps = conn.prepareStatement(
+                        "DELETE FROM client WHERE cpf = ?")) {
+                    ps.setString(1, cpf);
+                    ps.executeUpdate();
+                }
+                // 5. Person
+                try (PreparedStatement ps = conn.prepareStatement(
+                        "DELETE FROM person WHERE cpf = ?")) {
+                    ps.setString(1, cpf);
+                    ps.executeUpdate();
+                }
 
                 conn.commit();
 
@@ -184,7 +207,6 @@ public class ClientDAO {
             }
         }
     }
-
     // MÉTODO AUXILIAR
     private Client mapResultSet(ResultSet rs) throws SQLException {
 

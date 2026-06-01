@@ -49,7 +49,7 @@ public class RemoveBookController extends HttpServlet {
 
     // POST: recebe o bookId e remove do banco, depois redireciona com msg de
     // sucesso
-    @Override
+   @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
@@ -69,30 +69,60 @@ public class RemoveBookController extends HttpServlet {
             try (Connection conn = ConnectionDb.getConexao()) {
                 conn.setAutoCommit(false);
                 try {
-                    BookDAO bookDAO = new BookDAO(conn);
+                    // Verifica empréstimo ativo
+                    try (java.sql.PreparedStatement ps = conn.prepareStatement(
+                            "SELECT COUNT(*) FROM Loan l JOIN BookCopy bc ON l.bookCopyId = bc.bookCopyId " +
+                            "WHERE bc.bookId = ? AND l.active = TRUE")) {
+                        ps.setInt(1, bookId);
+                        try (java.sql.ResultSet rs = ps.executeQuery()) {
+                            if (rs.next() && rs.getInt(1) > 0) {
+                                conn.rollback();
+                                response.sendRedirect(request.getContextPath() + "/removeBook?msg=error_active_loan");
+                                return;
+                            }
+                        }
+                    }
 
-                    // Remove vínculos de empréstimo ativo antes de deletar
-                    // O BookDAO.delete() já cuida de BookAuthor e BookCategory
-                    // Precisamos remover BookCopy antes (FK)
-                    try (java.sql.PreparedStatement ps = conn
-                            .prepareStatement("DELETE FROM BookCopy WHERE BookId = ?")) {
+                    // Deleta na ordem correta respeitando FKs
+                    // 1. ReturnBook
+                    try (java.sql.PreparedStatement ps = conn.prepareStatement(
+                            "DELETE rb FROM ReturnBook rb JOIN Loan l ON rb.loanId = l.loanId " +
+                            "JOIN BookCopy bc ON l.bookCopyId = bc.bookCopyId WHERE bc.bookId = ?")) {
                         ps.setInt(1, bookId);
                         ps.executeUpdate();
                     }
-
-                    bookDAO.delete(bookId);
+                    // 2. Renewal
+                    try (java.sql.PreparedStatement ps = conn.prepareStatement(
+                            "DELETE r FROM Renewal r JOIN Loan l ON r.loanId = l.loanId " +
+                            "JOIN BookCopy bc ON l.bookCopyId = bc.bookCopyId WHERE bc.bookId = ?")) {
+                        ps.setInt(1, bookId);
+                        ps.executeUpdate();
+                    }
+                    // 3. Loan
+                    try (java.sql.PreparedStatement ps = conn.prepareStatement(
+                            "DELETE l FROM Loan l JOIN BookCopy bc ON l.bookCopyId = bc.bookCopyId WHERE bc.bookId = ?")) {
+                        ps.setInt(1, bookId);
+                        ps.executeUpdate();
+                    }
+                    // 4. BookCopy
+                    try (java.sql.PreparedStatement ps = conn.prepareStatement(
+                            "DELETE FROM BookCopy WHERE bookId = ?")) {
+                        ps.setInt(1, bookId);
+                        ps.executeUpdate();
+                    }
+                    // 5. Book (BookAuthor e BookCategory já deletados pelo BookDAO.delete)
+                    new BookDAO(conn).delete(bookId);
                     conn.commit();
+
                 } catch (Exception e) {
                     conn.rollback();
                     throw e;
                 }
             }
 
-            // Redireciona para a mesma busca com msg de sucesso
             String redirectQuery = (query != null && !query.trim().isEmpty())
                     ? "?msg=book_removed&query=" + java.net.URLEncoder.encode(query, "UTF-8")
                     : "?msg=book_removed";
-
             response.sendRedirect(request.getContextPath() + "/removeBook" + redirectQuery);
 
         } catch (Exception e) {

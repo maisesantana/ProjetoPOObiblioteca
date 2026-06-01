@@ -80,11 +80,11 @@
                 </section>
 
                 <% if ("book_removed".equals(msg)) { %>
-                  <div class="toast-success show" id="toastSuccess"><i class="bi bi-check-circle-fill"></i> Livro
-                    removido com sucesso!</div>
-                  <% } else if ("error".equals(msg)) { %>
-                    <div class="toast-error show" id="toastError"><i class="bi bi-x-circle-fill"></i> Erro ao remover
-                      livro.</div>
+                  <div class="toast-success show" id="toastSuccess"><i class="bi          bi-check-circle-fill"></i> Livro removido com sucesso!</div>
+                    <% } else if ("error_active_loan".equals(msg)) { %>
+                      <div class="toast-error show" id="toastError"><i class="bi bi-x-circle-fill"></i> Este livro possui empréstimo ativo e não pode ser removido.</div>
+                    <% } else if ("error".equals(msg)) { %>
+                      <div class="toast-error show" id="toastError"><i class="bi bi-x-circle-fill"></i> Erro ao remover livro.</div>
                     <% } %>
 
                       <section class="search-box">

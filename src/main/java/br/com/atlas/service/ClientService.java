@@ -76,13 +76,6 @@ public class ClientService {
             throw new IllegalStateException(
                 "Não é possível remover o cliente pois possui " + activeLoans + " empréstimo(s) ativo(s)."
             );
-
-        // RF: não pode remover cliente com histórico de empréstimos
-        if (loanDAO.hasAnyLoans(cpf))
-            throw new IllegalStateException(
-                "Não é possível remover o cliente pois possui histórico de empréstimos."
-            );
-
         dao.delete(cpf);
     }
 
