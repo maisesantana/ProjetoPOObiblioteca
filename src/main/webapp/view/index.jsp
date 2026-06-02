@@ -318,6 +318,14 @@
 
                     <div class="col-lg-4 col-md-6">
                         <div class="team-card">
+                            <img src="${pageContext.request.contextPath}/assets/images/home/rayane.jpg" alt="Rayane Gabrielle">
+                            <h4>Rayane Gabrielle</h4>
+                            <span>Analista</span>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4 col-md-6">
+                        <div class="team-card">
                             <img src="${pageContext.request.contextPath}/assets/images/home/woquiton.jpg" alt="Woquiton Fernandes">
                             <h4>Woquiton Fernandes</h4>
                             <span>Professor Orientador</span>
