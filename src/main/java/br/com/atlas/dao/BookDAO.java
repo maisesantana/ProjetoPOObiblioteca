@@ -223,6 +223,17 @@ public class BookDAO {
         return b;
     }
 
+    public boolean existsByName(String bookName) throws SQLException {
+        String sql = "SELECT COUNT(*) FROM Book WHERE LOWER(bookName) = LOWER(?)";
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, bookName.trim());
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) return rs.getInt(1) > 0;
+            }
+        }
+        return false;
+    }
+
     /**
      * Busca livros pelo nome (ou parte do nome).
      * @param name Nome ou trecho do título do livro.

@@ -95,6 +95,15 @@ public class LibrarianController extends HttpServlet implements Gerenciavel {
                     book.setBookLocation(shelf + "-" + rack);
                     book.setAuthors(authors);
 
+                    // Verifica duplicidade pelo título
+                    if (bookDAO.existsByName(name)) {
+                        conn.rollback();
+                        response.sendRedirect(request.getContextPath()
+                            + "/view/librarian/registerBook.jsp?msg=error&detail="
+                            + java.net.URLEncoder.encode("Já existe um livro cadastrado com este título.", "UTF-8"));
+                        return;
+                    }
+
                     if ("outra".equals(categoryIdStr)) {
                         if (newCategoryName == null || newCategoryName.isBlank()) {
                             response.sendRedirect(request.getContextPath()
