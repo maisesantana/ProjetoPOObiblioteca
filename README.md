@@ -128,6 +128,6 @@ Projeto desenvolvido para a disciplina de Programação Orientada a Objetos.
 |------------|
 | Maise Santana dos Santos |
 | MIQUEIAS NOGUEIRA SANTOS |
-| Érica Ellen Araújo de Barros |
+| ÉRICA ELLEN ARAÚJO DE BARROS |
 | ANA RODE RODRIGUES DOS SANTOS |
 | RAYANE GABRIELLE CASTRO CARDOSO |
