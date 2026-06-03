@@ -40,8 +40,10 @@ public class ManageAuthorsController extends HttpServlet {
         try (Connection conn = ConnectionDb.getConexao()) {
             AuthorDAO dao = new AuthorDAO(conn);
             if (query != null && !query.trim().isEmpty()) {
+                // Busca filtrada pela query informada
                 authors = dao.findByName(query.trim());
             } else {
+                // Caso contrário, lista todos do acervo
                 authors = dao.findAll();
             }
         } catch (Exception e) {
@@ -133,6 +135,7 @@ public class ManageAuthorsController extends HttpServlet {
                 try (Connection conn = ConnectionDb.getConexao()) {
                     AuthorDAO dao = new AuthorDAO(conn);
 
+                    // Sua validação de segurança contra quebra de integridade referencial
                     List<String> books = dao.findBooksByAuthor(authorId);
                     if (!books.isEmpty()) {
                         String redirect = request.getContextPath() + "/manageAuthors?msg=author_has_books&tab=edit";

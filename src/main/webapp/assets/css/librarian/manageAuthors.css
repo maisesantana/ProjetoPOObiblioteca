@@ -443,4 +443,21 @@ main {
     flex-direction: column;
     align-items: flex-start;
   }
+  .btn-delete-link {
+  background: none;
+  border: none;
+  color: #DC2626 !important;
+  font-size: 1.25rem;
+  cursor: pointer;
+  padding: 0.5rem;
+  transition: opacity 0.2s;
+}
+
+.btn-delete-link:hover {
+  opacity: 0.7;
+}
+
+.btn-delete-link i {
+  color: #DC2626 !important;
+}
 }

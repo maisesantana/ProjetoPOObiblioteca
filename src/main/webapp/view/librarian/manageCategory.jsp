@@ -106,8 +106,8 @@
                           <div class="toast-msg toast-error show" id="toastMsg">
                             <i class="bi bi-x-circle-fill"></i> Ocorreu um erro. Tente novamente.
                           </div>
-                          <div class="container mt-3">
-                            <% if ("category_exists".equals(msg)) { %>
+                          < class="container mt-3">
+                            <% }if ("category_exists".equals(msg)) { %>
                               <div class="alert alert-danger alert-dismissible fade show" role="alert">
                                 <i class="bi bi-exclamation-triangle-fill"></i> Esta categoria já está cadastrada!
                                 <button type="button" class="btn-close" data-bs-dismiss="alert"
