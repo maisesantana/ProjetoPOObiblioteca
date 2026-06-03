@@ -346,7 +346,8 @@
                         Este sistema foi desenvolvido como atividade prática da disciplina de
                         Linguagem de Programação Orientada a Objetos (LPOO),
                         no curso de Análise e Desenvolvimento de Sistemas, sob
-                        orientação do professor <strong>Woquiton Fernandes</strong>.
+                        orientação do professor <strong>Woquiton Fernandes</strong>. Também como a disciplina de Análise e 
+                        Projeto de Sistemas(APS), sob orientação da professora <strong>Moniky Silva Ribeiro</strong>.
                     </p>
 
                     <p style="text-align: justify;">
@@ -355,7 +356,7 @@
                         a partir de uma proposta criada pela equipe.
                     </p>
 
-                    <p class="closing-text" style="text-align: justify;">
+                    <p style="text-align: justify;">
                         Projeto acadêmico desenvolvido para fins de aprendizagem,
                         integração de conhecimentos e prática de desenvolvimento de software.
                     </p>
