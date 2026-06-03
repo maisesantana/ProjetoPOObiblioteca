@@ -72,6 +72,11 @@ public class ManageCategoryController extends HttpServlet {
             if ("insert".equals(action)) {
                 String name = request.getParameter("categoryName");
                 if (name != null && !name.trim().isEmpty()) {
+                    Category existing = categoryDAO.findByName(name.trim());
+                    if (existing != null) {
+                        response.sendRedirect(request.getContextPath() + "/manageCategory?msg=category_exists");
+                        return;
+                    }
                     categoryDAO.insert(new Category(name.trim()));
                     response.sendRedirect(request.getContextPath() + "/manageCategory?msg=category_added");
                     return;

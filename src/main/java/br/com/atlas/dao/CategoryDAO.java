@@ -18,11 +18,15 @@ public class CategoryDAO {
     }
 
     public void insert(Category category) throws SQLException {
+        Category existing = findByName(category.getCategoryName());
+        if (existing != null) {
+            throw new SQLException("Duplicate category name: " + category.getCategoryName());
+        }
         String sql = "INSERT INTO Category (CategoryName) VALUES (?)";
         try (PreparedStatement stmt = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             stmt.setString(1, category.getCategoryName());
             stmt.executeUpdate();
-            
+
             try (ResultSet generatedKeys = stmt.getGeneratedKeys()) {
                 if (generatedKeys.next()) {
                     category.setCategoryId(generatedKeys.getInt(1));
@@ -32,7 +36,7 @@ public class CategoryDAO {
     }
 
     public Category findByName(String name) throws SQLException {
-        String sql = "SELECT * FROM Category WHERE CategoryName = ?";
+        String sql = "SELECT * FROM Category WHERE CategoryName COLLATE utf8_general_ci = ?";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setString(1, name);
             try (ResultSet rs = stmt.executeQuery()) {
@@ -48,7 +52,7 @@ public class CategoryDAO {
         List<Category> list = new ArrayList<>();
         String sql = "SELECT * FROM Category ORDER BY CategoryName";
         try (PreparedStatement stmt = connection.prepareStatement(sql);
-            ResultSet rs = stmt.executeQuery()) {
+                ResultSet rs = stmt.executeQuery()) {
             while (rs.next()) {
                 list.add(new Category(rs.getInt("CategoryId"), rs.getString("CategoryName")));
             }
@@ -76,8 +80,8 @@ public class CategoryDAO {
     public List<String> findBooksByCategory(int catId) throws SQLException {
         List<String> books = new ArrayList<>();
         String sql = "SELECT b.BookName FROM Book b " +
-                    "JOIN BookCategory bc ON b.BookId = bc.BookId " +
-                    "WHERE bc.CategoryId = ?";
+                "JOIN BookCategory bc ON b.BookId = bc.BookId " +
+                "WHERE bc.CategoryId = ?";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setInt(1, catId);
             try (ResultSet rs = stmt.executeQuery()) {

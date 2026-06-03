@@ -28,7 +28,8 @@ CREATE TABLE Author (
 CREATE TABLE Category (
     categoryId INT AUTO_INCREMENT,
     categoryName VARCHAR(100) NOT NULL,
-    CONSTRAINT pk_category PRIMARY KEY (categoryId)
+    CONSTRAINT pk_category PRIMARY KEY (categoryId),
+    CONSTRAINT uk_category_name UNIQUE (categoryName)
 );
 
 CREATE TABLE Book (
