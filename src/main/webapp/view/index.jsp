@@ -310,7 +310,7 @@
 
                     <div class="col-lg-4 col-md-6">
                         <div class="team-card">
-                            <div class="team-avatar">C</div>
+                            <img src="${pageContext.request.contextPath}/assets/images/home/anaRode.jpg" alt="Ana Rode">
                             <h4>Ana Rode</h4>
                             <span>Desenvolvedor</span>
                         </div>

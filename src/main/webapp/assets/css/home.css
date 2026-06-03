@@ -22,7 +22,6 @@ body {
     color: #181e4b !important;
     transition: 0.3s;
 }
-
 .nav-link:hover,
 .nav-link.active {
     color: #80a4ed !important;
