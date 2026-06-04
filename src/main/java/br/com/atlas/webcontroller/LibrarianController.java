@@ -21,12 +21,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
-/**
- * Polimorfismo: implementa Gerenciavel operando sobre a entidade Livro.
- * cadastrar() → cadastra Livro
- * atualizar() → atualiza Livro
- * remover()   → remove Livro
- */
 public class LibrarianController extends HttpServlet implements Gerenciavel {
 
     @Override
@@ -64,20 +58,19 @@ public class LibrarianController extends HttpServlet implements Gerenciavel {
         }
     }
 
-    // POLIMORFISMO: cadastrar() operando sobre Livro
     @Override
     public void cadastrar(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try {
-            String name           = request.getParameter("name");
-            String publisher      = request.getParameter("publisher");
-            int pages             = Integer.parseInt(request.getParameter("pages"));
-            String shelf          = request.getParameter("shelf");
-            String rack           = request.getParameter("rack");
-            String authorsRaw     = request.getParameter("authors");
-            String categoryIdStr  = request.getParameter("categoryId");
+            String name            = request.getParameter("name");
+            String publisher       = request.getParameter("publisher");
+            int pages              = Integer.parseInt(request.getParameter("pages"));
+            String shelf           = request.getParameter("shelf");
+            String rack            = request.getParameter("rack");
+            String authorsRaw      = request.getParameter("authors");
+            String categoryIdStr   = request.getParameter("categoryId");
             String newCategoryName = request.getParameter("newCategoryName");
-            int copies            = Integer.parseInt(request.getParameter("copies"));
+            int copies             = Integer.parseInt(request.getParameter("copies"));
 
             List<String> authors = Arrays.stream(authorsRaw.split(","))
                     .map(String::trim).filter(s -> !s.isEmpty()).collect(Collectors.toList());
@@ -85,8 +78,18 @@ public class LibrarianController extends HttpServlet implements Gerenciavel {
             try (Connection conn = ConnectionDb.getConexao()) {
                 conn.setAutoCommit(false);
                 try {
-                    BookDAO bookDAO = new BookDAO(conn);
+                    BookDAO bookDAO         = new BookDAO(conn);
                     CategoryDAO categoryDAO = new CategoryDAO(conn);
+
+                    // Verifica duplicidade pelo título + editora
+                    if (bookDAO.existsByNameAndPublisher(name, publisher, pages)) {
+                        conn.rollback();
+                        response.sendRedirect(request.getContextPath()
+                            + "/view/librarian/registerBook.jsp?msg=error&detail="
+                            + java.net.URLEncoder.encode(
+                                "Já existe um livro cadastrado com este título e editora.", "UTF-8"));
+                        return;
+                    }
 
                     Book book = new Book();
                     book.setBookName(name);
@@ -94,15 +97,6 @@ public class LibrarianController extends HttpServlet implements Gerenciavel {
                     book.setNumberOfPages(pages);
                     book.setBookLocation(shelf + "-" + rack);
                     book.setAuthors(authors);
-
-                    // Verifica duplicidade pelo título
-                    if (bookDAO.existsByName(name)) {
-                        conn.rollback();
-                        response.sendRedirect(request.getContextPath()
-                            + "/view/librarian/registerBook.jsp?msg=error&detail="
-                            + java.net.URLEncoder.encode("Já existe um livro cadastrado com este título.", "UTF-8"));
-                        return;
-                    }
 
                     if ("outra".equals(categoryIdStr)) {
                         if (newCategoryName == null || newCategoryName.isBlank()) {
@@ -152,16 +146,15 @@ public class LibrarianController extends HttpServlet implements Gerenciavel {
         }
     }
 
-    // POLIMORFISMO: atualizar() operando sobre Livro
     @Override
     public void atualizar(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try {
-            int bookId    = Integer.parseInt(request.getParameter("bookId"));
-            String name   = request.getParameter("name");
-            String publisher = request.getParameter("publisher");
-            int pages     = Integer.parseInt(request.getParameter("pages"));
-            String location = request.getParameter("location");
+            int bookId        = Integer.parseInt(request.getParameter("bookId"));
+            String name       = request.getParameter("name");
+            String publisher  = request.getParameter("publisher");
+            int pages         = Integer.parseInt(request.getParameter("pages"));
+            String location   = request.getParameter("location");
             String authorsRaw = request.getParameter("authors");
 
             List<String> authors = Arrays.stream(authorsRaw.split(","))
@@ -186,7 +179,6 @@ public class LibrarianController extends HttpServlet implements Gerenciavel {
         }
     }
 
-    // POLIMORFISMO: remover() operando sobre Livro
     @Override
     public void remover(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {

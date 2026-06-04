@@ -20,11 +20,9 @@ public class BookDAO {
 
     public void insert(Book book) throws SQLException {
 
-        String sqlBook =
-            "INSERT INTO Book (bookName, bookLocation, numberOfPages, publisher) VALUES (?, ?, ?, ?)";
+        String sqlBook = "INSERT INTO Book (bookName, bookLocation, numberOfPages, publisher) VALUES (?, ?, ?, ?)";
 
-        try (PreparedStatement stmt =
-                conn.prepareStatement(sqlBook, Statement.RETURN_GENERATED_KEYS)) {
+        try (PreparedStatement stmt = conn.prepareStatement(sqlBook, Statement.RETURN_GENERATED_KEYS)) {
 
             stmt.setString(1, book.getBookName());
             stmt.setString(2, book.getBookLocation());
@@ -60,7 +58,7 @@ public class BookDAO {
             stmt.executeUpdate();
 
             try (PreparedStatement st1 = conn.prepareStatement("DELETE FROM BookAuthor WHERE bookId = ?");
-                 PreparedStatement st2 = conn.prepareStatement("DELETE FROM BookCategory WHERE bookId = ?")) {
+                    PreparedStatement st2 = conn.prepareStatement("DELETE FROM BookCategory WHERE bookId = ?")) {
                 st1.setInt(1, book.getBookId());
                 st2.setInt(1, book.getBookId());
                 st1.executeUpdate();
@@ -82,7 +80,7 @@ public class BookDAO {
         List<Book> list = new ArrayList<>();
         String sql = "SELECT * FROM Book";
         try (PreparedStatement stmt = conn.prepareStatement(sql);
-             ResultSet rs = stmt.executeQuery()) {
+                ResultSet rs = stmt.executeQuery()) {
 
             while (rs.next()) {
                 Book b = mapResultSet(rs);
@@ -113,13 +111,13 @@ public class BookDAO {
     public void delete(int bookId) throws SQLException {
         // Primeiro deletamos os vínculos para não dar erro de Chave Estrangeira
         try (PreparedStatement st1 = conn.prepareStatement("DELETE FROM BookAuthor WHERE bookId = ?");
-             PreparedStatement st2 = conn.prepareStatement("DELETE FROM BookCategory WHERE bookId = ?");
-             PreparedStatement st3 = conn.prepareStatement("DELETE FROM Book WHERE BookId = ?")) {
-            
+                PreparedStatement st2 = conn.prepareStatement("DELETE FROM BookCategory WHERE bookId = ?");
+                PreparedStatement st3 = conn.prepareStatement("DELETE FROM Book WHERE BookId = ?")) {
+
             st1.setInt(1, bookId);
             st2.setInt(1, bookId);
             st3.setInt(1, bookId);
-            
+
             st1.executeUpdate();
             st2.executeUpdate();
             st3.executeUpdate();
@@ -137,7 +135,8 @@ public class BookDAO {
             try (PreparedStatement ps = conn.prepareStatement(sqlGetAuthor)) {
                 ps.setString(1, name);
                 try (ResultSet rs = ps.executeQuery()) {
-                    if (rs.next()) authorId = rs.getInt(1);
+                    if (rs.next())
+                        authorId = rs.getInt(1);
                 }
             }
 
@@ -146,7 +145,8 @@ public class BookDAO {
                     ps.setString(1, name);
                     ps.executeUpdate();
                     try (ResultSet rs = ps.getGeneratedKeys()) {
-                        if (rs.next()) authorId = rs.getInt(1);
+                        if (rs.next())
+                            authorId = rs.getInt(1);
                     }
                 }
             }
@@ -169,7 +169,8 @@ public class BookDAO {
             try (PreparedStatement ps = conn.prepareStatement(sqlGetCat)) {
                 ps.setString(1, catName);
                 try (ResultSet rs = ps.executeQuery()) {
-                    if (rs.next()) catId = rs.getInt(1);
+                    if (rs.next())
+                        catId = rs.getInt(1);
                 }
             }
 
@@ -178,7 +179,8 @@ public class BookDAO {
                     ps.setString(1, catName);
                     ps.executeUpdate();
                     try (ResultSet rs = ps.getGeneratedKeys()) {
-                        if (rs.next()) catId = rs.getInt(1);
+                        if (rs.next())
+                            catId = rs.getInt(1);
                     }
                 }
             }
@@ -197,7 +199,8 @@ public class BookDAO {
             ps.setInt(1, b.getBookId());
             try (ResultSet rs = ps.executeQuery()) {
                 List<String> authors = new ArrayList<>();
-                while (rs.next()) authors.add(rs.getString("authorName"));
+                while (rs.next())
+                    authors.add(rs.getString("authorName"));
                 b.setAuthors(authors);
             }
         }
@@ -207,7 +210,8 @@ public class BookDAO {
             ps.setInt(1, b.getBookId());
             try (ResultSet rs = ps.executeQuery()) {
                 List<String> categories = new ArrayList<>();
-                while (rs.next()) categories.add(rs.getString("categoryName"));
+                while (rs.next())
+                    categories.add(rs.getString("categoryName"));
                 b.setCategories(categories);
             }
         }
@@ -228,7 +232,8 @@ public class BookDAO {
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, bookName.trim());
             try (ResultSet rs = stmt.executeQuery()) {
-                if (rs.next()) return rs.getInt(1) > 0;
+                if (rs.next())
+                    return rs.getInt(1) > 0;
             }
         }
         return false;
@@ -236,6 +241,7 @@ public class BookDAO {
 
     /**
      * Busca livros pelo nome (ou parte do nome).
+     * 
      * @param name Nome ou trecho do título do livro.
      * @return Lista de livros que coincidem com a busca.
      */
@@ -269,4 +275,16 @@ public class BookDAO {
 
         return list;
     }
+
+    public boolean existsByNameAndPublisher(String name, String publisher, int numberOfPages) throws SQLException {
+    String sql = "SELECT 1 FROM Book WHERE BookName = ? AND Publisher = ? AND NumberOfPages = ?";
+    try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+        stmt.setString(1, name);
+        stmt.setString(2, publisher);
+        stmt.setInt(3, numberOfPages);
+        try (ResultSet rs = stmt.executeQuery()) {
+            return rs.next();
+        }
+    }
+}
 }

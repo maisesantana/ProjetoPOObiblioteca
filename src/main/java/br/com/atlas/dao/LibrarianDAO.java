@@ -1,11 +1,14 @@
 package br.com.atlas.dao;
 
-import br.com.atlas.model.Employee;
-import br.com.atlas.model.Librarian;
-
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+
+import br.com.atlas.model.Employee;
+import br.com.atlas.model.Librarian;
 
 public class LibrarianDAO implements EmployeeTypeDAO {
 
@@ -46,33 +49,35 @@ public class LibrarianDAO implements EmployeeTypeDAO {
 
     public List<Librarian> findAll() throws SQLException {
         String sql = """
-            SELECT p.cpf, p.name, p.email, p.gender, p.birthDate, e.password
-            FROM Person p
-            JOIN Employee e ON p.cpf = e.cpf
-            JOIN Librarian l ON l.cpf = e.cpf
-        """;
+                    SELECT p.cpf, p.name, p.email, p.gender, p.birthDate, e.password
+                    FROM Person p
+                    JOIN Employee e ON p.cpf = e.cpf
+                    JOIN Librarian l ON l.cpf = e.cpf
+                """;
 
         List<Librarian> librarians = new ArrayList<>();
         try (PreparedStatement stmt = connection.prepareStatement(sql);
-             ResultSet rs = stmt.executeQuery()) {
-            while (rs.next()) librarians.add(mapResultSet(rs));
+                ResultSet rs = stmt.executeQuery()) {
+            while (rs.next())
+                librarians.add(mapResultSet(rs));
         }
         return librarians;
     }
 
     public Librarian findByCpf(String cpf) throws SQLException {
         String sql = """
-            SELECT p.cpf, p.name, p.email, p.gender, p.birthDate, e.password
-            FROM Person p
-            JOIN Employee e ON p.cpf = e.cpf
-            JOIN Librarian l ON l.cpf = e.cpf
-            WHERE p.cpf = ?
-        """;
+                    SELECT p.cpf, p.name, p.email, p.gender, p.birthDate, e.password
+                    FROM Person p
+                    JOIN Employee e ON p.cpf = e.cpf
+                    JOIN Librarian l ON l.cpf = e.cpf
+                    WHERE p.cpf = ?
+                """;
 
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setString(1, cpf);
             try (ResultSet rs = stmt.executeQuery()) {
-                if (rs.next()) return mapResultSet(rs);
+                if (rs.next())
+                    return mapResultSet(rs);
             }
         }
         return null;
@@ -80,18 +85,19 @@ public class LibrarianDAO implements EmployeeTypeDAO {
 
     public List<Librarian> findByName(String name) throws SQLException {
         String sql = """
-            SELECT p.cpf, p.name, p.email, p.gender, p.birthDate, e.password
-            FROM Person p
-            JOIN Employee e ON p.cpf = e.cpf
-            JOIN Librarian l ON l.cpf = e.cpf
-            WHERE p.name LIKE ?
-        """;
+                    SELECT p.cpf, p.name, p.email, p.gender, p.birthDate, e.password
+                    FROM Person p
+                    JOIN Employee e ON p.cpf = e.cpf
+                    JOIN Librarian l ON l.cpf = e.cpf
+                    WHERE p.name LIKE ?
+                """;
 
         List<Librarian> librarians = new ArrayList<>();
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setString(1, "%" + name + "%");
             try (ResultSet rs = stmt.executeQuery()) {
-                while (rs.next()) librarians.add(mapResultSet(rs));
+                while (rs.next())
+                    librarians.add(mapResultSet(rs));
             }
         }
         return librarians;
@@ -99,12 +105,11 @@ public class LibrarianDAO implements EmployeeTypeDAO {
 
     private Librarian mapResultSet(ResultSet rs) throws SQLException {
         return new Librarian(
-            rs.getString("cpf"),
-            rs.getString("name"),
-            rs.getString("email"),
-            rs.getString("gender").charAt(0),
-            rs.getDate("birthDate").toLocalDate(),
-            rs.getInt("password")
-        );
+                rs.getString("cpf"),
+                rs.getString("name"),
+                rs.getString("email"),
+                rs.getString("gender").charAt(0),
+                rs.getDate("birthDate").toLocalDate(),
+                rs.getInt("password"));
     }
 }
